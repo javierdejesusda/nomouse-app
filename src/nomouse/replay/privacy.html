@@ -28,7 +28,8 @@
     <li>Screenshots of the allowlisted demo page being walked (a W3C Before and After Demonstration page or a builder-made page), 1024 by 768 pixels: for each Enter pressed on a button, the screenshots before Enter, after Enter and after Escape.</li>
     <li>With them, the focused element's role, accessible name and focus box (its position and size on the screenshot), and the fixed reviewer prompt.</li>
     <li>At most one text-only call for the packets, when the page has findings: the findings on that page (rule, key step, element role and name, focus boxes) and the fixed writer prompt.</li>
-    <li>Nothing about you: no address you type (only listed pages can be walked), no cookies, no form input and no network address.</li>
+    <li>The task you type, if any, and up to five screenshots per key: with a task, the keyboard navigator asks the model for each key (at most 41 calls), sending the task text, the keys pressed so far and the latest screenshots of the page, but no focus box, role or name. Do not type personal information into the task.</li>
+    <li>Nothing else about you: no address you type (only listed pages can be walked), no cookies, no other form input and no network address.</li>
   </ul>
   <p>Every call uses the model <code>muse-spark-1.3</code> on the Standard tier (not the Contributor-mode variant), reasoning effort minimal, and asks the API not to store the response for later retrieval (<code>store: false</code>; the documented default is to store it).</p>
   <h2>What Meta says about use and retention</h2>
@@ -44,7 +45,7 @@
   <p>We found no fixed retention period (a number of days) in Meta's developer documentation at <a href="https://dev.meta.ai/docs">dev.meta.ai/docs</a> or its legal pages as read on 2026-10-30. Meta's <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a> also applies.</p>
   <h2>What this server keeps</h2>
   <ul>
-    <li>Each live run (at most 200 in all): its screenshots, focus record, frozen verdicts, model answers and packets, shown in the replay viewer at the run's link.</li>
+    <li>Each live run (at most 200 in all): its screenshots, focus record, frozen verdicts, model answers and packets, and the typed task, shown in the replay viewer at the run's link.</li>
     <li>A credit ledger with, per model call, the time, the run id, the token counts and the cost. No prompts, images or request headers.</li>
     <li>Start times per network address, in memory only, to limit how many runs one address can start; an address's times are dropped at the first run start more than an hour later, and all of them when the server restarts. Nothing is written about visitors, and there are no cookies or analytics.</li>
   </ul>

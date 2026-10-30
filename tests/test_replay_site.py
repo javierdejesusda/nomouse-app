@@ -1,9 +1,11 @@
+import json
 from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
 from conftest import AUDIT_REASON, write_audit
 from playwright.sync_api import Browser, Page, expect
+from test_export import navigator_run
 
 from nomouse.export import W3C_NOTICE, export_site
 from nomouse.packets import DISCLAIMER
@@ -201,3 +203,47 @@ def test_focus_on_the_document_draws_no_focus_box_or_tab_stop(
     expect(page.locator("#focus-desc")).to_have_text(
         "Panel: focus on the document (no element box); Tab path of 0 stops."
     )
+
+
+def test_a_navigator_run_shows_its_task_as_text_and_why_each_key(
+    fixture_runs: Path, tmp_path: Path, browser: Browser
+) -> None:
+    run_dir = navigator_run(fixture_runs)
+    record = json.loads((run_dir / "walk.json").read_text())
+    task = '<img src=x onerror="document.title=1"> open the menu'
+    record["navigator"]["task"] = task
+    (run_dir / "walk.json").write_text(json.dumps(record))
+    site = tmp_path / "site"
+    export_site(fixture_runs, site)
+    page = browser.new_page(viewport={"width": 1280, "height": 900})
+    errors: list[str] = []
+    page.on("pageerror", lambda error: errors.append(str(error)))
+    with serve_directory(site) as base_url:
+        page.goto(base_url + "index.html")
+        item = page.locator("#builder-pages li", has_text="keyboard navigator")
+        expect(item).to_contain_text(f'task "{task}"')
+
+        page.goto(base_url + "page.html?id=menu-task")
+        expect(page.get_by_role("heading", level=1)).to_have_text(
+            "Menu (keyboard navigator)"
+        )
+        about = page.locator("#about")
+        expect(about).to_contain_text(
+            "Keys chosen by the keyboard navigator (muse-spark-1.3, reasoning effort"
+            " minimal), not the deterministic driver"
+        )
+        expect(about).to_contain_text(f'Typed task: "{task}"')
+        expect(about).to_contain_text(
+            "The navigator answered done: I see done. 4 calls, 20000 input and 360"
+            " output tokens."
+        )
+        assert page.locator("#about img").count() == 0
+        why = page.locator("#navigator-reason")
+        expect(why).to_have_text("")
+        page.get_by_role("button", name="Next key").click()
+        expect(why).to_have_text("Navigator, before key 1: I see Tab.")
+        page.get_by_role("button", name="Next key").click()
+        expect(why).to_have_text("Navigator, before key 2: I see Enter.")
+        assert page.title() != "1"
+    page.close()
+    assert errors == []

@@ -22,12 +22,15 @@
 </header>
 <main id="main" tabindex="-1">
   <h1>Live run</h1>
-  <p>Pick a page from the list. The server walks it with the keyboard (Tab through, Enter then Escape on each button), records focus after every key, freezes the walker verdicts, then asks the model reviewer about each Enter and writes packets. The harness enforces key-only actions on an allowlisted origin: the walk cannot leave the page's own origin or send any request other than GET. Only the listed pages can be walked; no other address is accepted.</p>
+  <p>Pick a page from the list. The server walks it with the keyboard (Tab through, Enter then Escape on each button), or, if you type a task, lets the keyboard navigator choose the keys; it records focus after every key, freezes the walker verdicts, then asks the model reviewer about each Enter and writes packets. The harness enforces key-only actions on an allowlisted origin: the walk cannot leave the page's own origin or send any request other than GET. Only the listed pages can be walked; no other address is accepted.</p>
   <p id="live-caps"></p>
   <p>What a live run sends to the Meta Model API, and what is kept: <a href="privacy.html">Privacy</a>.</p>
   <form id="live-form">
     <label for="live-page">Page to walk</label>
     <select id="live-page"></select>
+    <label for="live-task">Task for the keyboard navigator (optional)</label>
+    <input type="text" id="live-task" maxlength="200" aria-describedby="live-task-hint">
+    <p class="hint" id="live-task-hint">With a task, such as "open the settings dialog and close it", the model chooses each key from Tab, Shift+Tab, Enter, Space, Escape, the arrow keys, Home and End, seeing only the screenshots; it types no text and stays on the page. Without one, the deterministic driver walks.</p>
     <button type="submit" id="start" disabled>Start a live run</button>
   </form>
   <div id="live-message"></div>

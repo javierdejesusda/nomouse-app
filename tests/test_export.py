@@ -368,3 +368,74 @@ def test_export_run_adds_one_live_run_to_an_existing_site(
     assert "live-20261030T170000Z" not in (site / "data" / "index.json").read_text()
     with pytest.raises(ExportError, match="already"):
         export_run(live_dir, site, review_runs=("live",), live=info)
+
+
+NAVIGATOR = {
+    "task": "open the menu and close it",
+    "model": "muse-spark-1.3",
+    "reasoning_effort": "minimal",
+    "prompt_sha256": "n" * 64,
+    "max_keys": 40,
+    "turns": [
+        {"answer": key, "reason": f"I see {key}.", "usage": {}, "latency_s": 1.0}
+        for key in ("Tab", "Enter", "Escape", "done")
+    ],
+    "usage": {"calls": 4, "input_tokens": 20_000, "output_tokens": 360},
+}
+
+
+def navigator_run(fixture_runs: Path) -> Path:
+    """Copies the menu walk as a navigator run, with the navigator's answers."""
+    run_dir = fixture_runs / "navigator" / "menu-task"
+    shutil.copytree(fixture_runs / "builder" / "menu", run_dir)
+    record = load(run_dir / "walk.json")
+    record["end_reason"] = "done"
+    record["navigator"] = NAVIGATOR
+    (run_dir / "walk.json").write_text(json.dumps(record))
+    return run_dir
+
+
+def test_a_navigator_run_is_exported_with_its_task_and_answers(
+    fixture_runs: Path, tmp_path: Path
+) -> None:
+    navigator_run(fixture_runs)
+    out = tmp_path / "site"
+
+    index = export_site(fixture_runs, out)
+
+    pages = {page["id"]: page for page in index["pages"]}
+    entry = pages["menu-task"]
+    assert entry["set"] == "builder"
+    assert entry["title"] == "Menu (keyboard navigator)"
+    assert entry["task"] == "open the menu and close it"
+    assert pages["menu"]["task"] is None
+    page = load(out / "data" / "pages" / "menu-task.json")
+    assert page["navigator"] == {
+        "task": "open the menu and close it",
+        "model": "muse-spark-1.3",
+        "reasoning_effort": "minimal",
+        "prompt_sha256": "n" * 64,
+        "max_keys": 40,
+        "end_reason": "done",
+        "turns": [
+            {"answer": key, "reason": f"I see {key}."}
+            for key in ("Tab", "Enter", "Escape", "done")
+        ],
+        "usage": {"calls": 4, "input_tokens": 20_000, "output_tokens": 360},
+    }
+    assert [review["run"] for review in page["reviews"]] == ["eval1", "eval2"]
+    assert load(out / "data" / "pages" / "menu.json")["navigator"] is None
+
+
+def test_a_live_navigator_run_keeps_its_task(
+    fixture_runs: Path, tmp_path: Path
+) -> None:
+    run_dir = navigator_run(fixture_runs)
+    site = tmp_path / "site"
+    export_site(fixture_runs / "missing", site)
+
+    entry = export_run(run_dir, site, review_runs=("eval1",), live={"page": "x"})
+
+    assert entry["task"] == "open the menu and close it"
+    page = load(site / "data" / "pages" / "menu-task.json")
+    assert page["navigator"]["turns"][0] == {"answer": "Tab", "reason": "I see Tab."}

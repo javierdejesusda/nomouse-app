@@ -25,14 +25,19 @@ def open_site(
     stops: list[Callable[[], None]] = []
     pages: list[Page] = []
 
-    def open_(*, key_available: bool = True, live: bool = True) -> tuple[Page, str]:
+    def open_(
+        *,
+        key_available: bool = True,
+        live: bool = True,
+        tasks: list[str | None] | None = None,
+    ) -> tuple[Page, str]:
         service: LiveApi | None = None
         if live:
             service = LiveService(
                 site=site,
                 state=tmp_path / "state",
                 pages=live_pages(BUILDER),
-                pipeline=copy_menu(fixture_runs),
+                pipeline=copy_menu(fixture_runs, tasks),
                 ledger=CreditLedger(tmp_path / "state" / "live-usage.jsonl"),
                 limiter=RateLimiter(max_runs=3, window_s=3600),
                 transport=api_reply,
@@ -64,7 +69,8 @@ def open_site(
 def test_a_live_run_is_started_from_the_list_and_opens_in_the_viewer(
     open_site: Callable[..., tuple[Page, str]],
 ) -> None:
-    page, base_url = open_site()
+    tasks: list[str | None] = []
+    page, base_url = open_site(tasks=tasks)
     page.goto(base_url + "live.html")
 
     main = page.get_by_role("main")
@@ -76,6 +82,10 @@ def test_a_live_run_is_started_from_the_list_and_opens_in_the_viewer(
     expect(choice.locator("option")).to_have_count(26)
     choice.select_option("builder/menu-focus-stays.html")
     choice.focus()
+    page.keyboard.press("Tab")
+    expect(
+        page.get_by_label("Task for the keyboard navigator (optional)")
+    ).to_be_focused()
     page.keyboard.press("Tab")
     expect(page.locator(":focus")).to_have_text("Start a live run")
     page.keyboard.press("Enter")
@@ -91,6 +101,26 @@ def test_a_live_run_is_started_from_the_list_and_opens_in_the_viewer(
     expect(about).to_contain_text("Live run of builder/menu-focus-stays.html")
     expect(about).to_contain_text("1 model call")
     expect(about).to_contain_text("muse-spark-1.3, reasoning effort minimal")
+    assert tasks == [None]
+
+
+def test_a_typed_task_is_sent_with_the_page_for_the_navigator(
+    open_site: Callable[..., tuple[Page, str]],
+) -> None:
+    tasks: list[str | None] = []
+    page, base_url = open_site(tasks=tasks)
+    page.goto(base_url + "live.html")
+
+    task = page.get_by_label("Task for the keyboard navigator (optional)")
+    expect(task).to_have_attribute("maxlength", "200")
+    page.get_by_label("Page to walk").select_option("builder/menu-focus-stays.html")
+    task.fill("<b>open the menu</b> and close it")
+    page.get_by_role("button", name="Start a live run").click()
+
+    expect(page.get_by_role("link", name="Open the live run")).to_be_focused(
+        timeout=10_000
+    )
+    assert tasks == ["<b>open the menu</b> and close it"]
 
 
 def test_without_a_key_live_mode_points_to_the_replay(
@@ -158,6 +188,10 @@ def test_the_privacy_page_says_what_is_sent_retention_and_a_contact(
             " Models."
         )
         expect(main).to_contain_text("no fixed retention period")
+        expect(main).to_contain_text(
+            "The task you type, if any, and up to five screenshots per key"
+        )
+        expect(main).to_contain_text("the typed task, shown in the replay")
         expect(
             main.get_by_role("link", name="Meta Model API Data Commitments")
         ).to_have_attribute("href", "https://dev.meta.ai/legal/commitments")

@@ -96,6 +96,11 @@ function show(index) {
   const appeared = frame.appeared ? ` ${plural(frame.appeared, "element")} appeared.` : "";
   document.getElementById("focus-desc").textContent =
     `Panel: ${describeFocus(frame.focus)}; Tab path of ${plural(stops, "stop")}.${appeared}`;
+  // Turn n chose key n + 1, so frame n + 1 shows what it led to.
+  const turn = page.navigator && current > 0 ? page.navigator.turns[current - 1] : null;
+  document.getElementById("navigator-reason").textContent = turn
+    ? `Navigator, before ${keyLabel(current - 1)}: ${turn.reason}`
+    : "";
 }
 
 function setUpViewer() {
@@ -147,11 +152,41 @@ function about() {
       ),
     );
   }
+  if (page.navigator) box.append(...navigatorFacts(page.navigator));
   if (page.superseded_by) {
     box.append(
       el("p", { class: "facts" }, `Superseded by ${page.superseded_by}: the page was revised before any model run, and this run is not scored.`),
     );
   }
+}
+
+const NAVIGATOR_ENDS = {
+  done: "The navigator answered done",
+  stuck: "The navigator answered stuck",
+  max_keys: "The navigator asked for a key past the cap",
+  invalid_reply: "The navigator gave an answer outside its schema; nothing was pressed",
+};
+
+function navigatorFacts(navigator) {
+  const last = navigator.turns[navigator.turns.length - 1];
+  const why = last && last.reason ? `: ${last.reason}` : ".";
+  const usage = navigator.usage;
+  return [
+    el(
+      "p",
+      { class: "facts" },
+      `Keys chosen by the keyboard navigator (${navigator.model}, reasoning effort ${navigator.reasoning_effort}),` +
+        ` not the deterministic driver; at most ${navigator.max_keys} keys from a fixed whitelist, shown the` +
+        " screenshots only.",
+    ),
+    el("p", { class: "facts" }, `Typed task: "${navigator.task}"`),
+    el(
+      "p",
+      { class: "facts" },
+      `${NAVIGATOR_ENDS[navigator.end_reason] || navigator.end_reason}${why} ` +
+        `${plural(usage.calls, "call")}, ${usage.input_tokens} input and ${usage.output_tokens} output tokens.`,
+    ),
+  ];
 }
 
 function findingItem(finding) {

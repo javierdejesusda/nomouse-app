@@ -25,7 +25,8 @@ DEFAULT_REVIEW_RUNS: tuple[str, ...] = ("eval1", "eval2")
 EVAL_REPORT_NAME = "eval-report.json"
 
 _FRONTEND = Path(__file__).parent / "replay"
-_RUN_SETS = ("eval", "builder")
+_RUN_SETS = ("eval", "builder", "navigator")
+_NAVIGATOR_TITLE = " (keyboard navigator)"
 _REVIEW_QUESTIONS = ("inside", "returned")
 _EVAL_KEYS = ("runs", "labels_sha256", "arms", "bar", "model_only", "disagreements")
 
@@ -43,8 +44,9 @@ def export_site(
 ) -> dict[str, Any]:
     """Builds the replay site from the frozen runs under a runs directory.
 
-    Every directory in `<runs_dir>/eval` and `<runs_dir>/builder` holding
-    frozen verdicts becomes a page. The eval counts come from
+    Every directory in `<runs_dir>/eval`, `<runs_dir>/builder` and
+    `<runs_dir>/navigator` (keyboard navigator runs) holding frozen verdicts
+    becomes a page. The eval counts come from
     `<runs_dir>/eval/eval-report.json` when it exists.
 
     Args:
@@ -135,6 +137,8 @@ def export_run(
     page = {**_page(run_dir, set(), review_runs), "live": live}
     if page["set"] == "builder":
         page["title"] = Path(page["page"]).stem.replace("-", " ").capitalize()
+        if page["navigator"] is not None:
+            page["title"] += _NAVIGATOR_TITLE
     _write_page(site, page, run_dir)
     return _summary(page)
 
@@ -182,16 +186,23 @@ def _page(run_dir: Path, names: set[str], review_runs: Sequence[str]) -> dict[st
         if reviewer.review_path(run_dir, run).is_file()
     ]
     successor = f"{run_dir.name}-v2"
+    navigator = _navigator(record)
+    # Navigator runs are named by whoever ran them; their page names them.
+    name = run_dir.name if navigator is None else Path(page_path).stem
+    title = _title(name, page_path, w3c)
+    if navigator is not None:
+        title += _NAVIGATOR_TITLE
     return {
         "id": run_dir.name,
         "set": "w3c" if w3c else "builder",
         "label": f"W3C {page_path.split('/')[0].title()}" if w3c else BUILDER_LABEL,
-        "title": _title(run_dir, page_path, w3c),
+        "title": title,
         "page": page_path,
         "source_url": W3C_BASE_URL + page_path if w3c else None,
         "notice": W3C_NOTICE if w3c else None,
         "superseded_by": successor if successor in names else None,
         "keys": verdicts["keys"],
+        "navigator": navigator,
         "verdicts": {
             "sha256": digest,
             "frozen_at": frozen_at.strftime("%Y-%m-%d %H:%M:%S UTC"),
@@ -215,6 +226,37 @@ def _page(run_dir: Path, names: set[str], review_runs: Sequence[str]) -> dict[st
     }
 
 
+def _navigator(record: dict[str, Any]) -> dict[str, Any] | None:
+    """Returns what a keyboard navigator was asked and answered, if it ran.
+
+    Per-turn usage and latency stay in the walk record.
+    """
+    navigator = record.get("navigator")
+    if navigator is None:
+        return None
+    return {
+        **{
+            key: navigator[key]
+            for key in (
+                "task",
+                "model",
+                "reasoning_effort",
+                "prompt_sha256",
+                "max_keys",
+            )
+        },
+        "end_reason": record["end_reason"],
+        "turns": [
+            {"answer": turn["answer"], "reason": turn.get("reason")}
+            for turn in navigator["turns"]
+        ],
+        "usage": {
+            key: navigator["usage"][key]
+            for key in ("calls", "input_tokens", "output_tokens")
+        },
+    }
+
+
 def _frozen_at(run_dir: Path) -> tuple[datetime.datetime, str]:
     """Returns the freeze time and where it came from.
 
@@ -229,11 +271,11 @@ def _frozen_at(run_dir: Path) -> tuple[datetime.datetime, str]:
     return datetime.datetime.fromtimestamp(mtime, datetime.UTC), "file time"
 
 
-def _title(run_dir: Path, page_path: str, w3c: bool) -> str:
+def _title(name: str, page_path: str, w3c: bool) -> str:
     """Returns a W3C page's name, or a builder run's name made readable."""
     if w3c:
         return Path(page_path).stem.title()
-    return run_dir.name.replace("-", " ").capitalize()
+    return name.replace("-", " ").capitalize()
 
 
 def _walker(verdict: dict[str, Any]) -> dict[str, Any]:
@@ -338,6 +380,7 @@ def _summary(page: dict[str, Any]) -> dict[str, Any]:
     return {
         **{key: page[key] for key in keys},
         "superseded_by": page["superseded_by"],
+        "task": page["navigator"]["task"] if page["navigator"] else None,
         "keys": len(page["keys"]),
         "walker_findings": len(w1["findings"]),
         "model_findings": len(model),

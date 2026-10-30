@@ -4,6 +4,7 @@ const POLL_MS = 1500;
 const STAGES = {
   queued: "waiting to start",
   walking: "walking the page with the keyboard",
+  navigating: "the keyboard navigator is choosing keys for the task",
   reviewing: "verdicts frozen; the model reviewer is answering",
   "writing packets": "writing packets",
 };
@@ -80,10 +81,12 @@ async function start(event) {
   document.getElementById("start").disabled = true;
   document.getElementById("live-message").replaceChildren();
   document.getElementById("live-result").replaceChildren();
+  const task = document.getElementById("live-task").value.trim();
+  const request = task ? { page: page.id, task } : { page: page.id };
   const { status, data } = await api("api/live/runs", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ page: page.id }),
+    body: JSON.stringify(request),
   });
   if (status !== 202) {
     alertMessage(data.message);

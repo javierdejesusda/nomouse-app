@@ -20,6 +20,7 @@ function pageItem(page) {
           `superseded by ${page.superseded_by} (page revised before any model run; not scored)`,
         )
       : null,
+    page.task ? el("span", { class: "facts" }, `keyboard navigator, task "${page.task}"`) : null,
     page.source_url ? el("span", { class: "source" }, `Original: ${page.source_url}`) : null,
     page.notice ? el("span", { class: "notice" }, page.notice) : null,
   );
