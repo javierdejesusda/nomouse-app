@@ -226,7 +226,7 @@ def review(
     result = {
         **head,
         "instances": instances,
-        "usage": _totals([call["usage"] for call in calls]),
+        "usage": usage_totals([call["usage"] for call in calls]),
         "calls": calls,
     }
     with path.open("x", encoding="utf-8") as out:
@@ -426,7 +426,16 @@ def _check(value: object, schema: Mapping[str, Any]) -> None:
         raise AnswerError(f"the model's answer has an unknown value: {value!r}")
 
 
-def _totals(usages: Sequence[Mapping[str, Any]]) -> dict[str, int]:
+def usage_totals(usages: Sequence[Mapping[str, Any]]) -> dict[str, int]:
+    """Sums the `usage` objects of several calls.
+
+    Args:
+        usages: Each call's `usage`, as the API returned it.
+
+    Returns:
+        The call count and the summed input, cached, output, reasoning and
+        total tokens.
+    """
     return {
         "calls": len(usages),
         "input_tokens": sum(int(u["input_tokens"]) for u in usages),

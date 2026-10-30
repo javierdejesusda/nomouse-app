@@ -20,7 +20,7 @@ RECORD_NAME = "walk.json"
 # like any other button, so the driver treats it as one.
 BUTTON_ROLES = frozenset({"button", "DisclosureTriangle"})
 
-EndReason = Literal["cycle", "repeat", "max_keys", "done", "stuck"]
+EndReason = Literal["cycle", "repeat", "max_keys", "done", "stuck", "invalid_reply"]
 
 # Two full cycles of a keyboard trap land on its first element three times.
 _REPEAT_VISITS = 3
@@ -86,7 +86,8 @@ class WalkRecord:
         viewport: Viewport size in CSS pixels.
         end_reason: Why the walk stopped: a full Tab cycle, a Tab target
             reached a third time, or the key cap; for a navigator run, the
-            navigator answered done or stuck, or the key cap.
+            navigator answered done or stuck, gave an answer outside its
+            schema, or asked for a key past the cap.
         repeat_step: Index of the Tab step that reached a target a third
             time, when that ended the walk.
         keys: The key sequence, in order.
