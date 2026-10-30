@@ -162,8 +162,21 @@ class SentenceTransport:
         return 200, json.dumps(reply).encode()
 
 
+ORDER_CAVEAT = (
+    ", a best practice finding: the Tab order differs from the visual layout,"
+    " and W3C allows other meaningful orders, so a person should review it"
+)
+MODEL_CAVEAT = ", which a model saw and a person should confirm"
+
+
 def plain(packet_id: str, finding: dict[str, Any]) -> str:
-    return f"Observed {finding['rule']} on {finding['element']['name']}."
+    """Writes a sentence with the caveat each kind of finding needs."""
+    sentence = f"Observed {finding['rule']} on {finding['element']['name']}"
+    if finding["best_practice"]:
+        sentence += ORDER_CAVEAT
+    if finding["status"] == "NEEDS REVIEW":
+        sentence += MODEL_CAVEAT
+    return sentence + "."
 
 
 def test_packets_cover_walker_and_model_findings_with_statuses(
@@ -258,16 +271,19 @@ def test_spark_writes_one_sentence_per_finding_from_the_witness_data(
         "status": "VERIFIED",
         "step": 3,
         "element": {"role": "button", "name": "Invite people", "tag": "BUTTON"},
+        "best_practice": False,
         "observed": W1_FINDINGS[0]["detail"],
     }
+    assert sent[1]["best_practice"] is True
     assert sent[1]["observed"] == 'jumps up 92 px from textbox "Name"'
     assert sent[2]["element"] == {"role": None, "name": None, "tag": "A"}
     assert sent[3]["status"] == "NEEDS REVIEW"
+    assert "W3C allows other meaningful orders" in text
     assert [p["sentence"] for p in result["packets"]] == [
         "Observed focus-management on Invite people.",
-        "Observed order on Email.",
+        f"Observed order on Email{ORDER_CAVEAT}.",
         "Observed unreachable on None.",
-        "Observed focus-management on Menu.",
+        f"Observed focus-management on Menu{MODEL_CAVEAT}.",
     ]
     assert {p["sentence_source"] for p in result["packets"]} == {"spark"}
     assert result["writer"]["mode"] == "spark"
@@ -321,7 +337,9 @@ def test_a_sentence_that_claims_status_or_is_not_one_sentence_falls_back(
     assert sources == ["spark", "template", "spark", "spark"]
     assert result["packets"][1]["sentence"] == (
         'Order (best practice) at step 6 on the textbox "Email":'
-        " jumps up 92 px from INPUT#name."
+        " jumps up 92 px from INPUT#name; the Tab order differs from the visual"
+        " layout, and W3C allows other meaningful orders, so a person should"
+        " review it."
     )
     assert result["packets"][1]["rejected"] == sentence
 
@@ -362,6 +380,38 @@ def test_the_writer_call_never_sees_dom_ids_or_the_page_file(tmp_path: Path) -> 
     assert "p.html" not in text
     assert "127.0.0.1" not in text
     assert result["packets"][3]["observed"] == findings[3]["detail"]
+
+
+@pytest.mark.parametrize(
+    ("packet_id", "sentence"),
+    [
+        ("P2", "Tab moved up from Name to Email."),
+        ("P2", "Best practice: Tab moved up from Name to Email, so check it."),
+        (
+            "P2",
+            "Tab moved up from Name to Email, so the order differs from the"
+            " visual layout; W3C allows other meaningful orders.",
+        ),
+        ("P4", "Focus stayed on Menu while the menu opened."),
+        ("P4", "A check measured that focus stayed on Menu."),
+    ],
+)
+def test_a_sentence_without_the_caveat_its_status_needs_falls_back(
+    tmp_path: Path, packet_id: str, sentence: str
+) -> None:
+    run_dir = write_run(tmp_path / "run", review=REVIEW)
+
+    def write(asked_id: str, finding: dict[str, Any]) -> str:
+        return sentence if asked_id == packet_id else plain(asked_id, finding)
+
+    result = write_packets(run_dir, transport=SentenceTransport(write))
+
+    assert acceptable_sentence(sentence)
+    packets = {p["id"]: p for p in result["packets"]}
+    assert packets[packet_id]["sentence_source"] == "template"
+    assert packets[packet_id]["rejected"] == sentence
+    others = [p["sentence_source"] for p in packets.values() if p["id"] != packet_id]
+    assert others == ["spark", "spark", "spark"]
 
 
 def no_network(url: str, body: bytes, headers: Mapping[str, str]) -> tuple[int, bytes]:

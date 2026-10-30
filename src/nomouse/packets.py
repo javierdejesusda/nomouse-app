@@ -5,12 +5,16 @@ too). Focus reviewer form (i) answers of `fail` become NEEDS REVIEW packets,
 unless W1 fired on the same Enter or Escape: then the model's answer is kept
 on the VERIFIED packet as corroboration, since the status says who saw it.
 Order packets come from W1 alone and are marked best practice, because a Tab
-order need not follow the layout.
+order need not follow the layout: their sentence says that the order differs
+from the visual layout and that W3C allows other meaningful orders, so a
+person should review it.
 
 The sentence comes from one Muse Spark text call over the witness data, or
 from a fixed template when asked to, when the call fails, or for any
-sentence that is not one plain sentence or that speaks of conformance,
-compliance or the law. Every packet carries the fixed disclaimer.
+sentence that is not one plain sentence, that speaks of conformance,
+compliance, standards or the law, or that leaves out the caveat its status
+needs (best practice for order, "a model saw it" for NEEDS REVIEW).
+Every packet carries the fixed disclaimer.
 """
 
 import json
@@ -20,7 +24,7 @@ from pathlib import Path
 from typing import Any
 
 from nomouse.driver import RECORD_NAME
-from nomouse.reviewer import ReviewError, frozen_digest, review_path
+from nomouse.reviewer import NEEDS_REVIEW, ReviewError, frozen_digest, review_path
 from nomouse.spark import (
     MODEL,
     REASONING_EFFORT,
@@ -37,7 +41,6 @@ DISCLAIMER = (
     " Not a conformance claim and not legal advice."
 )
 VERIFIED = "VERIFIED"
-NEEDS_REVIEW = "NEEDS REVIEW"
 
 WRITER_PROMPT = (
     "You write the evidence packets of a keyboard-only test of a web page."
@@ -48,7 +51,10 @@ WRITER_PROMPT = (
     " each finding write one plain sentence for a developer that says what"
     " happened to keyboard focus, using only the facts given. For a NEEDS"
     " REVIEW finding say that a model saw it and a person should confirm."
-    " Never say whether the page is compliant, conformant, accessible or"
+    " A finding with best_practice true is a best practice finding: say"
+    " best practice, say that the Tab order differs from the visual layout"
+    " and that W3C allows other meaningful orders, so a person should review"
+    " it. Never say whether the page is compliant, conformant, accessible or"
     " legal, and do not name laws, standards or WCAG.\n"
 )
 WRITER_SCHEMA: dict[str, Any] = {
@@ -85,6 +91,19 @@ _MODEL_SAW = {
 }
 _QUESTION_STEP = {"inside": "enter", "returned": "escape"}
 _MAX_SENTENCE = 300
+ORDER_CAVEAT = (
+    "the Tab order differs from the visual layout, and W3C allows other"
+    " meaningful orders, so a person should review it"
+)
+# What a model sentence must say, beyond the facts, for each kind of packet.
+_ORDER_MUST_SAY = (
+    r"best practice",
+    r"\bvisual",
+    r"\bW3C\b",
+    r"meaningful",
+    r"\b(person|human)\b|review",
+)
+_MODEL_MUST_SAY = (r"\bmodel\b", r"\b(person|human)\b|confirm|review")
 # Over-rejects on purpose ("accessible name", "lawn"): a rejected sentence
 # falls back to the template, which states the measured facts only.
 _FORBIDDEN = re.compile(
@@ -292,7 +311,7 @@ def _write_sentences(
         }
     for packet in packets:
         sentence = sentences[packet["id"]]
-        if acceptable_sentence(sentence):
+        if acceptable_sentence(sentence) and _states_caveats(packet, sentence):
             packet["sentence"] = sentence.strip()
             packet["sentence_source"] = "spark"
         else:
@@ -332,8 +351,22 @@ def _witness(
         "status": packet["status"],
         "step": packet["step"],
         "element": {key: element[key] for key in ("role", "name", "tag")},
+        "best_practice": packet["best_practice"],
         "observed": observed,
     }
+
+
+def _states_caveats(packet: Mapping[str, Any], sentence: str) -> bool:
+    """Tells whether a sentence says what the packet's status requires.
+
+    An order packet must read as best practice for a person to review, and a
+    NEEDS REVIEW packet must say that only a model saw it.
+    """
+    required = [
+        *(_ORDER_MUST_SAY if packet["best_practice"] else ()),
+        *(_MODEL_MUST_SAY if packet["status"] == NEEDS_REVIEW else ()),
+    ]
+    return all(re.search(pattern, sentence, re.IGNORECASE) for pattern in required)
 
 
 def _sentences(text: str, ids: Sequence[str]) -> dict[str, str]:
@@ -365,7 +398,11 @@ def _template(packet: Mapping[str, Any]) -> str:
         )
     if packet["step"] is None:
         return f"{title}: the {target} was {packet['observed']}."
-    return f"{title} at step {packet['step']} on the {target}: {packet['observed']}."
+    caveat = f"; {ORDER_CAVEAT}" if packet["best_practice"] else ""
+    return (
+        f"{title} at step {packet['step']} on the {target}:"
+        f" {packet['observed']}{caveat}."
+    )
 
 
 def _describe(element: Mapping[str, Any], *, with_id: bool = True) -> str:
