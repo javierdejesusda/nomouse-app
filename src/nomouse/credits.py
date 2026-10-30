@@ -26,6 +26,10 @@ MAX_CAP_USD = 20.0
 """The live credit cap may never exceed this, for the life of the page."""
 
 
+class CapReachedError(Exception):
+    """A model call was refused: the spend has reached the cap."""
+
+
 def call_cost(usage: Mapping[str, Any]) -> float:
     """Returns the USD cost of one call from its `usage` object.
 
@@ -56,10 +60,13 @@ class CreditLedger:
             cap_usd: The lifetime cap in USD.
 
         Raises:
-            ValueError: The cap is above USD 20.
+            ValueError: The cap is not between USD 0 and USD 20.
         """
-        if cap_usd > MAX_CAP_USD:
-            raise ValueError(f"the live cap must be at most USD {MAX_CAP_USD:.0f}")
+        # Written so that NaN, which compares false, is refused too.
+        if not 0 <= cap_usd <= MAX_CAP_USD:
+            raise ValueError(
+                f"the live cap must be between USD 0 and USD {MAX_CAP_USD:.0f}"
+            )
         self.path = path
         self.cap_usd = cap_usd
         self._lock = threading.Lock()
@@ -94,14 +101,6 @@ class CreditLedger:
         lines = [json.loads(line) for line in text.splitlines()]
         return [line for line in lines if run is None or line["run"] == run]
 
-    def can_afford(self, reserve_usd: float) -> bool:
-        """Returns whether a run that may cost `reserve_usd` stays within the cap.
-
-        Args:
-            reserve_usd: The most one run is expected to cost.
-        """
-        return self.spent_usd() + reserve_usd <= self.cap_usd
-
     def record(self, run: str, usage: Mapping[str, Any]) -> None:
         """Appends one answered call to the ledger.
 
@@ -131,12 +130,20 @@ class CreditLedger:
 
         Returns:
             A transport with the same replies that records the `usage` of
-            every HTTP 200 reply that carries one.
+            every HTTP 200 reply that carries one, and that refuses to send
+            once the recorded spend has reached the cap, so a run that
+            costs more than expected overshoots by one call at most.
+
+        Raises:
+            CapReachedError: From the returned transport, when the spend has
+                reached the cap.
         """
 
         def send(
             url: str, body: bytes, headers: Mapping[str, str]
         ) -> tuple[int, bytes]:
+            if self.spent_usd() >= self.cap_usd:
+                raise CapReachedError("the live credit cap is reached")
             status, raw = transport(url, body, headers)
             if status == 200:
                 try:

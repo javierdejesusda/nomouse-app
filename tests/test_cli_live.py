@@ -119,7 +119,7 @@ def test_serve_replay_without_live_serves_files_only(
 
 @pytest.mark.parametrize(
     ("extra", "message"),
-    [(["--cap-usd", "20.5"], "at most USD 20"), (["--cache", "nowhere"], "mirror")],
+    [(["--cap-usd", "20.5"], "and USD 20"), (["--cache", "nowhere"], "mirror")],
 )
 def test_serve_replay_live_refuses_a_high_cap_or_no_mirror(
     site: Path,

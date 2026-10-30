@@ -8,6 +8,7 @@ from nomouse.credits import (
     CACHED_INPUT_PRICE,
     INPUT_PRICE,
     OUTPUT_PRICE,
+    CapReachedError,
     CreditLedger,
     call_cost,
 )
@@ -70,20 +71,12 @@ def test_the_ledger_persists_spend_on_disk_across_instances(tmp_path: Path) -> N
     assert again.calls("live-2") == 2
 
 
-def test_the_ledger_refuses_a_cap_above_twenty_dollars(tmp_path: Path) -> None:
-    with pytest.raises(ValueError, match="at most USD 20"):
-        CreditLedger(tmp_path / "ledger.jsonl", cap_usd=20.01)
-
-
-def test_can_afford_keeps_a_reserve_below_the_cap(tmp_path: Path) -> None:
-    ledger = CreditLedger(tmp_path / "ledger.jsonl", cap_usd=0.05)
-    assert ledger.can_afford(0.04)
-
-    ledger.record("live-1", {"input_tokens": 20_000, "output_tokens": 0})
-
-    assert ledger.spent_usd() == pytest.approx(0.025)
-    assert not ledger.can_afford(0.03)
-    assert ledger.can_afford(0.02)
+@pytest.mark.parametrize("cap", [20.01, float("inf"), float("nan"), -1.0])
+def test_the_ledger_refuses_a_cap_outside_zero_to_twenty_dollars(
+    tmp_path: Path, cap: float
+) -> None:
+    with pytest.raises(ValueError, match="between USD 0 and USD 20"):
+        CreditLedger(tmp_path / "ledger.jsonl", cap_usd=cap)
 
 
 def test_the_metered_transport_records_usage_of_answered_calls_only(
@@ -109,3 +102,23 @@ def test_the_metered_transport_records_usage_of_answered_calls_only(
     assert json.loads(text)["run"] == "live-7"
     assert "LLM_secret" not in text
     assert "Authorization" not in text
+
+
+def test_the_metered_transport_sends_nothing_once_the_cap_is_reached(
+    tmp_path: Path,
+) -> None:
+    ledger = CreditLedger(tmp_path / "ledger.jsonl", cap_usd=0.01)
+    sent: list[bytes] = []
+
+    def inner(url: str, body: bytes, headers: Mapping[str, str]) -> tuple[int, bytes]:
+        sent.append(body)
+        return 200, reply({"input_tokens": 6_000, "output_tokens": 0})
+
+    metered = ledger.metered(inner, "live-1")
+    metered("u", b"first", {})
+    metered("u", b"second", {})
+    with pytest.raises(CapReachedError):
+        metered("u", b"third", {})
+
+    assert sent == [b"first", b"second"]
+    assert ledger.spent_usd() == pytest.approx(0.015)
