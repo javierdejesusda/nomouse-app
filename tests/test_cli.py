@@ -154,7 +154,12 @@ def test_walk_serves_and_walks_a_builder_page(tmp_path: Path) -> None:
     record = json.loads((out / "walk.json").read_text(encoding="utf-8"))
     assert record["url"] == "/menu-focus-stays.html"
     assert "Enter" in record["keys"]
-    assert (out / "verdicts.json").is_file()
+    verdicts = json.loads((out / "verdicts.json").read_text(encoding="utf-8"))
+    w0, w1 = verdicts["verdicts"]
+    assert w0["findings"] == []
+    assert [(f["rule"], f["element"]["dom_id"]) for f in w1["findings"]] == [
+        ("focus-management", "actions")
+    ]
 
 
 @pytest.mark.parametrize(

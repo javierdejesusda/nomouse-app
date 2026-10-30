@@ -225,7 +225,11 @@ def test_g1_command_refuses_to_append_to_an_existing_log(
     [
         (["--window", "0"], "--window must be between 1 and --calls"),
         (["--window", "21"], "--window must be between 1 and --calls"),
-        (["--calls", "30"], "30 calls asked"),
+        (["--calls", "61"], "61 calls asked"),
+        (
+            ["--window", "51", "--calls", "60"],
+            "--window must be between 1 and --calls, at most 50",
+        ),
     ],
 )
 def test_g1_command_refuses_bad_sizes_before_any_call(
@@ -235,7 +239,7 @@ def test_g1_command_refuses_bad_sizes_before_any_call(
     args: list[str],
     message: str,
 ) -> None:
-    run_dir = make_run(tmp_path / "run", steps=19)
+    run_dir = make_run(tmp_path / "run", steps=59)
     transport = TokenTransport()
     monkeypatch.setattr(spark, "urllib_transport", transport)
 
@@ -256,3 +260,38 @@ def test_g1_command_needs_a_finished_walk(
     assert caught.value.code == 2
     assert "walk a page first" in capsys.readouterr().err
     assert not (tmp_path / "g1-usage.jsonl").exists()
+
+
+class FailingTransport(TokenTransport):
+    """Answers like the API until call `fail_at`, which gets HTTP 429."""
+
+    def __init__(self, fail_at: int) -> None:
+        super().__init__()
+        self.fail_at = fail_at
+
+    def __call__(
+        self, url: str, body: bytes, headers: Mapping[str, str]
+    ) -> tuple[int, bytes]:
+        if len(self.bodies) + 1 == self.fail_at:
+            self.bodies.append(json.loads(body))
+            return 429, json.dumps({"error": {"message": "Rate limited"}}).encode()
+        return super().__call__(url, body, headers)
+
+
+def test_g1_command_reports_an_api_error_and_keeps_the_partial_log(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    run_dir = make_run(tmp_path / "run", steps=19)
+    monkeypatch.setattr(spark, "urllib_transport", FailingTransport(fail_at=4))
+
+    assert main(["g1", str(run_dir)]) == 1
+
+    captured = capsys.readouterr()
+    log = run_dir / "g1-usage.jsonl"
+    assert captured.out == ""
+    assert captured.err == (
+        f"nomouse g1: call failed: HTTP 429: Rate limited; 3 calls logged in {log}\n"
+    )
+    assert len(log.read_text().splitlines()) == 3

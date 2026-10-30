@@ -4,6 +4,7 @@ import argparse
 import contextlib
 import datetime
 import ipaddress
+import sys
 from collections.abc import Sequence
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -85,8 +86,10 @@ def _mirror(cache: Path) -> int:
 
 
 def _g1(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
-    if not 1 <= args.window <= args.calls:
-        parser.error("--window must be between 1 and --calls")
+    if not 1 <= args.window <= min(args.calls, spark.MAX_IMAGES):
+        parser.error(
+            f"--window must be between 1 and --calls, at most {spark.MAX_IMAGES}"
+        )
     log: Path = args.log or args.run_dir / "g1-usage.jsonl"
     if log.exists():
         parser.error(f"{log} already exists; choose another --log")
@@ -100,6 +103,15 @@ def _g1(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
             window=args.window,
             transport=spark.urllib_transport,
         )
+    except spark.SparkError as error:
+        logged = (
+            len(log.read_text(encoding="utf-8").splitlines()) if log.exists() else 0
+        )
+        print(
+            f"nomouse g1: call failed: {error}; {logged} calls logged in {log}",
+            file=sys.stderr,
+        )
+        return 1
     except ValueError as error:
         parser.error(str(error))
     print("call  input  output  reasoning  latency_s")
