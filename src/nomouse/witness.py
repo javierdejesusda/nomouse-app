@@ -108,9 +108,10 @@ class Target:
         dom_id: The element's `id` attribute, if any.
         box: Border box in CSS pixels, relative to the top-left corner of its
             document rather than the viewport.
-        reached_by: Backend node ids whose Tab landing reaches the target:
-            the target first, then its ancestor and descendant elements in
-            the same document and the other radios of its group.
+        reached_by: Backend node ids whose landing reaches the target: the
+            target first, then, for a click-only target, its descendant
+            elements (a browser may focus a scroller or media element inside
+            it) and, for a radio, the other radios of its group.
     """
 
     backend_node_id: int
@@ -232,7 +233,9 @@ class FocusWitness:
         controls, `<summary>`, and elements with `tabindex` of 0 or more or
         `contenteditable`. An element that only responds to clicks (the
         browser reports a click, mousedown or mouseup listener) is a target
-        when no ancestor is focusable or clickable. Labels are never targets,
+        when no ancestor is focusable and no descendant is focusable or
+        clickable, so a listener delegated from an app root does not hide the
+        fake buttons inside it. Labels are never targets,
         since clicking one activates its control, and neither is anything
         under a disabled `<fieldset>` or an `inert` element. Content made
         inert by a modal dialog and nodes re-rendered during the walk are
@@ -261,11 +264,6 @@ class FocusWitness:
                 for index in elements
             }
             ancestors = {index: _ancestor_indices(parents, index) for index in elements}
-            descendants: dict[int, list[int]] = {index: [] for index in elements}
-            for index in elements:
-                for ancestor in ancestors[index]:
-                    if ancestor in descendants:
-                        descendants[ancestor].append(index)
             disabled = {
                 index
                 for index in elements
@@ -277,45 +275,48 @@ class FocusWitness:
                 for index in elements
                 if _is_focusable(tags[index], attributes[index])
             }
-            interactive = focusable | set(nodes.get("isClickable", {}).get("index", []))
-            radio_groups: dict[str, list[int]] = {}
+            clickable = set(nodes.get("isClickable", {}).get("index", [])) - focusable
+            contains_interactive = {
+                ancestor
+                for index in focusable | clickable
+                for ancestor in ancestors.get(index, [])
+            }
+            radio_groups: dict[tuple[int, str], list[int]] = {}
             for index in elements:
-                if tags[index] == "INPUT" and attributes[index].get("type") == "radio":
-                    name = attributes[index].get("name")
-                    if name:
-                        radio_groups.setdefault(name, []).append(index)
+                group = _radio_group(index, tags, attributes, ancestors)
+                if group is not None:
+                    radio_groups.setdefault(group, []).append(index)
             for index, (x, y, width, height) in sorted(
                 _rendered_elements(document, strings).items()
             ):
-                is_target = index in focusable or (
-                    index in interactive
+                if index in focusable:
+                    group = _radio_group(index, tags, attributes, ancestors)
+                    mates = radio_groups[group] if group is not None else []
+                    reached_by = [index] + [mate for mate in mates if mate != index]
+                elif (
+                    index in clickable
                     and tags[index] != "LABEL"
-                    and interactive.isdisjoint(ancestors[index])
-                )
+                    and index not in contains_interactive
+                    and focusable.isdisjoint(ancestors[index])
+                ):
+                    reached_by = [index] + [
+                        other for other in elements if index in ancestors[other]
+                    ]
+                else:
+                    continue
                 if (
-                    not is_target
-                    or width <= 0
+                    width <= 0
                     or height <= 0
                     or not disabled.isdisjoint([index, *ancestors[index]])
                 ):
                     continue
-                group = radio_groups.get(
-                    attributes[index].get("name", "")
-                    if attributes[index].get("type") == "radio"
-                    else "",
-                    [],
-                )
-                reached_by = [index, *ancestors[index], *descendants[index]]
-                reached_by += [mate for mate in group if mate != index]
                 targets.append(
                     Target(
                         backend_node_id=backend_ids[index],
                         tag=tags[index],
                         dom_id=attributes[index].get("id"),
                         box=Box(x=x, y=y, width=width, height=height),
-                        reached_by=[
-                            backend_ids[node] for node in reached_by if node in tags
-                        ],
+                        reached_by=[backend_ids[node] for node in reached_by],
                     )
                 )
         return targets
@@ -408,6 +409,23 @@ def _ancestor_indices(parents: list[int], index: int) -> list[int]:
         ancestors.append(parent)
         parent = parents[parent]
     return ancestors
+
+
+def _radio_group(
+    index: int,
+    tags: dict[int, str],
+    attributes: dict[int, dict[str, str]],
+    ancestors: dict[int, list[int]],
+) -> tuple[int, str] | None:
+    """Returns (form index or -1, name) for a named radio, else None."""
+    if (
+        tags[index] != "INPUT"
+        or attributes[index].get("type", "").lower() != "radio"
+        or not attributes[index].get("name")
+    ):
+        return None
+    form = next((a for a in ancestors[index] if tags.get(a) == "FORM"), -1)
+    return form, attributes[index]["name"]
 
 
 def _is_focusable(tag: str, attributes: dict[str, str]) -> bool:

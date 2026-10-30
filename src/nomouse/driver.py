@@ -86,6 +86,8 @@ class WalkRecord:
         viewport: Viewport size in CSS pixels.
         end_reason: Why the walk stopped: a full Tab cycle, a Tab target
             reached a third time, or the key cap.
+        repeat_step: Index of the Tab step that reached a target a third
+            time, when that ended the walk.
         keys: The key sequence, in order.
         initial: Page state before the first key.
         steps: Page state after each key.
@@ -96,6 +98,7 @@ class WalkRecord:
     url: str
     viewport: ViewportSize
     end_reason: EndReason
+    repeat_step: int | None
     keys: list[str]
     initial: Observation
     steps: list[Step]
@@ -216,18 +219,22 @@ def walk(
     cycle = _TabCycle()
     pressed_buttons: set[int | None] = set()
     end_reason: EndReason = "max_keys"
+    repeat_step: int | None = None
     while len(steps) < max_keys:
-        focus = press("Tab").focus
+        landing = press("Tab")
+        focus = landing.focus
         reason = cycle.land(focus)
         if reason is not None:
             end_reason = reason
+            if reason == "repeat":
+                repeat_step = landing.index
             break
         if focus.role in BUTTON_ROLES and focus.backend_node_id not in pressed_buttons:
             pressed_buttons.add(focus.backend_node_id)
             for key in ("Enter", "Escape"):
                 if len(steps) < max_keys:
                     press(key)
-    if end_reason == "repeat" and len(steps) + 2 <= max_keys:
+    if repeat_step is not None and len(steps) + 2 <= max_keys:
         press("Escape")
         press("Tab")
 
@@ -235,6 +242,7 @@ def walk(
         url=initial.url,
         viewport=VIEWPORT,
         end_reason=end_reason,
+        repeat_step=repeat_step,
         keys=[step.key for step in steps],
         initial=initial,
         steps=steps,
