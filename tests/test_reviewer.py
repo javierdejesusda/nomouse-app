@@ -10,6 +10,7 @@ import pytest
 from nomouse import spark
 from nomouse.reviewer import (
     FORM_I_PROMPT,
+    FORM_II_PROMPT,
     ReviewError,
     review,
 )
@@ -161,7 +162,7 @@ class ReviewTransport:
 
 def parse(request: dict[str, Any]) -> tuple[str, dict[str, Any]]:
     text = request["input"][0]["content"][0]["text"]
-    for form, prompt in (("i", FORM_I_PROMPT),):
+    for form, prompt in (("i", FORM_I_PROMPT), ("ii", FORM_II_PROMPT)):
         if text.startswith(prompt):
             return form, json.loads(text.removeprefix(prompt))
     raise AssertionError("unknown prompt")
@@ -227,6 +228,45 @@ def test_review_asks_form_i_about_each_enter_with_its_escape(tmp_path: Path) -> 
     }
 
 
+def test_review_asks_form_ii_with_one_layout_screenshot_per_view(
+    tmp_path: Path,
+) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS)
+    transport = ReviewTransport()
+
+    review(run_dir, transport=transport)
+
+    form_ii = [b for b in transport.bodies if parse(b)[0] == "ii"]
+    assert len(form_ii) == 1
+    request = form_ii[0]
+    # A view is a scroll position between two non-Tab keys; its first
+    # screenshot stands for it.
+    assert images(request) == ["initial", "step-003", "step-005"]
+
+    def element(image: int, role: str, name: str, y: float) -> dict[str, Any]:
+        return {"image": image, "role": role, "name": name, "box": box(y)}
+
+    assert parse(request)[1] == {
+        "transitions": [
+            {
+                "step": 1,
+                "from": element(1, "link", "Home", 10),
+                "to": element(1, "button", "Menu", 50),
+            },
+            {
+                "step": 4,
+                "from": element(2, "button", "Menu", 50),
+                "to": element(2, "link", "About", 100),
+            },
+            {
+                "step": 5,
+                "from": element(2, "link", "About", 100),
+                "to": element(3, "link", "Contact", 100),
+            },
+        ]
+    }
+
+
 def test_review_never_shows_the_model_verdicts_or_dom_ids(tmp_path: Path) -> None:
     run_dir = write_run(tmp_path / "run", STEPS)
     transport = ReviewTransport()
@@ -264,17 +304,39 @@ def test_review_writes_answers_statuses_hash_and_usage(tmp_path: Path) -> None:
             "finding": True,
             "status": "NEEDS REVIEW",
         },
+        {
+            "form": "ii",
+            "steps": {"from": 0, "to": 1},
+            "answer": {"answer": "breaks", "reason": "Reason."},
+            "finding": True,
+            "status": "best practice, NEEDS REVIEW",
+        },
+        {
+            "form": "ii",
+            "steps": {"from": 3, "to": 4},
+            "answer": {"answer": "follows", "reason": "Reason."},
+            "finding": False,
+            "status": None,
+        },
+        {
+            "form": "ii",
+            "steps": {"from": 4, "to": 5},
+            "answer": {"answer": "follows", "reason": "Reason."},
+            "finding": False,
+            "status": None,
+        },
     ]
     assert written["usage"] == {
-        "calls": 1,
-        "input_tokens": 1037 * 3 + 300,
+        "calls": 2,
+        "input_tokens": 1037 * 6 + 600,
         "cached_tokens": 0,
-        "output_tokens": 100,
-        "reasoning_tokens": 20,
-        "total_tokens": 1037 * 3 + 400,
+        "output_tokens": 200,
+        "reasoning_tokens": 40,
+        "total_tokens": 1037 * 6 + 800,
     }
     assert [(c["form"], c["images"], c["instances"]) for c in written["calls"]] == [
-        ("i", 3, 1)
+        ("i", 3, 1),
+        ("ii", 3, 3),
     ]
 
 
@@ -363,6 +425,9 @@ def test_review_splits_requests_to_stay_within_the_image_limit(
         button = focus(n + 1, "button", f"B{n}", 10)
         steps += [("Tab", button, 0.0), ("Enter", button, 0.0)]
         steps.append(("Escape", button, 0.0))
+    steps += [
+        ("Tab", focus(100 + n, "link", f"L{n}", 10), 100.0 * n) for n in range(60)
+    ]
     run_dir = write_run(tmp_path / "run", steps)
     transport = ReviewTransport()
 
@@ -371,10 +436,19 @@ def test_review_splits_requests_to_stay_within_the_image_limit(
     for request in transport.bodies:
         assert len(images(request)) <= spark.MAX_IMAGES
     assert sum(i["form"] == "i" for i in result["instances"]) == 20
+    assert sum(i["form"] == "ii" for i in result["instances"]) == 79
     assert sum(c["form"] == "i" for c in result["calls"]) == 2
+    asked = [
+        item["step"]
+        for body in transport.bodies
+        if parse(body)[0] == "ii"
+        for item in parse(body)[1]["transitions"]
+    ]
+    assert asked == sorted(set(asked))
+    assert len(asked) == 79
 
 
-def test_review_of_a_walk_without_buttons_makes_no_call(
+def test_review_of_a_walk_without_buttons_or_moves_makes_no_call(
     tmp_path: Path,
 ) -> None:
     run_dir = write_run(tmp_path / "run", [("Tab", focus(1, "link", "A", 10), 0.0)])

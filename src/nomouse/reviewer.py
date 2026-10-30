@@ -1,12 +1,21 @@
 """Focus reviewer: Muse Spark judges a frozen walk from its screenshots.
 
 Form (i) asks, for each Enter and the Escape after it, whether focus landed
-inside what visibly opened and came back to the trigger.
+inside what visibly opened and came back to the trigger. Form (ii) asks, for
+each Tab transition, whether the move follows the visual reading order.
 
 The model sees screenshots and the focused element's role, accessible name
 and box as JSON text, never labels, DOM ids or walker verdicts. It runs only
 on a walk whose walker verdicts are frozen and match their hash, and records
 that hash. Every model finding has status NEEDS REVIEW.
+
+Form (ii) sends one layout screenshot per view instead of one per Tab: a view
+is a scroll position between two non-Tab keys, during which a page without
+timers keeps its layout, so the first screenshot of the view shows where
+every element focused in it sits. A page that fits the viewport costs one
+image plus about 60 text tokens per transition, against about 1,037 tokens per
+screenshot. Limit: content that only shows while focused (a skip link) is
+absent from the layout screenshot; its box is still given.
 """
 
 import hashlib
@@ -31,6 +40,8 @@ from nomouse.walkers import VERDICTS_NAME
 
 REVIEW_NAME = "review.json"
 NEEDS_REVIEW = "NEEDS REVIEW"
+ORDER_STATUS = "best practice, NEEDS REVIEW"
+
 FORM_I_PROMPT = (
     "You are reviewing a keyboard-only walk of a web page. A driver pressed"
     " Tab to reach a control, then Enter, then Escape. For each instance in"
@@ -53,6 +64,21 @@ FORM_I_PROMPT = (
     " activated? pass, fail or unsure; unsure when there is no after-Escape"
     " screenshot.\n"
     "Give each answer a one-sentence reason naming what you saw.\n"
+)
+
+FORM_II_PROMPT = (
+    "You are reviewing the Tab order of a web page from a keyboard-only walk."
+    " The attached screenshots of the 1024x768 viewport show the page layout,"
+    " numbered from 1 in the order attached; a screenshot may show a focus"
+    " indicator on some element, which you can ignore. The JSON below lists"
+    " the Tab transitions in the order they were pressed: for each, the"
+    " element focus left and the element it landed on, each with the number"
+    " of the screenshot that shows it, its role, accessible name and border"
+    " box in that screenshot's pixels. For each transition answer follows if"
+    " the move follows the visual reading order a sighted user would expect"
+    " from the layout, breaks if it breaks that order, or unsure if the"
+    " screenshots do not show enough, with a one-sentence reason naming what"
+    " you saw.\n"
 )
 
 _VERDICT = {"type": "string", "enum": ["pass", "fail", "unsure"]}
@@ -82,8 +108,20 @@ FORM_I_SCHEMA = _answer_list(
         "returned": _JUDGED,
     },
 )
+FORM_II_SCHEMA = _answer_list(
+    "transitions",
+    {
+        "step": {"type": "integer"},
+        "answer": {"type": "string", "enum": ["follows", "breaks", "unsure"]},
+        "reason": _REASON,
+    },
+)
+
 # 16 instances of 3 screenshots stay under the API's 50 images per request.
 _ENTER_BATCH = MAX_IMAGES // 3
+# Keeps one reply's reasons short enough to stay reliable.
+_TAB_BATCH = 40
+
 _DOCUMENT_TAGS = frozenset({"BODY", "HTML"})
 _RUN_LABEL = re.compile(r"[A-Za-z0-9_-]+")
 
@@ -130,7 +168,7 @@ def review(
     run: str | None = None,
     transport: Transport = urllib_transport,
 ) -> dict[str, Any]:
-    """Reviews a frozen walk with form (i) and writes the review.
+    """Reviews a frozen walk with forms (i) and (ii) and writes the review.
 
     Args:
         run_dir: Run directory with the walk record, its screenshots and the
@@ -167,6 +205,7 @@ def review(
     calls: list[dict[str, Any]] = []
     batches = [
         *(("i", b) for b in _batches(_enter_instances(observations), _ENTER_BATCH)),
+        *(("ii", b) for b in _batches(_tab_instances(observations), _TAB_BATCH)),
     ]
     for form, batch in batches:
         answers, reply, images = _ask(run_dir, form, batch, transport)
@@ -249,6 +288,42 @@ def _enter_instances(observations: Sequence[dict[str, Any]]) -> Iterator[_Instan
         )
 
 
+def _tab_instances(observations: Sequence[dict[str, Any]]) -> Iterator[_Instance]:
+    """Yields a form (ii) instance per Tab that moves between two elements.
+
+    Each element carries the screenshot that opens its view, standing for
+    the layout it was focused in.
+    """
+    view_shot: dict[tuple[float, float, int], str] = {}
+    shots: list[str] = []
+    epoch = 0
+    for observation in observations:
+        if observation.get("key") not in (None, "Tab"):
+            epoch += 1
+        view = (observation["scroll_x"], observation["scroll_y"], epoch)
+        shots.append(view_shot.setdefault(view, observation["screenshot"]))
+    for position in range(1, len(observations)):
+        before, step = observations[position - 1], observations[position]
+        source, landing = before["focus"], step["focus"]
+        if (
+            step["key"] != "Tab"
+            or _focus(source) is None
+            or _focus(landing) is None
+            or source["backend_node_id"] == landing["backend_node_id"]
+        ):
+            continue
+        yield _Instance(
+            form="ii",
+            steps={"from": before.get("index"), "to": step["index"]},
+            question={
+                "step": step["index"],
+                "from": _focus(source),
+                "to": _focus(landing),
+            },
+            images=[shots[position - 1], shots[position]],
+        )
+
+
 def _focus(focus: Mapping[str, Any]) -> dict[str, Any] | None:
     if focus["tag"] is None or focus["tag"] in _DOCUMENT_TAGS or not focus["box"]:
         return None
@@ -270,8 +345,13 @@ def _batches(instances: Iterator[_Instance], size: int) -> Iterator[list[_Instan
 
 
 def _shots(batch: Sequence[_Instance]) -> list[str]:
-    """Returns the screenshots one request attaches, in order."""
-    return [shot for instance in batch for shot in instance.images]
+    """Returns the screenshots one request attaches, in order.
+
+    Form (i) attaches each instance's own screenshots; form (ii) attaches
+    each layout screenshot once.
+    """
+    shots = [shot for instance in batch for shot in instance.images]
+    return shots if batch[0].form == "i" else list(dict.fromkeys(shots))
 
 
 def _ask(
@@ -283,20 +363,29 @@ def _ask(
     first = 1
     for instance in batch:
         question = dict(instance.question)
-        question["screenshots"] = [
-            {"image": n, **shown}
-            for n, shown in enumerate(question["screenshots"], start=first)
-        ]
-        first += len(instance.images)
+        if form == "i":
+            question["screenshots"] = [
+                {"image": n, **shown}
+                for n, shown in enumerate(question["screenshots"], start=first)
+            ]
+            first += len(instance.images)
+        else:
+            for end, shot in zip(("from", "to"), instance.images, strict=True):
+                question[end] = {"image": shots.index(shot) + 1, **question[end]}
         questions.append(question)
+    key, prompt, schema, name = (
+        ("instances", FORM_I_PROMPT, FORM_I_SCHEMA, "FocusManagementReview")
+        if form == "i"
+        else ("transitions", FORM_II_PROMPT, FORM_II_SCHEMA, "TabOrderReview")
+    )
     reply = ask(
-        FORM_I_PROMPT + json.dumps({"instances": questions}),
+        prompt + json.dumps({key: questions}),
         [(run_dir / shot).read_bytes() for shot in shots],
-        schema=("FocusManagementReview", FORM_I_SCHEMA),
+        schema=(name, schema),
         transport=transport,
     )
     asked = [question["step"] for question in questions]
-    return _validated(reply.text, "instances", asked, FORM_I_SCHEMA), reply, len(shots)
+    return _validated(reply.text, key, asked, schema), reply, len(shots)
 
 
 def _validated(
@@ -341,11 +430,13 @@ def _check(value: object, schema: Mapping[str, Any]) -> None:
 
 
 def _is_finding(form: str, answer: Mapping[str, Any]) -> bool:
-    return "fail" in (answer["inside"]["answer"], answer["returned"]["answer"])
+    if form == "i":
+        return "fail" in (answer["inside"]["answer"], answer["returned"]["answer"])
+    return bool(answer["answer"] == "breaks")
 
 
 def _status(form: str) -> str:
-    return NEEDS_REVIEW
+    return NEEDS_REVIEW if form == "i" else ORDER_STATUS
 
 
 def _totals(usages: Sequence[Mapping[str, Any]]) -> dict[str, int]:
