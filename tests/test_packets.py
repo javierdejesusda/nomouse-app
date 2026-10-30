@@ -1,5 +1,7 @@
 import hashlib
 import json
+import urllib.error
+from collections.abc import Callable, Mapping
 from pathlib import Path
 from typing import Any
 
@@ -8,6 +10,7 @@ import pytest
 from nomouse.packets import (
     DISCLAIMER,
     PacketError,
+    acceptable_sentence,
     write_packets,
 )
 
@@ -121,12 +124,48 @@ REVIEW = [
 ]
 
 
+class SentenceTransport:
+    """Answers like the API, writing sentences with `write(id, finding)`."""
+
+    def __init__(self, write: Callable[[str, dict[str, Any]], str]) -> None:
+        self.write = write
+        self.bodies: list[dict[str, Any]] = []
+
+    def __call__(
+        self, url: str, body: bytes, headers: Mapping[str, str]
+    ) -> tuple[int, bytes]:
+        request = json.loads(body)
+        self.bodies.append(request)
+        text = request["input"][0]["content"][0]["text"]
+        findings = json.loads(text[text.index("{") :])["findings"]
+        answer = {
+            "sentences": [
+                {"id": f["id"], "sentence": self.write(f["id"], f)} for f in findings
+            ]
+        }
+        reply = {
+            "model": "muse-spark-1.3",
+            "output": [
+                {
+                    "type": "message",
+                    "content": [{"type": "output_text", "text": json.dumps(answer)}],
+                }
+            ],
+            "usage": {"input_tokens": 400, "output_tokens": 90, "total_tokens": 490},
+        }
+        return 200, json.dumps(reply).encode()
+
+
+def plain(packet_id: str, finding: dict[str, Any]) -> str:
+    return f"Observed {finding['rule']} on {finding['element']['name']}."
+
+
 def test_packets_cover_walker_and_model_findings_with_statuses(
     tmp_path: Path,
 ) -> None:
     run_dir = write_run(tmp_path / "run", review=REVIEW)
 
-    result = write_packets(run_dir)
+    result = write_packets(run_dir, template=True)
 
     packets = result["packets"]
     assert [(p["rule"], p["status"], p["source"]) for p in packets] == [
@@ -153,19 +192,22 @@ def test_packets_cover_walker_and_model_findings_with_statuses(
     for packet in packets:
         assert packet["disclaimer"] == DISCLAIMER
         assert packet["sentence_source"] == "template"
+        assert acceptable_sentence(packet["sentence"])
     assert DISCLAIMER == (
         "Observed keyboard-only test evidence."
         " Not a conformance claim and not legal advice."
     )
 
 
-def test_packets_record_their_inputs_and_template_sentences(
+def test_template_packets_make_no_call_and_record_their_inputs(
     tmp_path: Path,
 ) -> None:
     run_dir = write_run(tmp_path / "run", review=REVIEW)
+    transport = SentenceTransport(plain)
 
-    result = write_packets(run_dir)
+    result = write_packets(run_dir, template=True, transport=transport)
 
+    assert transport.bodies == []
     written = json.loads((run_dir / "packets.json").read_text(encoding="utf-8"))
     assert written == result
     assert result["page"] == "http://127.0.0.1/p.html"
@@ -187,10 +229,145 @@ def test_packets_record_their_inputs_and_template_sentences(
     )
 
 
+def test_spark_writes_one_sentence_per_finding_from_the_witness_data(
+    tmp_path: Path,
+) -> None:
+    run_dir = write_run(tmp_path / "run", review=REVIEW)
+    transport = SentenceTransport(plain)
+
+    result = write_packets(run_dir, transport=transport)
+
+    assert len(transport.bodies) == 1
+    request = transport.bodies[0]
+    assert request["model"] == "muse-spark-1.3"
+    assert request["reasoning"] == {"effort": "minimal"}
+    assert request["text"]["format"]["type"] == "json_schema"
+    assert len(request["input"][0]["content"]) == 1
+    text = request["input"][0]["content"][0]["text"]
+    sent = json.loads(text[text.index("{") :])["findings"]
+    assert sent[0] == {
+        "id": "P1",
+        "rule": "focus-management",
+        "status": "VERIFIED",
+        "step": 3,
+        "element": {"role": "button", "name": "Invite people"},
+        "observed": W1_FINDINGS[0]["detail"],
+    }
+    assert sent[3]["status"] == "NEEDS REVIEW"
+    assert "invite" not in json.dumps(sent).replace("Invite", "")
+    assert [p["sentence"] for p in result["packets"]] == [
+        "Observed focus-management on Invite people.",
+        "Observed order on Email.",
+        "Observed unreachable on Help.",
+        "Observed focus-management on Menu.",
+    ]
+    assert {p["sentence_source"] for p in result["packets"]} == {"spark"}
+    assert result["writer"]["mode"] == "spark"
+    assert result["writer"]["model"] == "muse-spark-1.3"
+    assert result["writer"]["reasoning_effort"] == "minimal"
+    assert result["writer"]["usage"]["input_tokens"] == 400
+    assert result["writer"]["error"] is None
+
+
+@pytest.mark.parametrize(
+    "sentence",
+    [
+        "The page is not compliant because focus stays on Menu.",
+        "This dialog is non-compliant.",
+        "Focus order is conformant here.",
+        "This violates the law for public sites.",
+        "Focus stays on Invite, a WCAG 2.4.3 failure.",
+        "The ADA requires focus to move.",
+        "Focus stayed on Menu.\nA second line.",
+        "Focus stayed on Menu",
+        "Focus stayed on Menu. It did not move.",
+        "",
+    ],
+)
+def test_a_sentence_that_claims_status_or_is_not_one_sentence_falls_back(
+    tmp_path: Path, sentence: str
+) -> None:
+    run_dir = write_run(tmp_path / "run", review=REVIEW)
+
+    def write(packet_id: str, finding: dict[str, Any]) -> str:
+        return sentence if packet_id == "P2" else plain(packet_id, finding)
+
+    result = write_packets(run_dir, transport=SentenceTransport(write))
+
+    assert not acceptable_sentence(sentence)
+    sources = [p["sentence_source"] for p in result["packets"]]
+    assert sources == ["spark", "template", "spark", "spark"]
+    assert result["packets"][1]["sentence"] == (
+        'Order (best practice) at step 6 on the textbox "Email":'
+        " jumps up 92 px from INPUT#name."
+    )
+    assert result["packets"][1]["rejected"] == sentence
+
+
+def no_network(url: str, body: bytes, headers: Mapping[str, str]) -> tuple[int, bytes]:
+    raise urllib.error.URLError("no network")
+
+
+def server_error(
+    url: str, body: bytes, headers: Mapping[str, str]
+) -> tuple[int, bytes]:
+    return 500, b'{"error": {"message": "down"}}'
+
+
+class EditingTransport(SentenceTransport):
+    """Answers every finding, then lets `edit` change the sentences list."""
+
+    def __init__(self, edit: Callable[[list[dict[str, Any]]], None]) -> None:
+        super().__init__(plain)
+        self.edit = edit
+
+    def __call__(
+        self, url: str, body: bytes, headers: Mapping[str, str]
+    ) -> tuple[int, bytes]:
+        status, raw = super().__call__(url, body, headers)
+        reply = json.loads(raw)
+        part = reply["output"][0]["content"][0]
+        answer = json.loads(part["text"])
+        self.edit(answer["sentences"])
+        part["text"] = json.dumps(answer)
+        return status, json.dumps(reply).encode()
+
+
+def drop_first(sentences: list[dict[str, Any]]) -> None:
+    del sentences[0]
+
+
+def number_first(sentences: list[dict[str, Any]]) -> None:
+    sentences[0]["id"] = 1
+
+
+@pytest.mark.parametrize(
+    "transport",
+    [
+        no_network,
+        server_error,
+        EditingTransport(drop_first),
+        EditingTransport(number_first),
+    ],
+    ids=["no-network", "http-500", "missing-id", "numeric-id"],
+)
+def test_a_failed_call_falls_back_to_the_template_for_every_packet(
+    tmp_path: Path, transport: Any
+) -> None:
+    run_dir = write_run(tmp_path / "run", review=REVIEW)
+
+    result = write_packets(run_dir, transport=transport)
+
+    assert result["writer"]["mode"] == "template"
+    assert result["writer"]["error"]
+    assert {p["sentence_source"] for p in result["packets"]} == {"template"}
+    assert (run_dir / "packets.json").is_file()
+
+
 def test_packets_without_a_review_hold_the_walker_findings(tmp_path: Path) -> None:
     run_dir = write_run(tmp_path / "run")
 
-    result = write_packets(run_dir)
+    result = write_packets(run_dir, template=True)
 
     assert result["review"] is None
     assert {p["status"] for p in result["packets"]} == {"VERIFIED"}
@@ -201,8 +378,8 @@ def test_a_named_review_is_used_and_must_exist(tmp_path: Path) -> None:
     run_dir = write_run(tmp_path / "run", review=REVIEW, review_name="review-g.json")
 
     with pytest.raises(PacketError, match="review-h.json"):
-        write_packets(run_dir, run="h")
-    result = write_packets(run_dir, run="g")
+        write_packets(run_dir, run="h", template=True)
+    result = write_packets(run_dir, run="g", template=True)
 
     assert result["review"]["file"] == "review-g.json"
     assert len(result["packets"]) == 4
@@ -218,7 +395,7 @@ def test_tab_order_answers_in_an_old_review_make_no_packet(tmp_path: Path) -> No
     }
     run_dir = write_run(tmp_path / "run", findings=[], review=[order])
 
-    result = write_packets(run_dir)
+    result = write_packets(run_dir, template=True)
 
     assert result["packets"] == []
 
@@ -228,7 +405,7 @@ def test_a_returned_fail_the_walker_missed_is_its_own_packet(tmp_path: Path) -> 
         tmp_path / "run", findings=[], review=[form_i(0, "pass", "fail")]
     )
 
-    result = write_packets(run_dir)
+    result = write_packets(run_dir, template=True)
 
     (packet,) = result["packets"]
     assert (packet["question"], packet["step"]) == ("returned", 2)
@@ -244,14 +421,14 @@ def test_packets_refuse_unfrozen_verdicts_or_a_review_of_other_verdicts(
     run_dir = write_run(tmp_path / "a", review=REVIEW)
     (run_dir / "verdicts.json").write_text("{}", encoding="utf-8")
     with pytest.raises(PacketError, match="hash"):
-        write_packets(run_dir)
+        write_packets(run_dir, template=True)
 
     other = write_run(tmp_path / "b", review=REVIEW)
     review = json.loads((other / "review.json").read_text())
     review["verdicts_sha256"] = "0" * 64
     (other / "review.json").write_text(json.dumps(review), encoding="utf-8")
     with pytest.raises(PacketError, match="other verdicts"):
-        write_packets(other)
+        write_packets(other, template=True)
 
     assert not (run_dir / "packets.json").exists()
     assert not (other / "packets.json").exists()
@@ -260,8 +437,21 @@ def test_packets_refuse_unfrozen_verdicts_or_a_review_of_other_verdicts(
 def test_packets_never_overwrite(tmp_path: Path) -> None:
     run_dir = write_run(tmp_path / "run", review=REVIEW)
     (run_dir / "packets.json").write_text("{}", encoding="utf-8")
+    transport = SentenceTransport(plain)
 
     with pytest.raises(FileExistsError):
-        write_packets(run_dir)
+        write_packets(run_dir, transport=transport)
 
+    assert transport.bodies == []
     assert (run_dir / "packets.json").read_text(encoding="utf-8") == "{}"
+
+
+def test_a_walk_without_findings_makes_no_call(tmp_path: Path) -> None:
+    run_dir = write_run(tmp_path / "run", findings=[])
+    transport = SentenceTransport(plain)
+
+    result = write_packets(run_dir, transport=transport)
+
+    assert transport.bodies == []
+    assert result["packets"] == []
+    assert result["writer"] == {"mode": "template", "error": None, "usage": None}
