@@ -38,6 +38,10 @@ spend plus this reserve stays within the cap. The T10 eval reviews cost
 under USD 0.03 a page."""
 API_PAUSE_S = 600.0
 """How long live mode stays off after a run could not reach the API."""
+MAX_STORED_RUNS = 200
+"""Live runs kept on disk before live mode turns off. A run of a page
+with no button makes no model call, so the credit cap alone does not bound
+the disk; a 40-key run takes up to about 25 MB with its replay copy."""
 
 _REPLAY_NOTE = "The replay of every frozen run still works with no key."
 _log = logging.getLogger(__name__)
@@ -199,6 +203,7 @@ class LiveService:
         transport: Transport,
         key_available: bool,
         clock: Callable[[], float] = time.monotonic,
+        max_stored_runs: int = MAX_STORED_RUNS,
     ) -> None:
         """Initializes the service.
 
@@ -212,6 +217,8 @@ class LiveService:
             transport: Sends the model calls; metered per run.
             key_available: Whether an API key is configured.
             clock: Monotonic clock in seconds.
+            max_stored_runs: Live runs kept in the state directory before
+                live mode turns off.
         """
         self._site = site
         self._state = state
@@ -222,6 +229,7 @@ class LiveService:
         self._transport = transport
         self._key_available = key_available
         self._clock = clock
+        self._max_stored_runs = max_stored_runs
         self._lock = threading.Lock()
         self._runs: dict[str, dict[str, Any]] = {}
         self._thread: threading.Thread | None = None
@@ -265,8 +273,8 @@ class LiveService:
                 " other address.",
             }
         fallback = {"replay_id": self._replay_id(page)}
-        if (message := self._off_reason()) is not None:
-            return 503, {"error": "live_off", "message": message, **fallback}
+        # Checked under the lock, after the busy check, so the cap is read
+        # only once the previous run has recorded all of its calls.
         with self._lock:
             if self._busy():
                 return 409, {
@@ -275,6 +283,8 @@ class LiveService:
                     " Try again when it finishes, or open the replay.",
                     **fallback,
                 }
+            if (message := self._off_reason()) is not None:
+                return 503, {"error": "live_off", "message": message, **fallback}
             if not self._limiter.allow(client):
                 return 429, {
                     "error": "rate_limited",
@@ -390,6 +400,13 @@ class LiveService:
                 f"Live mode is off: the lifetime live credit cap of USD {cap:.2f}"
                 f" is used up (USD {spent:.2f} spent; a run may cost up to USD"
                 f" {RUN_RESERVE_USD:.2f}). {_REPLAY_NOTE}"
+            )
+        runs = self._state / "runs"
+        if runs.is_dir() and len(list(runs.iterdir())) >= self._max_stored_runs:
+            return (
+                f"Live mode is off: this server keeps at most"
+                f" {self._max_stored_runs} live runs, and they are all used."
+                f" {_REPLAY_NOTE}"
             )
         if self._clock() < self._paused_until:
             return (

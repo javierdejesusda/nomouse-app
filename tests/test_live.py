@@ -84,6 +84,9 @@ def make_service(
         key_available: bool = True,
         cap_usd: float = 20.0,
         limiter: RateLimiter | None = None,
+        ledger: CreditLedger | None = None,
+        max_stored_runs: int = 200,
+        transport: Transport = api_reply,
     ) -> tuple[LiveService, Clock]:
         clock = Clock()
         service = LiveService(
@@ -91,11 +94,13 @@ def make_service(
             state=tmp_path / "state",
             pages=live_pages(BUILDER),
             pipeline=pipeline or copy_menu(fixture_runs),
-            ledger=CreditLedger(tmp_path / "state" / "live-usage.jsonl", cap_usd),
+            ledger=ledger
+            or CreditLedger(tmp_path / "state" / "live-usage.jsonl", cap_usd),
             limiter=limiter or RateLimiter(max_runs=3, window_s=3600, clock=clock),
-            transport=api_reply,
+            transport=transport,
             key_available=key_available,
             clock=clock,
+            max_stored_runs=max_stored_runs,
         )
         return service, clock
 
@@ -273,6 +278,81 @@ def test_an_exhausted_cap_falls_back_to_replay_without_a_call(
     assert reply["message"] == status["message"]
     assert calls == []
     assert RUN_RESERVE_USD > 1.0 - 0.875
+
+
+class StaleLedger(CreditLedger):
+    """A ledger whose next read is taken just before a running run spends."""
+
+    def __init__(self, path: Path, cap_usd: float) -> None:
+        super().__init__(path, cap_usd)
+        self.before_answer: Callable[[], None] | None = None
+
+    def spent_usd(self, run: str | None = None) -> float:
+        spent = super().spent_usd(run)
+        if (hook := self.before_answer) is not None:
+            self.before_answer = None
+            hook()
+        return spent
+
+
+def test_a_start_checks_the_cap_after_the_previous_run_has_spent(
+    make_service: Callable[..., tuple[LiveService, Clock]],
+    fixture_runs: Path,
+    tmp_path: Path,
+) -> None:
+    release = threading.Event()
+    walks: list[str] = []
+    walk = copy_menu(fixture_runs)
+
+    def spend_after_release(
+        page: LivePage, run_dir: Path, transport: Transport, progress: Any
+    ) -> None:
+        walks.append(page.id)
+        release.wait(5)
+        if len(walks) == 1:
+            walk(page, run_dir, transport, progress)
+
+    ledger = StaleLedger(tmp_path / "state" / "live-usage.jsonl", 1.0)
+    big = {"input_tokens": 640_000, "output_tokens": 0}
+
+    def costly(url: str, body: bytes, headers: Mapping[str, str]) -> Any:
+        return 200, json.dumps({"usage": big}).encode()
+
+    service, _ = make_service(spend_after_release, ledger=ledger, transport=costly)
+    first, _ = service.start("203.0.113.5", "builder/menu-focus-stays.html")
+
+    def finish_first_run() -> None:
+        release.set()
+        service.join()
+
+    ledger.before_answer = finish_first_run
+    second, _ = service.start("198.51.100.7", "before/home.html")
+    ledger.before_answer = None
+    release.set()
+    service.join()
+
+    assert first == 202
+    assert second in (409, 503)
+    assert walks == ["builder/menu-focus-stays.html"]
+    assert ledger.spent_usd() == pytest.approx(0.8)
+
+
+def test_live_mode_turns_off_when_the_stored_runs_reach_their_limit(
+    make_service: Callable[..., tuple[LiveService, Clock]], tmp_path: Path
+) -> None:
+    for name in ("live-a", "live-b"):
+        (tmp_path / "state" / "runs" / name).mkdir(parents=True)
+    calls: list[object] = []
+    service, _ = make_service(lambda *a: calls.append(a), max_stored_runs=2)
+
+    code, reply = service.start("203.0.113.5", "before/home.html")
+
+    assert code == 503
+    assert reply["message"].startswith(
+        "Live mode is off: this server keeps at most 2 live runs"
+    )
+    assert service.status()["live"] is False
+    assert calls == []
 
 
 def test_an_unreadable_ledger_keeps_live_mode_off(
