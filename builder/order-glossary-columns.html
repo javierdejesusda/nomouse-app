@@ -1,0 +1,59 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: Tab order, correct variant that is not top to bottom. An A to Z
+  glossary flows down three newspaper columns (CSS `columns`), so Tab goes
+  down each column and then up to the top of the next, in alphabetical order.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sailing glossary (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #f7fafc; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  main { padding: 16px; max-width: 900px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  .terms { columns: 3; column-gap: 32px; column-rule: 1px solid #d5dde5; list-style: none; padding: 0; margin: 16px 0; }
+  .terms li { break-inside: avoid; padding: 4px 0 8px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Harbour school</strong>
+  <a href="#courses">Courses</a>
+  <a href="#glossary">Glossary</a>
+</header>
+<main id="glossary">
+  <h1>Sailing glossary</h1>
+  <p>Terms used in our beginner courses, A to Z.</p>
+  <ul class="terms">
+    <li><a id="term-first" href="#abeam">Abeam</a></li>
+    <li><a href="#backstay">Backstay</a></li>
+    <li><a href="#beam-reach">Beam reach</a></li>
+    <li><a href="#bow">Bow</a></li>
+    <li><a href="#cleat">Cleat</a></li>
+    <li><a href="#close-hauled">Close-hauled</a></li>
+    <li><a id="term-col2" href="#downhaul">Downhaul</a></li>
+    <li><a href="#gybe">Gybe</a></li>
+    <li><a href="#halyard">Halyard</a></li>
+    <li><a href="#heel">Heel</a></li>
+    <li><a href="#jib">Jib</a></li>
+    <li><a href="#leeward">Leeward</a></li>
+    <li><a id="term-col3" href="#mainsheet">Mainsheet</a></li>
+    <li><a href="#port">Port</a></li>
+    <li><a href="#reef">Reef</a></li>
+    <li><a href="#starboard">Starboard</a></li>
+    <li><a href="#tack">Tack</a></li>
+    <li><a href="#windward">Windward</a></li>
+  </ul>
+  <p><a href="#suggest">Suggest a term</a></p>
+</main>
+</body>
+</html>

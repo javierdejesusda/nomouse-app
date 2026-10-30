@@ -1,0 +1,71 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: Tab order, correct variant that is not top to bottom. The article
+  is read first and the right-hand sidebar after it, so Tab moves up from the
+  end of the article to the top of the sidebar.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allotment journal (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #fafaf7; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  .layout { display: grid; grid-template-columns: 1fr 280px; gap: 32px; padding: 16px; max-width: 1000px; }
+  article h1 { font-size: 26px; margin: 0 0 8px; }
+  article p { margin: 0 0 12px; }
+  article ul { padding-left: 20px; }
+  article li { margin-bottom: 8px; }
+  aside { background: #fff; border: 1px solid #ddd; padding: 16px; align-self: start; }
+  aside h2 { font-size: 18px; margin: 0 0 8px; }
+  aside section + section { margin-top: 20px; }
+  aside ul { padding-left: 20px; margin: 0; }
+  aside li { margin-bottom: 8px; }
+  input { font: inherit; padding: 6px 8px; width: 100%; box-sizing: border-box; }
+  button { font: inherit; padding: 6px 12px; margin-top: 8px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Allotment journal</strong>
+  <a href="#posts">Posts</a>
+  <a href="#about">About</a>
+</header>
+<div class="layout">
+  <article>
+    <h1>Saving tomato seed in October</h1>
+    <p>The last trusses ripened late this year, which turned out to be a good thing: the fruit we kept for seed had a full month on the vine.</p>
+    <p>Scoop the seeds with their jelly into a jar, add a splash of water and leave it on a warm shelf for three days. The mould that forms on top breaks down the coating that stops seeds sprouting inside the fruit.</p>
+    <p>Rinse, spread on a plate, and let them dry for a week before you label the envelope.</p>
+    <h2>Related reading</h2>
+    <ul>
+      <li><a href="#blight">Spotting blight before it spreads</a></li>
+      <li><a href="#beds">Planning next year's beds</a></li>
+    </ul>
+    <p><a id="article-last" href="#comments">Read the 14 comments</a></p>
+  </article>
+  <aside>
+    <section>
+      <h2>Monthly letter</h2>
+      <label for="newsletter-email">Email address</label>
+      <input id="newsletter-email" type="email">
+      <button id="subscribe" type="button">Subscribe</button>
+    </section>
+    <section>
+      <h2>Popular</h2>
+      <ul>
+        <li><a href="#compost">Hot compost in a small space</a></li>
+        <li><a href="#garlic">When to plant garlic</a></li>
+      </ul>
+    </section>
+  </aside>
+</div>
+</body>
+</html>

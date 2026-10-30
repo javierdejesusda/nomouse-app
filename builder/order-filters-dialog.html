@@ -1,0 +1,88 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: Tab order, correct variant that is not top to bottom. A modal
+  filter panel is open when the page loads and holds focus; the shop behind
+  it stays visible but inert, so Tab skips the header and product grid and
+  cycles through the panel only.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop: filters (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #fafafa; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; position: relative; z-index: 3; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  main { padding: 16px; max-width: 620px; }
+  .products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; list-style: none; padding: 0; }
+  .products li { background: #fff; border: 1px solid #ddd; padding: 12px; height: 80px; }
+  .scrim { position: fixed; inset: 0; background: rgba(20, 20, 30, .35); z-index: 1; }
+  [role="dialog"] { position: fixed; top: 0; right: 0; bottom: 0; width: 320px; box-sizing: border-box; padding: 56px 24px 24px; background: #fff; z-index: 2; box-shadow: -4px 0 16px rgba(0,0,0,.2); }
+  [role="dialog"] h2 { margin: 0 0 12px; font-size: 20px; }
+  fieldset { border: 0; padding: 0; margin: 0 0 16px; }
+  legend { font-weight: 600; margin-bottom: 4px; }
+  .option { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .actions { display: flex; gap: 12px; }
+  button { font: inherit; padding: 6px 12px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<div id="page" inert>
+  <header>
+    <strong>Trailhead outfitters</strong>
+    <a href="#tents">Tents</a>
+    <a href="#packs">Packs</a>
+    <a href="#boots">Boots</a>
+  </header>
+  <main>
+    <h1>Backpacks</h1>
+    <ul class="products">
+      <li><a href="#p1">Ridge 30 L</a></li>
+      <li><a href="#p2">Summit 45 L</a></li>
+      <li><a href="#p3">Daytrip 18 L</a></li>
+      <li><a href="#p4">Canyon 38 L</a></li>
+      <li><a href="#p5">Alpine 55 L</a></li>
+      <li><a href="#p6">Commuter 22 L</a></li>
+    </ul>
+  </main>
+</div>
+<div class="scrim"></div>
+<div id="filters" role="dialog" aria-modal="true" aria-labelledby="filters-title">
+  <h2 id="filters-title">Filter backpacks</h2>
+  <fieldset>
+    <legend>Brand</legend>
+    <div class="option"><input id="brand-ridge" type="checkbox"><label for="brand-ridge">Ridgeline</label></div>
+    <div class="option"><input id="brand-north" type="checkbox"><label for="brand-north">Northfold</label></div>
+    <div class="option"><input id="brand-pine" type="checkbox"><label for="brand-pine">Pinecrest</label></div>
+  </fieldset>
+  <fieldset>
+    <legend>Capacity</legend>
+    <div class="option"><label for="capacity">Up to</label>
+      <select id="capacity"><option>20 L</option><option selected>40 L</option><option>60 L</option></select>
+    </div>
+  </fieldset>
+  <div class="actions">
+    <button id="filters-reset" type="button">Reset</button>
+    <button id="filters-apply" type="button">Show results</button>
+  </div>
+  <p id="filters-status" role="status"></p>
+</div>
+<script>
+  document.getElementById("brand-ridge").focus();
+  document.getElementById("filters-reset").addEventListener("click", () => {
+    for (const box of document.querySelectorAll("#filters input")) {
+      box.checked = false;
+    }
+  });
+  document.getElementById("filters-apply").addEventListener("click", () => {
+    document.getElementById("filters-status").textContent = "6 backpacks match.";
+  });
+</script>
+</body>
+</html>

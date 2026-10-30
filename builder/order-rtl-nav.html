@@ -1,0 +1,53 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: Tab order, correct variant that is not top to bottom. A Hebrew
+  page (dir="rtl") reads right to left, so Tab moves leftwards along each row,
+  which is the reading order.
+-->
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>חנות הספרים (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #fbfaf6; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 32px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-inline-end: 16px; }
+  main { padding: 16px; max-width: 900px; }
+  h1 { font-size: 24px; margin: 0 0 12px; }
+  .search { display: flex; gap: 12px; align-items: center; margin-bottom: 24px; }
+  input { font: inherit; padding: 6px 8px; }
+  button { font: inherit; padding: 6px 12px; }
+  .books { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; list-style: none; padding: 0; }
+  .books li { background: #fff; border: 1px solid #ddd; padding: 12px; }
+  .books a { display: block; margin-top: 8px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge" lang="en" dir="ltr">builder-made test page (MIT)</span>
+<header>
+  <strong>חנות הספרים</strong>
+  <a id="nav-home" href="#home">ראשי</a>
+  <a id="nav-new" href="#new">ספרים חדשים</a>
+  <a id="nav-sale" href="#sale">מבצעים</a>
+  <a id="nav-contact" href="#contact">צור קשר</a>
+</header>
+<main>
+  <h1>ספרים חדשים</h1>
+  <div class="search">
+    <label for="query">חיפוש</label>
+    <input id="query" type="search">
+    <button id="search-go" type="button">חפש</button>
+  </div>
+  <ul class="books">
+    <li>הים הפתוח<a href="#book-1">לפרטים</a></li>
+    <li>גן בחורף<a href="#book-2">לפרטים</a></li>
+    <li>מפה של העיר<a href="#book-3">לפרטים</a></li>
+  </ul>
+</main>
+</body>
+</html>

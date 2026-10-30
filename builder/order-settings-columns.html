@@ -1,0 +1,67 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: Tab order, correct variant that is not top to bottom. Two settings
+  groups sit side by side; Tab finishes the Account column, then moves up to
+  the top of the Notifications column, matching how the page reads.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #f6f7f9; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  main { padding: 16px; max-width: 880px; }
+  h1 { font-size: 24px; margin: 0 0 16px; }
+  .groups { display: flex; gap: 32px; align-items: flex-start; }
+  fieldset { flex: 1; margin: 0; padding: 16px; background: #fff; border: 1px solid #ccc; border-radius: 8px; }
+  legend { font-weight: 600; padding: 0 4px; }
+  .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+  .check { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; }
+  input, select { font: inherit; padding: 6px 8px; }
+  .save { margin-top: 24px; }
+  button { font: inherit; padding: 8px 16px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Rota</strong>
+  <a href="#schedule">Schedule</a>
+  <a href="#people">People</a>
+</header>
+<main>
+  <h1>Settings</h1>
+  <div class="groups">
+    <fieldset>
+      <legend>Account</legend>
+      <div class="field"><label for="display-name">Display name</label><input id="display-name" value="Sam Ortega"></div>
+      <div class="field"><label for="account-email">Email</label><input id="account-email" type="email" value="sam@example.org"></div>
+      <div class="field">
+        <label for="language">Language</label>
+        <select id="language"><option>English</option><option>Español</option><option>Deutsch</option></select>
+      </div>
+      <div class="field"><label for="timezone">Time zone</label><input id="timezone" value="Europe/Madrid"></div>
+    </fieldset>
+    <fieldset>
+      <legend>Notifications</legend>
+      <div class="check"><input id="notify-digest" type="checkbox" checked><label for="notify-digest">Weekly digest</label></div>
+      <div class="check"><input id="notify-swaps" type="checkbox" checked><label for="notify-swaps">Shift swap requests</label></div>
+      <div class="check"><input id="notify-news" type="checkbox"><label for="notify-news">Product news</label></div>
+    </fieldset>
+  </div>
+  <div class="save"><button id="save" type="button">Save changes</button> <span id="save-status" role="status"></span></div>
+</main>
+<script>
+  document.getElementById("save").addEventListener("click", () => {
+    document.getElementById("save-status").textContent = "Saved.";
+  });
+</script>
+</body>
+</html>
