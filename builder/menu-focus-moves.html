@@ -1,0 +1,88 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: menu button, correct variant. Enter on "Sort" opens the menu and
+  moves focus to its first item; arrow keys move between items. Escape closes
+  the menu and returns focus to "Sort".
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photo library (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #fafafa; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  main { padding: 16px; max-width: 900px; }
+  .toolbar { display: flex; gap: 12px; align-items: center; position: relative; margin-bottom: 16px; }
+  button { font: inherit; padding: 6px 12px; }
+  [role="menu"] { position: absolute; top: 40px; left: 0; margin: 0; padding: 4px 0; list-style: none; background: #fff; border: 1px solid #999; box-shadow: 0 4px 12px rgba(0,0,0,.15); min-width: 180px; z-index: 1; }
+  [role="menu"] button { display: block; width: 100%; text-align: left; border: 0; background: none; }
+  [role="menu"] button:focus { background: #dbe8ff; }
+  .photos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 0; list-style: none; }
+  .photos li { background: #e8edf2; height: 90px; padding: 8px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Photo library</strong>
+  <a href="#albums">Albums</a>
+  <a href="#shared">Shared</a>
+</header>
+<main>
+  <div class="toolbar">
+    <button id="sort" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sort-menu">Sort</button>
+    <ul id="sort-menu" role="menu" aria-labelledby="sort" hidden>
+      <li role="none"><button type="button" role="menuitem" id="sort-newest" tabindex="-1">Newest first</button></li>
+      <li role="none"><button type="button" role="menuitem" tabindex="-1">Oldest first</button></li>
+      <li role="none"><button type="button" role="menuitem" tabindex="-1">By album</button></li>
+    </ul>
+    <a href="#upload">Upload photos</a>
+  </div>
+  <ul class="photos">
+    <li><a href="#ph1">Harbour at dawn</a></li>
+    <li><a href="#ph2">Market stalls</a></li>
+    <li><a href="#ph3">Snow on the hill</a></li>
+    <li><a href="#ph4">Birthday cake</a></li>
+  </ul>
+</main>
+<script>
+  const button = document.getElementById("sort");
+  const menu = document.getElementById("sort-menu");
+  const items = [...menu.querySelectorAll("[role=menuitem]")];
+  function setOpen(open) {
+    menu.hidden = !open;
+    button.setAttribute("aria-expanded", String(open));
+    if (open) {
+      items[0].focus();
+    }
+  }
+  button.addEventListener("click", () => setOpen(menu.hidden));
+  for (const item of items) {
+    item.addEventListener("click", () => {
+      setOpen(false);
+      button.focus();
+    });
+  }
+  menu.addEventListener("keydown", (event) => {
+    const step = { ArrowDown: 1, ArrowUp: -1 }[event.key];
+    if (step) {
+      event.preventDefault();
+      const next = (items.indexOf(document.activeElement) + step + items.length) % items.length;
+      items[next].focus();
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !menu.hidden) {
+      setOpen(false);
+      button.focus();
+    }
+  });
+</script>
+</body>
+</html>
