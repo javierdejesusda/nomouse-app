@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import Browser, BrowserContext
 
-from nomouse.driver import WalkRecord, new_walk_context, walk
+from nomouse.driver import KeySession, WalkRecord, new_walk_context, walk
 from nomouse.guard import BlockedRequest
 from nomouse.server import serve_directory
 from nomouse.witness import Box, Cover
@@ -424,3 +424,61 @@ def test_walk_presses_no_trap_probe_keys_past_the_key_cap(
 
     assert record.end_reason == "repeat"
     assert len(record.keys) == 5
+
+
+def test_key_session_records_any_key_it_is_given(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    session = KeySession(context, site + "focus.html", tmp_path)
+
+    for key in ("Tab", "Tab", "Shift+Tab", "Space", "ArrowDown", "End"):
+        session.press(key)
+    record = session.finish("stuck", navigator={"task": "Save"})
+
+    assert record.keys == ["Tab", "Tab", "Shift+Tab", "Space", "ArrowDown", "End"]
+    assert [step.focus.dom_id for step in record.steps[:3]] == ["save", "docs", "save"]
+    assert record.end_reason == "stuck"
+    assert record.repeat_step is None
+    assert record.navigator == {"task": "Save"}
+    keylog = context.pages[0].evaluate("window.keylog")
+    assert [key for key, _ in keylog] == [
+        "Tab",
+        "Tab",
+        "Shift",
+        "Tab",
+        " ",
+        "ArrowDown",
+        "End",
+    ]
+    assert context.pages[0].evaluate("window.saveClicks") == 1
+    written = json.loads((tmp_path / "walk.json").read_text(encoding="utf-8"))
+    assert written == record.to_dict()
+    assert written["navigator"] == {"task": "Save"}
+    for step in record.steps:
+        assert png_size(tmp_path / step.screenshot) == (1024, 768)
+
+
+def test_key_session_keeps_the_page_when_a_link_would_leave_it(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    session = KeySession(context, site + "focus.html", tmp_path)
+
+    session.press("Tab")
+    session.press("Tab")
+    step = session.press("Enter")
+    record = session.finish("done")
+
+    assert step.url == "/focus.html"
+    assert step.focus.dom_id == "docs"
+    assert record.blocked_requests == [
+        BlockedRequest(method="GET", url="/landing.html", reason="off-page navigation")
+    ]
+    assert context.pages[0].evaluate("window.linkActivations") == 1
+
+
+def test_a_driver_walk_records_no_navigator(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "blank.html", tmp_path)
+
+    assert record.navigator is None

@@ -263,13 +263,14 @@ def _unreachable(record: WalkRecord) -> Iterator[Finding | None]:
     to the button it was pressed on, so that tabbing went through the page in
     order. Landings on the document do not count.
     """
+    if record.end_reason != "cycle":
+        return
     steps = record.steps
-    focus_moved = any(
+    if any(
         step.key == "Escape"
         and step.focus.backend_node_id != steps[step.index - 2].focus.backend_node_id
         for step in steps
-    )
-    if record.end_reason != "cycle" or focus_moved:
+    ):
         return
     landed = {
         step.focus.backend_node_id for step in steps if not step.focus.is_document

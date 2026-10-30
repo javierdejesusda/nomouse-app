@@ -20,7 +20,7 @@ RECORD_NAME = "walk.json"
 # like any other button, so the driver treats it as one.
 BUTTON_ROLES = frozenset({"button", "DisclosureTriangle"})
 
-EndReason = Literal["cycle", "repeat", "max_keys"]
+EndReason = Literal["cycle", "repeat", "max_keys", "done", "stuck"]
 
 # Two full cycles of a keyboard trap land on its first element three times.
 _REPEAT_VISITS = 3
@@ -85,7 +85,8 @@ class WalkRecord:
         url: The walked page.
         viewport: Viewport size in CSS pixels.
         end_reason: Why the walk stopped: a full Tab cycle, a Tab target
-            reached a third time, or the key cap.
+            reached a third time, or the key cap; for a navigator run, the
+            navigator answered done or stuck, or the key cap.
         repeat_step: Index of the Tab step that reached a target a third
             time, when that ended the walk.
         keys: The key sequence, in order.
@@ -93,6 +94,8 @@ class WalkRecord:
         steps: Page state after each key.
         targets: The interactive elements on the page before the first key.
         blocked_requests: Requests the guard aborted during the walk.
+        navigator: None when the deterministic driver chose the keys; for a
+            keyboard navigator run, the task and the navigator's answers.
     """
 
     url: str
@@ -104,6 +107,7 @@ class WalkRecord:
     steps: list[Step]
     targets: list[Target]
     blocked_requests: list[BlockedRequest]
+    navigator: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Returns the record as JSON-serializable data."""
@@ -179,9 +183,7 @@ def walk(
     a trap it presses Escape and then Tab, if the cap allows, to probe whether
     Escape leaves the trap.
 
-    The guard is installed on the context and pinned to the page, so the walk
-    cannot leave the page, its origin, or send a non-GET request. The page is
-    left open in the context.
+    The page is opened and recorded by a `KeySession`, under its guard.
 
     Args:
         context: A context from `new_walk_context`, used for this walk only.
@@ -192,36 +194,13 @@ def walk(
     Returns:
         The walk record, also written to `run_dir / RECORD_NAME`.
     """
-    run_dir.mkdir(parents=True, exist_ok=True)
-    guard = RequestGuard(url)
-    guard.install(context)
-    page = context.new_page()
-    page.set_viewport_size(VIEWPORT)
-    page.goto(url)
-    guard.pin(page.url)
-    origin = _origin_prefix(page.url)
-    witness = FocusWitness(context.new_cdp_session(page))
-    observer = _Observer(page, witness, run_dir, origin)
-
-    initial = observer.observe("initial.png")
-    targets = witness.targets()
-    steps: list[Step] = []
-
-    def press(key: str) -> Step:
-        page.keyboard.press(key)
-        page.evaluate(_TWO_FRAMES)
-        index = len(steps)
-        state = observer.observe(f"step-{index:03d}.png")
-        step = Step(index=index, key=key, **vars(state))
-        steps.append(step)
-        return step
-
+    session = KeySession(context, url, run_dir)
     cycle = _TabCycle()
     pressed_buttons: set[int | None] = set()
     end_reason: EndReason = "max_keys"
     repeat_step: int | None = None
-    while len(steps) < max_keys:
-        landing = press("Tab")
+    while len(session.steps) < max_keys:
+        landing = session.press("Tab")
         focus = landing.focus
         reason = cycle.land(focus)
         if reason is not None:
@@ -232,30 +211,107 @@ def walk(
         if focus.role in BUTTON_ROLES and focus.backend_node_id not in pressed_buttons:
             pressed_buttons.add(focus.backend_node_id)
             for key in ("Enter", "Escape"):
-                if len(steps) < max_keys:
-                    press(key)
-    if repeat_step is not None and len(steps) + 2 <= max_keys:
-        press("Escape")
-        press("Tab")
+                if len(session.steps) < max_keys:
+                    session.press(key)
+    if repeat_step is not None and len(session.steps) + 2 <= max_keys:
+        session.press("Escape")
+        session.press("Tab")
+    return session.finish(end_reason, repeat_step)
 
-    record = WalkRecord(
-        url=initial.url,
-        viewport=VIEWPORT,
-        end_reason=end_reason,
-        repeat_step=repeat_step,
-        keys=[step.key for step in steps],
-        initial=initial,
-        steps=steps,
-        targets=targets,
-        blocked_requests=[
-            replace(blocked, url=_relative(blocked.url, origin))
-            for blocked in guard.blocked
-        ],
-    )
-    (run_dir / RECORD_NAME).write_text(
-        json.dumps(record.to_dict(), indent=2), encoding="utf-8"
-    )
-    return record
+
+class KeySession:
+    """Presses keys on one page and records the page state after each key.
+
+    The guard is installed on the context and pinned to the page, so no key
+    can take the session off the page or its origin, or send a non-GET
+    request: a link to another document is aborted and the page stays. The
+    page is left open in the context.
+
+    Attributes:
+        initial: The page state before the first key.
+        steps: The page state after each key pressed so far.
+    """
+
+    def __init__(self, context: BrowserContext, url: str, run_dir: Path) -> None:
+        """Opens the page and records its state before the first key.
+
+        Args:
+            context: A context from `new_walk_context`, used for this session
+                only.
+            url: The page to open.
+            run_dir: Directory for the record and screenshots; created if
+                missing.
+        """
+        run_dir.mkdir(parents=True, exist_ok=True)
+        self._run_dir = run_dir
+        self._guard = RequestGuard(url)
+        self._guard.install(context)
+        self._page = context.new_page()
+        self._page.set_viewport_size(VIEWPORT)
+        self._page.goto(url)
+        self._guard.pin(self._page.url)
+        self._origin = _origin_prefix(self._page.url)
+        witness = FocusWitness(context.new_cdp_session(self._page))
+        self._observer = _Observer(self._page, witness, run_dir, self._origin)
+        self.initial = self._observer.observe("initial.png")
+        self._targets = witness.targets()
+        self.steps: list[Step] = []
+
+    def press(self, key: str) -> Step:
+        """Presses one key and records the state it leads to.
+
+        Args:
+            key: A Playwright key name, such as `Tab` or `Shift+Tab`.
+
+        Returns:
+            The recorded step.
+        """
+        self._page.keyboard.press(key)
+        self._page.evaluate(_TWO_FRAMES)
+        index = len(self.steps)
+        state = self._observer.observe(f"step-{index:03d}.png")
+        step = Step(index=index, key=key, **vars(state))
+        self.steps.append(step)
+        return step
+
+    def finish(
+        self,
+        end_reason: EndReason,
+        repeat_step: int | None = None,
+        *,
+        navigator: dict[str, Any] | None = None,
+    ) -> WalkRecord:
+        """Builds the walk record and writes it to the run directory.
+
+        Args:
+            end_reason: Why no further key was pressed.
+            repeat_step: Index of the Tab step that reached a target a third
+                time, when that ended the walk.
+            navigator: For a keyboard navigator run, what the navigator was
+                asked and answered.
+
+        Returns:
+            The walk record, also written to `run_dir / RECORD_NAME`.
+        """
+        record = WalkRecord(
+            url=self.initial.url,
+            viewport=VIEWPORT,
+            end_reason=end_reason,
+            repeat_step=repeat_step,
+            keys=[step.key for step in self.steps],
+            initial=self.initial,
+            steps=self.steps,
+            targets=self._targets,
+            blocked_requests=[
+                replace(blocked, url=_relative(blocked.url, self._origin))
+                for blocked in self._guard.blocked
+            ],
+            navigator=navigator,
+        )
+        (self._run_dir / RECORD_NAME).write_text(
+            json.dumps(record.to_dict(), indent=2), encoding="utf-8"
+        )
+        return record
 
 
 class _Observer:

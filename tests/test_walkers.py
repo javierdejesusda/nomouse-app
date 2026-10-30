@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import Browser, BrowserContext
 
-from nomouse.driver import new_walk_context, walk
+from nomouse.driver import KeySession, new_walk_context, walk
 from nomouse.server import serve_directory
 from nomouse.walkers import Element, Finding, freeze, run_w0, run_w1
 
@@ -372,3 +372,17 @@ def test_w1_judges_neither_the_cycle_closing_landing_nor_the_trap_probe(
     assert cover.checked["cover"] == 3
     assert trap.checked["order"] == 4
     assert all(f.step is None or f.step <= 4 for f in trap.findings)
+
+
+def test_freeze_judges_a_navigator_run_that_starts_with_escape(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    session = KeySession(context, site + "focus.html", tmp_path)
+    session.press("Escape")
+    record = session.finish("stuck", navigator={"task": "Close it"})
+
+    freeze(record, tmp_path)
+
+    verdicts = json.loads((tmp_path / "verdicts.json").read_text(encoding="utf-8"))
+    assert verdicts["keys"] == ["Escape"]
+    assert all(v["checked"]["unreachable"] == 0 for v in verdicts["verdicts"])
