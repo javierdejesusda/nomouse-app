@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Targets fixture</title>
+<style>#plain { width: 80px; height: 24px; }</style>
+</head>
+<body>
+<button id="plain" type="button">Plain</button>
+<a id="link" href="landing.html"><span id="inner" onclick="void 0">Link</span></a>
+<div id="clicky" onclick="void 0"><span id="clicky-inner" onclick="void 0">Clicky</span></div>
+<button id="off" type="button" disabled>Off</button>
+<div id="wrap" onclick="void 0"><button id="nested" type="button">Nested</button></div>
+<label id="email-label" for="email">Email</label>
+<input id="email">
+<div id="editor" contenteditable="true"><p id="para">Edit me</p></div>
+<a id="menu" tabindex="0">Menu</a>
+<div id="list" tabindex="0"><button id="option" type="button">Option</button></div>
+<input id="r1" type="radio" name="size" checked aria-label="Small">
+<input id="r2" type="radio" name="size" aria-label="Large">
+<fieldset disabled><input id="fenced" aria-label="Fenced"></fieldset>
+<div inert><button id="asleep" type="button">Asleep</button></div>
+<div id="scroll-wrap" onclick="void 0"><div id="scroller" style="overflow: auto; height: 40px"><p style="height: 200px">Long</p></div></div>
+<p id="text">Plain text</p>
+<div id="gone" onclick="void 0" hidden>Gone</div>
+</body>
+</html>

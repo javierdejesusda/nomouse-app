@@ -10,7 +10,7 @@ from urllib.parse import urlsplit
 from playwright.sync_api import Browser, BrowserContext, Page, ViewportSize
 
 from nomouse.guard import BlockedRequest, RequestGuard
-from nomouse.witness import Focus, FocusWitness
+from nomouse.witness import Focus, FocusWitness, Target
 
 VIEWPORT: ViewportSize = {"width": 1024, "height": 768}
 DEFAULT_MAX_KEYS = 300
@@ -89,6 +89,7 @@ class WalkRecord:
         keys: The key sequence, in order.
         initial: Page state before the first key.
         steps: Page state after each key.
+        targets: The interactive elements on the page before the first key.
         blocked_requests: Requests the guard aborted during the walk.
     """
 
@@ -98,6 +99,7 @@ class WalkRecord:
     keys: list[str]
     initial: Observation
     steps: list[Step]
+    targets: list[Target]
     blocked_requests: list[BlockedRequest]
 
     def to_dict(self) -> dict[str, Any]:
@@ -170,7 +172,9 @@ def walk(
     every key it records the focused element through CDP and takes a viewport
     screenshot. The walk ends after one full Tab cycle (Tab moved focus out of
     the page and then landed on a node it had reached before), when one Tab
-    target is reached a third time (a keyboard trap), or at `max_keys`.
+    target is reached a third time (a keyboard trap), or at `max_keys`. After
+    a trap it presses Escape and then Tab, if the cap allows, to probe whether
+    Escape leaves the trap.
 
     The guard is installed on the context and pinned to the page, so the walk
     cannot leave the page, its origin, or send a non-GET request. The page is
@@ -193,11 +197,11 @@ def walk(
     page.goto(url)
     guard.pin(page.url)
     origin = _origin_prefix(page.url)
-    observer = _Observer(
-        page, FocusWitness(context.new_cdp_session(page)), run_dir, origin
-    )
+    witness = FocusWitness(context.new_cdp_session(page))
+    observer = _Observer(page, witness, run_dir, origin)
 
     initial = observer.observe("initial.png")
+    targets = witness.targets()
     steps: list[Step] = []
 
     def press(key: str) -> Step:
@@ -223,6 +227,9 @@ def walk(
             for key in ("Enter", "Escape"):
                 if len(steps) < max_keys:
                     press(key)
+    if end_reason == "repeat" and len(steps) + 2 <= max_keys:
+        press("Escape")
+        press("Tab")
 
     record = WalkRecord(
         url=initial.url,
@@ -231,6 +238,7 @@ def walk(
         keys=[step.key for step in steps],
         initial=initial,
         steps=steps,
+        targets=targets,
         blocked_requests=[
             replace(blocked, url=_relative(blocked.url, origin))
             for blocked in guard.blocked

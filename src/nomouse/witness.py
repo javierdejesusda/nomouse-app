@@ -61,11 +61,15 @@ _ASCII_WHITESPACE = re.compile(r"[ \t\n\f\r]+")
 
 _DOCUMENT_TAGS = frozenset({"BODY", "HTML"})
 _ELEMENT_NODE = 1
+_CONTROL_TAGS = frozenset({"BUTTON", "INPUT", "SELECT", "TEXTAREA"})
+_LINK_TAGS = frozenset({"A", "AREA"})
 
 
 @dataclass(frozen=True)
 class Box:
-    """Border box of an element in CSS pixels, relative to the viewport.
+    """Border box of an element in CSS pixels.
+
+    Each field holding a box says which frame it is relative to.
 
     Attributes:
         x: Left edge.
@@ -92,6 +96,28 @@ class Cover:
 
     sampled: int
     covered: int
+
+
+@dataclass(frozen=True)
+class Target:
+    """An element a keyboard user should be able to reach.
+
+    Attributes:
+        backend_node_id: CDP backend node id, stable while the page is loaded.
+        tag: Upper-case tag name.
+        dom_id: The element's `id` attribute, if any.
+        box: Border box in CSS pixels, relative to the top-left corner of its
+            document rather than the viewport.
+        reached_by: Backend node ids whose Tab landing reaches the target:
+            the target first, then its ancestor and descendant elements in
+            the same document and the other radios of its group.
+    """
+
+    backend_node_id: int
+    tag: str
+    dom_id: str | None
+    box: Box
+    reached_by: list[int]
 
 
 @dataclass(frozen=True)
@@ -193,17 +219,106 @@ class FocusWitness:
         strings: list[str] = snapshot["strings"]
         rendered: set[int] = set()
         for document in snapshot["documents"]:
-            nodes = document["nodes"]
-            layout = document["layout"]
-            for index, styles in zip(
-                layout["nodeIndex"], layout["styles"], strict=True
-            ):
-                if (
-                    nodes["nodeType"][index] == _ELEMENT_NODE
-                    and strings[styles[0]] == "visible"
-                ):
-                    rendered.add(nodes["backendNodeId"][index])
+            backend_ids = document["nodes"]["backendNodeId"]
+            rendered.update(
+                backend_ids[index] for index in _rendered_elements(document, strings)
+            )
         return frozenset(rendered)
+
+    def targets(self) -> list[Target]:
+        """Returns the rendered elements a keyboard user should reach.
+
+        Focusable elements are targets: links with `href`, enabled form
+        controls, `<summary>`, and elements with `tabindex` of 0 or more or
+        `contenteditable`. An element that only responds to clicks (the
+        browser reports a click, mousedown or mouseup listener) is a target
+        when no ancestor is focusable or clickable. Labels are never targets,
+        since clicking one activates its control, and neither is anything
+        under a disabled `<fieldset>` or an `inert` element. Content made
+        inert by a modal dialog and nodes re-rendered during the walk are
+        not accounted for. Only elements with a non-empty box count.
+
+        Returns:
+            The targets in document order.
+        """
+        snapshot = self._cdp.send(
+            "DOMSnapshot.captureSnapshot", {"computedStyles": ["visibility"]}
+        )
+        strings: list[str] = snapshot["strings"]
+        targets: list[Target] = []
+        for document in snapshot["documents"]:
+            nodes = document["nodes"]
+            parents: list[int] = nodes["parentIndex"]
+            backend_ids: list[int] = nodes["backendNodeId"]
+            elements = [
+                index
+                for index, node_type in enumerate(nodes["nodeType"])
+                if node_type == _ELEMENT_NODE
+            ]
+            tags = {index: strings[nodes["nodeName"][index]] for index in elements}
+            attributes = {
+                index: _snapshot_attributes(strings, nodes["attributes"][index])
+                for index in elements
+            }
+            ancestors = {index: _ancestor_indices(parents, index) for index in elements}
+            descendants: dict[int, list[int]] = {index: [] for index in elements}
+            for index in elements:
+                for ancestor in ancestors[index]:
+                    if ancestor in descendants:
+                        descendants[ancestor].append(index)
+            disabled = {
+                index
+                for index in elements
+                if "inert" in attributes[index]
+                or (tags[index] == "FIELDSET" and "disabled" in attributes[index])
+            }
+            focusable = {
+                index
+                for index in elements
+                if _is_focusable(tags[index], attributes[index])
+            }
+            interactive = focusable | set(nodes.get("isClickable", {}).get("index", []))
+            radio_groups: dict[str, list[int]] = {}
+            for index in elements:
+                if tags[index] == "INPUT" and attributes[index].get("type") == "radio":
+                    name = attributes[index].get("name")
+                    if name:
+                        radio_groups.setdefault(name, []).append(index)
+            for index, (x, y, width, height) in sorted(
+                _rendered_elements(document, strings).items()
+            ):
+                is_target = index in focusable or (
+                    index in interactive
+                    and tags[index] != "LABEL"
+                    and interactive.isdisjoint(ancestors[index])
+                )
+                if (
+                    not is_target
+                    or width <= 0
+                    or height <= 0
+                    or not disabled.isdisjoint([index, *ancestors[index]])
+                ):
+                    continue
+                group = radio_groups.get(
+                    attributes[index].get("name", "")
+                    if attributes[index].get("type") == "radio"
+                    else "",
+                    [],
+                )
+                reached_by = [index, *ancestors[index], *descendants[index]]
+                reached_by += [mate for mate in group if mate != index]
+                targets.append(
+                    Target(
+                        backend_node_id=backend_ids[index],
+                        tag=tags[index],
+                        dom_id=attributes[index].get("id"),
+                        box=Box(x=x, y=y, width=width, height=height),
+                        reached_by=[
+                            backend_ids[node] for node in reached_by if node in tags
+                        ],
+                    )
+                )
+        return targets
 
     def scroll(self) -> tuple[float, float]:
         """Returns the page's scroll offsets (x, y) in CSS pixels."""
@@ -258,6 +373,56 @@ def _attribute(node: dict[str, Any], name: str) -> str | None:
         if key == name:
             return value
     return None
+
+
+def _rendered_elements(
+    document: dict[str, Any], strings: list[str]
+) -> dict[int, list[float]]:
+    """Maps snapshot node indices of rendered elements to their bounds.
+
+    An element is rendered when it has a layout box and its computed
+    visibility is `visible`.
+    """
+    node_types: list[int] = document["nodes"]["nodeType"]
+    layout = document["layout"]
+    return {
+        index: bounds
+        for index, styles, bounds in zip(
+            layout["nodeIndex"], layout["styles"], layout["bounds"], strict=True
+        )
+        if node_types[index] == _ELEMENT_NODE and strings[styles[0]] == "visible"
+    }
+
+
+def _snapshot_attributes(strings: list[str], pairs: list[int]) -> dict[str, str]:
+    return {
+        strings[key]: strings[value]
+        for key, value in zip(pairs[0::2], pairs[1::2], strict=True)
+    }
+
+
+def _ancestor_indices(parents: list[int], index: int) -> list[int]:
+    ancestors = []
+    parent = parents[index]
+    while parent >= 0:
+        ancestors.append(parent)
+        parent = parents[parent]
+    return ancestors
+
+
+def _is_focusable(tag: str, attributes: dict[str, str]) -> bool:
+    if tag in _LINK_TAGS and "href" in attributes:
+        return True
+    if tag in _CONTROL_TAGS:
+        return "disabled" not in attributes
+    if tag == "SUMMARY":
+        return True
+    if attributes.get("contenteditable", "false").lower() != "false":
+        return True
+    try:
+        return int(attributes.get("tabindex", "-1")) >= 0
+    except ValueError:
+        return False
 
 
 def _ax_value(node: dict[str, Any], field: str) -> str | None:

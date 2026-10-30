@@ -150,12 +150,14 @@ def test_walk_ends_when_tab_focus_repeats_inside_a_trap(
     record = walk(context, site + "trap.html", tmp_path)
 
     assert record.end_reason == "repeat"
-    assert [step.focus.dom_id for step in record.steps] == [
-        "first",
-        "second",
-        "first",
-        "second",
-        "first",
+    assert [(step.key, step.focus.dom_id) for step in record.steps] == [
+        ("Tab", "first"),
+        ("Tab", "second"),
+        ("Tab", "first"),
+        ("Tab", "second"),
+        ("Tab", "first"),
+        ("Escape", "first"),
+        ("Tab", "second"),
     ]
 
 
@@ -376,3 +378,44 @@ def test_walk_records_the_canonical_page_url(
     record = walk(context, site + "./focus.html", tmp_path)
 
     assert record.url == "/focus.html"
+
+
+def test_walk_records_the_elements_a_keyboard_user_should_reach_as_targets(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "targets.html", tmp_path)
+
+    assert [target.dom_id for target in record.targets] == [
+        "plain",
+        "link",
+        "clicky",
+        "wrap",
+        "nested",
+        "email",
+        "editor",
+        "menu",
+        "list",
+        "option",
+        "r1",
+        "r2",
+        "scroll-wrap",
+    ]
+    targets = {target.dom_id: target for target in record.targets}
+    assert targets["link"].tag == "A"
+    landed = {step.focus.dom_id: step.focus.backend_node_id for step in record.steps}
+    assert landed["list"] in targets["option"].reached_by
+    assert landed["option"] in targets["list"].reached_by
+    assert landed["r1"] in targets["r2"].reached_by
+    assert landed["scroller"] in targets["scroll-wrap"].reached_by
+    assert landed["nested"] in targets["wrap"].reached_by
+    assert targets["plain"].reached_by[0] == targets["plain"].backend_node_id
+    assert targets["plain"].box == Box(x=8, y=8, width=80, height=24)
+
+
+def test_walk_presses_no_trap_probe_keys_past_the_key_cap(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "trap.html", tmp_path, max_keys=5)
+
+    assert record.end_reason == "repeat"
+    assert len(record.keys) == 5
