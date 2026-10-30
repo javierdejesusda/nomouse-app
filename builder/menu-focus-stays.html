@@ -1,0 +1,80 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: menu button, failing variant. Enter opens the Actions menu but
+  focus stays on the button, so a keyboard user must Tab to reach the items.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project board (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #fafafa; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  main { padding: 16px; max-width: 900px; }
+  .toolbar { display: flex; gap: 12px; align-items: center; position: relative; margin-bottom: 16px; }
+  .toolbar input { padding: 6px 8px; font: inherit; }
+  button { font: inherit; padding: 6px 12px; }
+  [role="menu"] { position: absolute; top: 40px; left: 0; margin: 0; padding: 4px 0; list-style: none; background: #fff; border: 1px solid #999; box-shadow: 0 4px 12px rgba(0,0,0,.15); min-width: 160px; }
+  [role="menu"] button { display: block; width: 100%; text-align: left; border: 0; background: none; }
+  [role="menu"] button:focus { background: #dbe8ff; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0; list-style: none; }
+  .cards li { background: #fff; border: 1px solid #ddd; padding: 12px; }
+  footer { padding: 16px; font-size: 14px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Project board</strong>
+  <a href="#board">Board</a>
+  <a href="#reports">Reports</a>
+  <a href="#team">Team</a>
+</header>
+<main id="board">
+  <div class="toolbar">
+    <button id="actions" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="actions-menu">Actions</button>
+    <ul id="actions-menu" role="menu" aria-labelledby="actions" hidden>
+      <li role="none"><button type="button" role="menuitem">New card</button></li>
+      <li role="none"><button type="button" role="menuitem">Archive done</button></li>
+      <li role="none"><button type="button" role="menuitem">Export</button></li>
+    </ul>
+    <label for="filter">Filter</label>
+    <input id="filter" type="search">
+    <button id="refresh" type="button">Refresh</button>
+  </div>
+  <ul class="cards">
+    <li><a href="#card-1">Draft the release notes</a></li>
+    <li><a href="#card-2">Fix the login timeout</a></li>
+    <li><a href="#card-3">Review the color tokens</a></li>
+    <li><a href="#card-4">Plan the user interviews</a></li>
+    <li><a href="#card-5">Update the help center</a></li>
+    <li><a href="#card-6">Clean up old branches</a></li>
+  </ul>
+</main>
+<footer>
+  <a href="#help">Help</a>
+</footer>
+<script>
+  const button = document.getElementById("actions");
+  const menu = document.getElementById("actions-menu");
+  function setOpen(open) {
+    menu.hidden = !open;
+    button.setAttribute("aria-expanded", String(open));
+  }
+  // The failure under test: opening the menu never moves focus into it.
+  button.addEventListener("click", () => setOpen(menu.hidden));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !menu.hidden) {
+      setOpen(false);
+      button.focus();
+    }
+  });
+</script>
+</body>
+</html>

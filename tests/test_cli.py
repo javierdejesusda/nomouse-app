@@ -143,3 +143,29 @@ def test_walk_serves_and_walks_a_mirror_page(tmp_path: Path) -> None:
     record = json.loads((out / "walk.json").read_text(encoding="utf-8"))
     assert record["url"] == "/before/survey.html"
     assert record["keys"][:3] == ["Tab", "Enter", "Escape"]
+
+
+def test_walk_serves_and_walks_a_builder_page(tmp_path: Path) -> None:
+    out = tmp_path / "run"
+
+    result = run_cli("walk", "builder/menu-focus-stays.html", "--out", str(out))
+
+    assert result.returncode == 0, result.stderr
+    record = json.loads((out / "walk.json").read_text(encoding="utf-8"))
+    assert record["url"] == "/menu-focus-stays.html"
+    assert "Enter" in record["keys"]
+    assert (out / "verdicts.json").is_file()
+
+
+@pytest.mark.parametrize(
+    "target", ["builder/missing.html", "builder/../pyproject.toml", "builder/"]
+)
+def test_walk_refuses_a_builder_target_that_is_not_a_builder_page(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path, target: str
+) -> None:
+    with pytest.raises(SystemExit) as caught:
+        main(["walk", target, "--out", str(tmp_path / "run")])
+
+    assert caught.value.code == 2
+    assert "no builder page" in capsys.readouterr().err
+    assert not (tmp_path / "run").exists()

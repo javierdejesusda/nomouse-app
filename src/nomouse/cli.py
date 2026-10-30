@@ -17,6 +17,8 @@ from nomouse.walkers import VERDICTS_NAME, freeze
 
 _DEFAULT_CACHE = Path(".cache")
 _DEFAULT_RUNS = Path("runs")
+_BUILDER_PREFIX = "builder/"
+BUILDER_ROOT = Path(__file__).resolve().parents[2] / "builder"
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -49,7 +51,10 @@ def _parser() -> argparse.ArgumentParser:
     )
     walk_command.add_argument(
         "target",
-        help=f"a loopback URL, or a mirror page: {', '.join(WALK_PAGES)}",
+        help=(
+            "a loopback URL, a builder page (builder/<file>.html), or a mirror"
+            f" page: {', '.join(WALK_PAGES)}"
+        ),
     )
     walk_command.add_argument("--cache", type=Path, default=_DEFAULT_CACHE)
     walk_command.add_argument(
@@ -77,11 +82,17 @@ def _walk(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
             if not root.is_dir():
                 parser.error(f"no mirror in {args.cache}; run `nomouse mirror` first")
             url = stack.enter_context(serve_directory(root)) + target
+        elif target.startswith(_BUILDER_PREFIX):
+            page = _builder_page(target.removeprefix(_BUILDER_PREFIX))
+            if page is None:
+                parser.error(f"no builder page {target} in {BUILDER_ROOT}")
+            url = stack.enter_context(serve_directory(BUILDER_ROOT)) + page
         elif _is_loopback_url(target):
             url = target
         else:
             parser.error(
-                "target must be a loopback URL or one of: " + ", ".join(WALK_PAGES)
+                "target must be a loopback URL, builder/<file>.html or one of: "
+                + ", ".join(WALK_PAGES)
             )
         out: Path = args.out or _DEFAULT_RUNS / _timestamp()
         if (out / VERDICTS_NAME).exists():
@@ -93,6 +104,14 @@ def _walk(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
     print(f"{len(record.keys)} keys, ended by {record.end_reason}: {out / RECORD_NAME}")
     print(f"verdicts frozen: sha256 {freeze(record, out)}")
     return 0
+
+
+def _builder_page(name: str) -> str | None:
+    """Returns the page's path below the builder directory, if it is a file there."""
+    page = (BUILDER_ROOT / name).resolve()
+    if not page.is_file() or not page.is_relative_to(BUILDER_ROOT):
+        return None
+    return page.relative_to(BUILDER_ROOT).as_posix()
 
 
 def _is_loopback_url(url: str) -> bool:
