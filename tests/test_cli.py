@@ -1,3 +1,4 @@
+import hashlib
 import json
 import subprocess
 import sys
@@ -94,6 +95,35 @@ def test_walk_writes_a_record_for_a_loopback_url(site: str, tmp_path: Path) -> N
     assert record["url"] == "/focus.html"
     assert record["end_reason"] == "cycle"
     assert str(out / "walk.json") in result.stdout
+
+
+def test_walk_freezes_walker_verdicts_and_prints_their_hash(
+    site: str, tmp_path: Path
+) -> None:
+    out = tmp_path / "run"
+
+    result = run_cli("walk", site + "focus.html", "--out", str(out))
+
+    assert result.returncode == 0, result.stderr
+    digest = hashlib.sha256((out / "verdicts.json").read_bytes()).hexdigest()
+    assert f"verdicts frozen: sha256 {digest}" in result.stdout
+    assert (out / "verdicts.json.sha256").is_file()
+
+
+def test_walk_refuses_a_run_directory_with_frozen_verdicts(
+    site: str, tmp_path: Path
+) -> None:
+    out = tmp_path / "run"
+    run_cli("walk", site + "focus.html", "--out", str(out))
+    frozen = (out / "verdicts.json").read_bytes()
+    record = (out / "walk.json").read_bytes()
+
+    result = run_cli("walk", site + "blank.html", "--out", str(out))
+
+    assert result.returncode == 2
+    assert "already holds frozen verdicts" in result.stderr
+    assert (out / "verdicts.json").read_bytes() == frozen
+    assert (out / "walk.json").read_bytes() == record
 
 
 def test_walk_serves_and_walks_a_mirror_page(tmp_path: Path) -> None:

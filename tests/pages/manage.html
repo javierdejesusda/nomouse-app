@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Focus management fixture</title></head>
+<body>
+<button id="menu" type="button" aria-expanded="false">Menu</button>
+<ul id="panel" hidden><li><a href="landing.html">Item</a></li></ul>
+<button id="modal" type="button">Modal</button>
+<div id="dialog" role="dialog" aria-label="Notice" hidden>
+  <button id="ok" type="button">OK</button>
+</div>
+<script>
+  // The menu opens without moving focus; the dialog takes focus but does not
+  // give it back when Escape closes it.
+  const panel = document.getElementById("panel");
+  const dialog = document.getElementById("dialog");
+  document.getElementById("menu").addEventListener("click", () => {
+    panel.hidden = false;
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      panel.hidden = true;
+      dialog.hidden = true;
+    }
+  });
+  document.getElementById("modal").addEventListener("click", () => {
+    dialog.hidden = false;
+    document.getElementById("ok").focus();
+  });
+</script>
+</body>
+</html>

@@ -6,21 +6,29 @@ The thresholds below are frozen before the eval; changing one changes every
 verdict hash.
 """
 
+import hashlib
+import json
 import math
 from collections.abc import Iterator
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Literal
 
 from PIL import Image, ImageChops
 
-from nomouse.driver import Observation, WalkRecord
+from nomouse.driver import Observation, Step, WalkRecord
 from nomouse.witness import Box, Focus
 
 FOCUS_RING_MARGIN_PX = 8
 """Pixels around the focus box searched for a change: Chromium draws its
 default focus ring outside the border box, and an author ring may sit a few
 pixels further out (for example 2 px wide at a 6 px offset)."""
+
+ORDER_THRESHOLD_PX = 24
+"""How far a Tab transition may move up, or left on the same row, before W1
+flags it: about one line of 16 px text at 1.5 line height."""
+
+VERDICTS_NAME = "verdicts.json"
 
 Rule = Literal[
     "trap", "unreachable", "focus-not-visible", "order", "cover", "focus-management"
@@ -91,27 +99,113 @@ def run_w0(record: WalkRecord, run_dir: Path) -> Verdicts:
     Returns:
         W0's verdicts.
     """
-    return _verdicts(
-        "W0",
-        {
-            "trap": _trap(record),
-            "unreachable": _unreachable(record),
-            "focus-not-visible": _focus_not_visible(record, run_dir),
+    return _verdicts("W0", _w0_outcomes(record, run_dir))
+
+
+def run_w1(record: WalkRecord, run_dir: Path) -> Verdicts:
+    """Runs W1, which is W0 plus the order, cover and focus-management checks.
+
+    Args:
+        record: The walk record.
+        run_dir: The directory holding the walk's screenshots.
+
+    Returns:
+        W1's verdicts.
+    """
+    return _verdicts("W1", _w1_outcomes(record, _w0_outcomes(record, run_dir)))
+
+
+def freeze(record: WalkRecord, run_dir: Path) -> str:
+    """Runs W0 and W1 and freezes their verdicts with a SHA-256 hash.
+
+    Writes `verdicts.json` (canonical JSON: the page, the key sequence, the
+    thresholds and both walkers' verdicts, with no backend node ids or run
+    paths) and `verdicts.json.sha256` in `sha256sum` format. Frozen verdicts
+    are never rewritten.
+
+    Args:
+        record: The walk record.
+        run_dir: The directory holding the walk's screenshots, where the
+            verdicts are written.
+
+    Returns:
+        The hex SHA-256 of `verdicts.json`.
+
+    Raises:
+        FileExistsError: If the run directory already holds verdicts.
+    """
+    w0 = _w0_outcomes(record, run_dir)
+    payload = {
+        "page": record.url,
+        "keys": record.keys,
+        "thresholds": {
+            "focus_ring_margin_px": FOCUS_RING_MARGIN_PX,
+            "order_threshold_px": ORDER_THRESHOLD_PX,
         },
+        "verdicts": [
+            asdict(_verdicts("W0", w0)),
+            asdict(_verdicts("W1", _w1_outcomes(record, w0))),
+        ],
+    }
+    data = (
+        json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+        + "\n"
+    ).encode("utf-8")
+    digest = hashlib.sha256(data).hexdigest()
+    verdicts_path = run_dir / VERDICTS_NAME
+    with verdicts_path.open("xb") as frozen:
+        frozen.write(data)
+    try:
+        (run_dir / f"{VERDICTS_NAME}.sha256").write_text(
+            f"{digest}  {VERDICTS_NAME}\n", encoding="utf-8"
+        )
+    except BaseException:
+        verdicts_path.unlink()
+        raise
+    return digest
+
+
+Outcomes = dict[Rule, list[Finding | None]]
+"""Per rule, one entry per instance checked: a Finding when it fired, else None."""
+
+
+def _judged_steps(record: WalkRecord) -> list[Step]:
+    """Returns the steps the per-landing rules judge.
+
+    Leaves out the Tab that closes a full cycle, which lands on the first
+    element again, and the Escape and Tab that probe a trap.
+    """
+    if record.repeat_step is not None:
+        return record.steps[: record.repeat_step + 1]
+    if record.end_reason == "cycle":
+        return record.steps[:-1]
+    return record.steps
+
+
+def _w0_outcomes(record: WalkRecord, run_dir: Path) -> Outcomes:
+    return {
+        "trap": list(_trap(record)),
+        "unreachable": list(_unreachable(record)),
+        "focus-not-visible": list(_focus_not_visible(record, run_dir)),
+    }
+
+
+def _w1_outcomes(record: WalkRecord, w0: Outcomes) -> Outcomes:
+    return w0 | {
+        "order": list(_order(record)),
+        "cover": list(_cover(record)),
+        "focus-management": list(_focus_management(record)),
+    }
+
+
+def _verdicts(walker: WalkerName, outcomes: Outcomes) -> Verdicts:
+    return Verdicts(
+        walker=walker,
+        findings=[
+            result for results in outcomes.values() for result in results if result
+        ],
+        checked={rule: len(results) for rule, results in outcomes.items()},
     )
-
-
-def _verdicts(
-    walker: WalkerName, checks: dict[Rule, Iterator[Finding | None]]
-) -> Verdicts:
-    """Collects rule outcomes: a Finding when a rule fired, None when it passed."""
-    findings: list[Finding] = []
-    checked: dict[Rule, int] = {}
-    for rule, outcomes in checks.items():
-        results = list(outcomes)
-        checked[rule] = len(results)
-        findings.extend(result for result in results if result is not None)
-    return Verdicts(walker=walker, findings=findings, checked=checked)
 
 
 def _element(focus: Focus) -> Element:
@@ -200,7 +294,7 @@ def _focus_not_visible(record: WalkRecord, run_dir: Path) -> Iterator[Finding | 
         x=0, y=0, width=record.viewport["width"], height=record.viewport["height"]
     )
     previous: Observation = record.initial
-    for step in record.steps:
+    for step in _judged_steps(record):
         before, previous = previous, step
         focus = step.focus
         if (
@@ -313,3 +407,107 @@ def _pixel_box(box: Box) -> PixelBox:
         math.ceil(box.x + box.width),
         math.ceil(box.y + box.height),
     )
+
+
+def _order(record: WalkRecord) -> Iterator[Finding | None]:
+    """Yields a finding per Tab transition that jumps up or left.
+
+    A transition goes from the element focused before a Tab press to the
+    element it lands on, in page coordinates (box plus scroll offset; an
+    element with fixed or sticky position is therefore placed where it was
+    drawn at that scroll). It jumps up when the landing's top edge is more
+    than the threshold above the previous one, and left when the two tops are
+    within the threshold (the same row) and the landing's left edge is more
+    than the threshold to the left. Presses from or to the document, such as
+    the wrap past the last element, are not judged.
+    """
+    previous: Observation = record.initial
+    for step in _judged_steps(record):
+        before, previous = previous, step
+        source, focus = before.focus, step.focus
+        if (
+            step.key != "Tab"
+            or source.is_document
+            or focus.is_document
+            or source.box is None
+            or focus.box is None
+            or source.backend_node_id == focus.backend_node_id
+        ):
+            continue
+        up = (source.box.y + before.scroll_y) - (focus.box.y + step.scroll_y)
+        left = (source.box.x + before.scroll_x) - (focus.box.x + step.scroll_x)
+        if up > ORDER_THRESHOLD_PX:
+            detail = f"jumps up {round(up)} px from {_label(source)}"
+        elif abs(up) <= ORDER_THRESHOLD_PX and left > ORDER_THRESHOLD_PX:
+            detail = (
+                f"jumps left {round(left)} px on the same row from {_label(source)}"
+            )
+        else:
+            yield None
+            continue
+        yield Finding("order", step.index, _element(focus), detail)
+
+
+def _cover(record: WalkRecord) -> Iterator[Finding | None]:
+    """Yields a finding per Tab landing whose sampled box is all covered."""
+    for step in _judged_steps(record):
+        cover = step.focus.cover
+        if step.key != "Tab" or cover is None or cover.sampled == 0:
+            continue
+        if cover.covered == cover.sampled:
+            yield Finding(
+                rule="cover",
+                step=step.index,
+                element=_element(step.focus),
+                detail=(
+                    f"all {cover.sampled} sampled points are covered by other content"
+                ),
+            )
+        else:
+            yield None
+
+
+def _focus_management(record: WalkRecord) -> Iterator[Finding | None]:
+    """Yields findings on where focus goes when Enter opens something.
+
+    After Enter, the elements that appeared form the opened set, and focus
+    must be on one of them. After the Escape that follows, focus must be
+    back on the trigger, the element Enter was pressed on. An Enter that
+    opened nothing is not judged, nor is its Escape.
+    """
+    steps = _judged_steps(record)
+    for step in steps:
+        if step.key != "Enter" or not step.appeared or step.index == 0:
+            continue
+        trigger = steps[step.index - 1].focus
+        if step.focus.backend_node_id in step.appeared:
+            yield None
+        else:
+            yield Finding(
+                rule="focus-management",
+                step=step.index,
+                element=_element(trigger),
+                detail=(
+                    f"after Enter, focus is outside the {len(step.appeared)}"
+                    " elements that appeared"
+                ),
+            )
+        escape = steps[step.index + 1] if step.index + 1 < len(steps) else None
+        if escape is None or escape.key != "Escape":
+            continue
+        if escape.focus.backend_node_id == trigger.backend_node_id:
+            yield None
+        else:
+            yield Finding(
+                rule="focus-management",
+                step=escape.index,
+                element=_element(trigger),
+                detail=(
+                    "after Escape, focus did not return to the trigger"
+                    f" (now {_label(escape.focus)})"
+                ),
+            )
+
+
+def _label(focus: Focus) -> str:
+    return f"{focus.tag}#{focus.dom_id}" if focus.dom_id else str(focus.tag)

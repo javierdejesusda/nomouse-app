@@ -382,16 +382,20 @@ def _rendered_elements(
     """Maps snapshot node indices of rendered elements to their bounds.
 
     An element is rendered when it has a layout box and its computed
-    visibility is `visible`.
+    visibility is `visible`. Pseudo-elements such as `::marker` are left out:
+    they cannot take focus.
     """
     node_types: list[int] = document["nodes"]["nodeType"]
+    pseudo = set(document["nodes"].get("pseudoType", {}).get("index", []))
     layout = document["layout"]
     return {
         index: bounds
         for index, styles, bounds in zip(
             layout["nodeIndex"], layout["styles"], layout["bounds"], strict=True
         )
-        if node_types[index] == _ELEMENT_NODE and strings[styles[0]] == "visible"
+        if node_types[index] == _ELEMENT_NODE
+        and index not in pseudo
+        and strings[styles[0]] == "visible"
     }
 
 

@@ -13,6 +13,7 @@ from playwright.sync_api import sync_playwright
 from nomouse.driver import DEFAULT_MAX_KEYS, RECORD_NAME, new_walk_context, walk
 from nomouse.mirror import WALK_PAGES, fetch_mirror, mirror_root
 from nomouse.server import serve_directory
+from nomouse.walkers import VERDICTS_NAME, freeze
 
 _DEFAULT_CACHE = Path(".cache")
 _DEFAULT_RUNS = Path("runs")
@@ -43,7 +44,9 @@ def _parser() -> argparse.ArgumentParser:
         "mirror", help="download and unpack the W3C demo (News excluded)"
     )
     mirror.add_argument("--cache", type=Path, default=_DEFAULT_CACHE)
-    walk_command = commands.add_parser("walk", help="walk one page with the keyboard")
+    walk_command = commands.add_parser(
+        "walk", help="walk one page with the keyboard and freeze walker verdicts"
+    )
     walk_command.add_argument(
         "target",
         help=f"a loopback URL, or a mirror page: {', '.join(WALK_PAGES)}",
@@ -81,11 +84,14 @@ def _walk(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
                 "target must be a loopback URL or one of: " + ", ".join(WALK_PAGES)
             )
         out: Path = args.out or _DEFAULT_RUNS / _timestamp()
+        if (out / VERDICTS_NAME).exists():
+            parser.error(f"{out} already holds frozen verdicts; choose another --out")
         playwright = stack.enter_context(sync_playwright())
         browser = playwright.chromium.launch()
         stack.callback(browser.close)
         record = walk(new_walk_context(browser), url, out, max_keys=args.max_keys)
     print(f"{len(record.keys)} keys, ended by {record.end_reason}: {out / RECORD_NAME}")
+    print(f"verdicts frozen: sha256 {freeze(record, out)}")
     return 0
 
 
