@@ -50,7 +50,7 @@ def test_export_writes_an_index_of_w3c_and_builder_pages(
     assert menu["superseded_by"] is None
     assert pages["menu-v1"]["superseded_by"] == "menu-v1-v2"
     assert index["eval"] is True
-    for asset in ("index.html", "eval.html", "app.css"):
+    for asset in ("index.html", "page.html", "eval.html", "app.css", "page.js"):
         assert (out / asset).is_file()
     assert (out / ".gitignore").read_text() == "*\n"
 

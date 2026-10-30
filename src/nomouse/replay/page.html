@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'; base-uri 'none'">
+<title>Page replay - NoMouse</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header>
+  <p class="brand"><a href="index.html">NoMouse replay</a></p>
+  <nav aria-label="Site">
+    <ul>
+      <li><a href="index.html">Pages</a></li>
+      <li><a href="eval.html">Eval counts</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="main" tabindex="-1">
+  <h1 id="title">Loading</h1>
+  <div id="about"></div>
+  <section id="viewer" aria-labelledby="viewer-heading" hidden>
+    <h2 id="viewer-heading">Key by key</h2>
+    <div class="controls">
+      <button type="button" id="prev">Previous key</button>
+      <label for="key-slider">Key</label>
+      <input type="range" id="key-slider" min="0" value="0" step="1">
+      <button type="button" id="next">Next key</button>
+      <p id="step-status" role="status"></p>
+    </div>
+    <p class="hint" id="captures-hint">Step with the Key slider or the buttons, or focus the captures and press the Left or Right arrow, Home or End.</p>
+    <div id="captures" class="captures" tabindex="0" role="group" aria-label="Captures" aria-describedby="captures-hint">
+      <figure>
+        <img id="capture" alt="" width="1024" height="768">
+        <figcaption>Unmodified page capture</figcaption>
+      </figure>
+      <figure>
+        <svg id="panel" viewBox="0 0 1024 768" role="img" aria-labelledby="focus-desc" xmlns="http://www.w3.org/2000/svg"></svg>
+        <figcaption>Tool panel: the browser's focus box and the Tab path, drawn over a copy</figcaption>
+      </figure>
+    </div>
+    <p id="focus-desc"></p>
+  </section>
+  <section id="verdicts" aria-labelledby="verdicts-heading" hidden>
+    <h2 id="verdicts-heading">Walker verdicts</h2>
+  </section>
+  <section id="reviews" aria-labelledby="reviews-heading" hidden>
+    <h2 id="reviews-heading">Model review, form (i)</h2>
+  </section>
+  <section id="packets" aria-labelledby="packets-heading" hidden>
+    <h2 id="packets-heading">Packets</h2>
+  </section>
+</main>
+<footer>
+  <p>Observed keyboard-only test evidence. Not a conformance claim and not legal advice.</p>
+</footer>
+<script src="common.js"></script>
+<script src="page.js"></script>
+</body>
+</html>
