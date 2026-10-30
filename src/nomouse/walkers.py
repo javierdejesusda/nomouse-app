@@ -6,6 +6,7 @@ The thresholds below are frozen before the eval; changing one changes every
 verdict hash.
 """
 
+import datetime
 import hashlib
 import json
 import math
@@ -29,6 +30,8 @@ ORDER_THRESHOLD_PX = 24
 flags it: about one line of 16 px text at 1.5 line height."""
 
 VERDICTS_NAME = "verdicts.json"
+FROZEN_AT_NAME = f"{VERDICTS_NAME}.frozen_at"
+"""Sidecar holding the UTC freeze time, kept out of the hashed verdicts."""
 
 Rule = Literal[
     "trap", "unreachable", "focus-not-visible", "order", "cover", "focus-management"
@@ -120,8 +123,10 @@ def freeze(record: WalkRecord, run_dir: Path) -> str:
 
     Writes `verdicts.json` (canonical JSON: the page, the key sequence, the
     thresholds and both walkers' verdicts, with no backend node ids or run
-    paths) and `verdicts.json.sha256` in `sha256sum` format. Frozen verdicts
-    are never rewritten.
+    paths), `verdicts.json.sha256` in `sha256sum` format and
+    `verdicts.json.frozen_at`, the UTC freeze time in ISO 8601. The time
+    stays out of the hashed file so the same walk gives the same hash.
+    Frozen verdicts are never rewritten.
 
     Args:
         record: The walk record.
@@ -155,10 +160,12 @@ def freeze(record: WalkRecord, run_dir: Path) -> str:
     verdicts_path = run_dir / VERDICTS_NAME
     with verdicts_path.open("xb") as frozen:
         frozen.write(data)
+    frozen_at = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     try:
         (run_dir / f"{VERDICTS_NAME}.sha256").write_text(
             f"{digest}  {VERDICTS_NAME}\n", encoding="utf-8"
         )
+        (run_dir / FROZEN_AT_NAME).write_text(f"{frozen_at}\n", encoding="utf-8")
     except BaseException:
         verdicts_path.unlink()
         raise

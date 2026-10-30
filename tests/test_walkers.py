@@ -1,5 +1,7 @@
+import datetime
 import hashlib
 import json
+import shutil
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -274,6 +276,29 @@ def test_freeze_writes_verdicts_and_their_sha256(
         "order",
         "order",
     ]
+
+
+def test_freeze_records_its_utc_time_beside_the_hashed_verdicts(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "order.html", tmp_path / "a")
+    before = datetime.datetime.now(datetime.UTC).replace(microsecond=0)
+
+    freeze(record, tmp_path / "a")
+
+    after = datetime.datetime.now(datetime.UTC)
+    stamp = (tmp_path / "a" / "verdicts.json.frozen_at").read_text(encoding="utf-8")
+    assert stamp.endswith("Z\n")
+    frozen_at = datetime.datetime.fromisoformat(stamp.strip())
+    assert before <= frozen_at <= after
+    shutil.copytree(tmp_path / "a", tmp_path / "b")
+    (tmp_path / "b" / "verdicts.json").unlink()
+    (tmp_path / "b" / "verdicts.json.sha256").unlink()
+    assert freeze(record, tmp_path / "b") == freeze_digest(tmp_path / "a")
+
+
+def freeze_digest(run_dir: Path) -> str:
+    return hashlib.sha256((run_dir / "verdicts.json").read_bytes()).hexdigest()
 
 
 def test_freeze_refuses_to_overwrite_frozen_verdicts(
