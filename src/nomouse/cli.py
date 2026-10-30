@@ -160,7 +160,12 @@ def _review(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
     except FileExistsError as error:
         parser.error(f"{error}; give another --run label")
     except (spark.SparkError, reviewer.AnswerError) as error:
-        print(f"nomouse review: {error}; no review written", file=sys.stderr)
+        partial = reviewer.partial_path(reviewer.review_path(args.run_dir, args.run))
+        print(
+            f"nomouse review: {error}; no review written,"
+            f" completed calls are in {partial}",
+            file=sys.stderr,
+        )
         return 1
     except (ValueError, reviewer.ReviewError) as error:
         parser.error(str(error))

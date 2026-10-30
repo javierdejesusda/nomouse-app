@@ -11,8 +11,11 @@ from nomouse import spark
 from nomouse.cli import main
 from nomouse.reviewer import (
     FORM_I_PROMPT,
+    FORM_I_SCHEMA,
     FORM_II_PROMPT,
+    FORM_II_SCHEMA,
     ReviewError,
+    prompt_digest,
     review,
 )
 
@@ -279,6 +282,9 @@ def test_review_never_shows_the_model_verdicts_or_dom_ids(tmp_path: Path) -> Non
         assert "secret-id" not in text
         assert "W1" not in text
         assert "verdict" not in text.lower()
+        assert "p.html" not in text
+        assert "backend" not in text
+        assert set(request) == {"model", "reasoning", "input", "text"}
 
 
 def test_review_writes_answers_statuses_hash_and_usage(tmp_path: Path) -> None:
@@ -293,6 +299,13 @@ def test_review_writes_answers_statuses_hash_and_usage(tmp_path: Path) -> None:
     assert written["verdicts_sha256"] == hashlib.sha256(VERDICTS).hexdigest()
     assert written["model"] == "muse-spark-1.3"
     assert written["reasoning_effort"] == "minimal"
+    frozen = json.dumps(
+        [FORM_I_PROMPT, FORM_II_PROMPT, FORM_I_SCHEMA, FORM_II_SCHEMA],
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    assert written["prompt_sha256"] == hashlib.sha256(frozen.encode()).hexdigest()
+    assert written["prompt_sha256"] == prompt_digest()
     assert written["instances"] == [
         {
             "form": "i",
@@ -512,3 +525,116 @@ def test_cli_review_reports_an_unfit_answer_as_a_failed_run(
 
     assert "answer" in capsys.readouterr().err
     assert not (run_dir / "review.json").exists()
+
+
+class FailingTransport(ReviewTransport):
+    """Answers the first `ok` calls, then returns an HTTP 500."""
+
+    def __init__(self, ok: int) -> None:
+        super().__init__()
+        self.ok = ok
+
+    def __call__(
+        self, url: str, body: bytes, headers: Mapping[str, str]
+    ) -> tuple[int, bytes]:
+        if len(self.bodies) >= self.ok:
+            self.bodies.append(json.loads(body))
+            return 500, b'{"error": {"message": "server fell over"}}'
+        return super().__call__(url, body, headers)
+
+
+def partial_lines(run_dir: Path, name: str = "review.partial.jsonl") -> list[Any]:
+    text = (run_dir / name).read_text(encoding="utf-8")
+    return [json.loads(line) for line in text.splitlines()]
+
+
+def test_review_keeps_answers_already_paid_for_when_a_call_fails(
+    tmp_path: Path,
+) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS)
+
+    with pytest.raises(spark.SparkError, match="server fell over"):
+        review(run_dir, transport=FailingTransport(ok=1))
+
+    assert not (run_dir / "review.json").exists()
+    header, call, failure = partial_lines(run_dir)
+    assert header["complete"] is False
+    assert "incomplete" in header["note"]
+    assert header["verdicts_sha256"] == hashlib.sha256(VERDICTS).hexdigest()
+    assert header["page"] == "http://127.0.0.1/p.html"
+    assert header["prompt_sha256"] == prompt_digest()
+    assert call["form"] == "i"
+    assert call["answers"] == [
+        {
+            "steps": {"trigger": 1, "enter": 2, "escape": 3},
+            "answer": {
+                "opened": "yes",
+                "inside": {"answer": "fail", "reason": "Focus stayed outside."},
+                "returned": {"answer": "pass", "reason": "Back on Menu."},
+            },
+        }
+    ]
+    assert call["usage"]["input_tokens"] == 1037 * 3 + 300
+    assert call["images"] == 3
+    assert failure == {"error": "HTTP 500: server fell over"}
+
+
+def test_review_records_a_paid_answer_that_does_not_fit(tmp_path: Path) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS)
+
+    with pytest.raises(ReviewError, match="answer"):
+        review(run_dir, run="r1", transport=ReviewTransport(drop_first))
+
+    _, call, failure = partial_lines(run_dir, "review-r1.partial.jsonl")
+    assert call["form"] == "i"
+    assert call["steps"] == [{"trigger": 1, "enter": 2, "escape": 3}]
+    assert "covers steps" in failure["error"]
+    assert json.loads(call["text"]) == {"instances": []}
+    assert call["usage"]["input_tokens"] == 1037 * 3 + 300
+
+
+def test_review_removes_its_partial_log_once_the_review_is_written(
+    tmp_path: Path,
+) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS)
+
+    review(run_dir, transport=ReviewTransport())
+
+    assert (run_dir / "review.json").is_file()
+    assert not (run_dir / "review.partial.jsonl").exists()
+
+
+def test_review_never_overwrites_a_partial_log(tmp_path: Path) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS)
+    (run_dir / "review.partial.jsonl").write_text("{}\n", encoding="utf-8")
+    transport = ReviewTransport()
+
+    with pytest.raises(FileExistsError):
+        review(run_dir, transport=transport)
+
+    assert transport.bodies == []
+    assert (run_dir / "review.partial.jsonl").read_text(encoding="utf-8") == "{}\n"
+
+
+def test_review_refusing_unfrozen_verdicts_leaves_no_partial_log(
+    tmp_path: Path,
+) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS, freeze=False)
+
+    with pytest.raises(ReviewError):
+        review(run_dir, transport=ReviewTransport())
+
+    assert list(run_dir.glob("review*")) == []
+
+
+def test_cli_review_names_the_partial_log_when_a_call_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS)
+    monkeypatch.setattr(spark, "urllib_transport", FailingTransport(ok=1))
+
+    assert main(["review", str(run_dir)]) == 1
+
+    err = capsys.readouterr().err
+    assert "no review written" in err
+    assert str(run_dir / "review.partial.jsonl") in err

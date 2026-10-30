@@ -24,14 +24,13 @@ import re
 from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, TextIO
 
 from nomouse.driver import RECORD_NAME
 from nomouse.spark import (
     MAX_IMAGES,
     MODEL,
     REASONING_EFFORT,
-    SparkReply,
     Transport,
     ask,
     urllib_transport,
@@ -41,6 +40,10 @@ from nomouse.walkers import VERDICTS_NAME
 REVIEW_NAME = "review.json"
 NEEDS_REVIEW = "NEEDS REVIEW"
 ORDER_STATUS = "best practice, NEEDS REVIEW"
+_PARTIAL_NOTE = (
+    "incomplete: completed calls of a review that has not finished or failed;"
+    " not a review"
+)
 
 FORM_I_PROMPT = (
     "You are reviewing a keyboard-only walk of a web page. A driver pressed"
@@ -140,6 +143,23 @@ class _Instance:
     images: list[str]
 
 
+def prompt_digest() -> str:
+    """Returns the SHA-256 of the prompts and answer schemas the model gets.
+
+    A review records it, so a run can be matched to prompts frozen earlier.
+
+    Returns:
+        The hex SHA-256 of `[FORM_I_PROMPT, FORM_II_PROMPT, FORM_I_SCHEMA,
+        FORM_II_SCHEMA]` as compact JSON with sorted keys, UTF-8 encoded.
+    """
+    frozen = json.dumps(
+        [FORM_I_PROMPT, FORM_II_PROMPT, FORM_I_SCHEMA, FORM_II_SCHEMA],
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(frozen.encode()).hexdigest()
+
+
 def review_path(run_dir: Path, run: str | None = None) -> Path:
     """Returns where a review of a run is written.
 
@@ -168,6 +188,10 @@ def review(
 ) -> dict[str, Any]:
     """Reviews a frozen walk with forms (i) and (ii) and writes the review.
 
+    Each completed call is logged to the partial log (`partial_path`) as it
+    returns, so a failed call does not lose answers already paid for; the log
+    is removed once the review is written.
+
     Args:
         run_dir: Run directory with the walk record, its screenshots and the
             frozen walker verdicts with their `.sha256`.
@@ -175,29 +199,40 @@ def review(
         transport: Sends the HTTP requests.
 
     Returns:
-        The review, as written: page, run label, verdicts hash, model,
-        reasoning effort, one entry per instance with the model's answer,
-        whether it is a finding and its status, usage totals and per-call
-        usage.
+        The review, as written: page, run label, verdicts hash, prompt
+        hash, model, reasoning effort, one entry per instance with the
+        model's answer, whether it is a finding and its status, usage totals
+        and per-call usage.
 
     Raises:
         ValueError: The run label is not a plain name.
-        FileExistsError: The review file already exists.
+        FileExistsError: The review file or its partial log already exists.
         ReviewError: The verdicts are missing or do not match their hash, or
             the walk record is missing.
-        AnswerError: An answer does not fit its question (nothing is
-            written).
-        SparkError: A model call failed.
+        AnswerError: An answer does not fit its question (no review is
+            written; the partial log keeps the reply).
+        SparkError: A model call failed (no review is written; the partial
+            log keeps the calls before it).
     """
     path = review_path(run_dir, run)
-    if path.exists():
-        raise FileExistsError(f"{path} already exists")
+    partial = partial_path(path)
+    for existing in (path, partial):
+        if existing.exists():
+            raise FileExistsError(f"{existing} already exists")
     digest = _frozen_digest(run_dir)
     record_path = run_dir / RECORD_NAME
     if not record_path.is_file():
         raise ReviewError(f"no {RECORD_NAME} in {run_dir}")
     record = json.loads(record_path.read_text(encoding="utf-8"))
     observations: list[dict[str, Any]] = [record["initial"], *record["steps"]]
+    head = {
+        "page": record["url"],
+        "run": run,
+        "verdicts_sha256": digest,
+        "prompt_sha256": prompt_digest(),
+        "model": MODEL,
+        "reasoning_effort": REASONING_EFFORT,
+    }
 
     instances: list[dict[str, Any]] = []
     calls: list[dict[str, Any]] = []
@@ -205,41 +240,57 @@ def review(
         *(("i", b) for b in _batches(_enter_instances(observations))),
         *(("ii", b) for b in _batches(_tab_instances(observations), _TAB_BATCH)),
     ]
-    for form, batch in batches:
-        answers, reply, images = _ask(run_dir, form, batch, transport)
-        calls.append(
-            {
-                "form": form,
-                "images": images,
-                "instances": len(batch),
-                "usage": reply.usage,
-                "latency_s": reply.latency_s,
-            }
-        )
-        for instance, answer in zip(batch, answers, strict=True):
-            finding = _is_finding(form, answer)
-            instances.append(
-                {
-                    "form": form,
-                    "steps": instance.steps,
-                    "answer": answer,
-                    "finding": finding,
-                    "status": _status(form) if finding else None,
-                }
-            )
+    with partial.open("x", encoding="utf-8") as log:
+        _log_line(log, {"complete": False, "note": _PARTIAL_NOTE, **head})
+        for form, batch in batches:
+            try:
+                answers, call = _ask(run_dir, form, batch, transport, log)
+            except Exception as error:
+                _log_line(log, {"error": str(error)})
+                raise
+            calls.append(call)
+            for instance, answer in zip(batch, answers, strict=True):
+                finding = _is_finding(form, answer)
+                instances.append(
+                    {
+                        "form": form,
+                        "steps": instance.steps,
+                        "answer": answer,
+                        "finding": finding,
+                        "status": _status(form) if finding else None,
+                    }
+                )
     result = {
-        "page": record["url"],
-        "run": run,
-        "verdicts_sha256": digest,
-        "model": MODEL,
-        "reasoning_effort": REASONING_EFFORT,
+        **head,
         "instances": instances,
         "usage": _totals([call["usage"] for call in calls]),
         "calls": calls,
     }
     with path.open("x", encoding="utf-8") as out:
         out.write(json.dumps(result, indent=2) + "\n")
+    partial.unlink()
     return result
+
+
+def partial_path(path: Path) -> Path:
+    """Returns where a review in progress logs its completed calls.
+
+    The log holds one JSON line per completed call, so answers already paid
+    for survive a failed call. Its header says it is incomplete, and it is
+    removed once the review itself is written.
+
+    Args:
+        path: The review file, as given by `review_path`.
+
+    Returns:
+        `<review name>.partial.jsonl` next to the review.
+    """
+    return path.with_name(f"{path.stem}.partial.jsonl")
+
+
+def _log_line(log: TextIO, line: Mapping[str, Any]) -> None:
+    log.write(json.dumps(line) + "\n")
+    log.flush()
 
 
 def _frozen_digest(run_dir: Path) -> str:
@@ -358,9 +409,17 @@ def _shots(batch: Sequence[_Instance]) -> list[str]:
 
 
 def _ask(
-    run_dir: Path, form: str, batch: Sequence[_Instance], transport: Transport
-) -> tuple[list[dict[str, Any]], SparkReply, int]:
-    """Asks one batch and returns the validated answers in batch order."""
+    run_dir: Path,
+    form: str,
+    batch: Sequence[_Instance],
+    transport: Transport,
+    log: TextIO,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Asks one batch and logs the reply, even one that does not fit.
+
+    Returns:
+        The validated answers in batch order, and the call's summary.
+    """
     shots = _shots(batch)
     questions = []
     first = 1
@@ -387,8 +446,26 @@ def _ask(
         schema=(name, schema),
         transport=transport,
     )
+    call = {
+        "form": form,
+        "images": len(shots),
+        "instances": len(batch),
+        "usage": reply.usage,
+        "latency_s": reply.latency_s,
+    }
     asked = [question["step"] for question in questions]
-    return _validated(reply.text, key, asked, schema), reply, len(shots)
+    try:
+        answers = _validated(reply.text, key, asked, schema)
+    except AnswerError:
+        steps = [instance.steps for instance in batch]
+        _log_line(log, {**call, "steps": steps, "text": reply.text})
+        raise
+    logged = [
+        {"steps": instance.steps, "answer": answer}
+        for instance, answer in zip(batch, answers, strict=True)
+    ]
+    _log_line(log, {**call, "answers": logged})
+    return answers, call
 
 
 def _validated(
