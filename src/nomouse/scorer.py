@@ -5,6 +5,10 @@ frozen walker verdicts and one review per run directory, and makes no model
 call. The model never sees the labels or the DOM ids; the scorer maps the
 model's answers to DOM ids through the walk record's step numbers.
 
+Form (ii) answers exist only in reviews made before the product shrank to
+form (i) (2026-10-30); the scorer keeps reading them so the G3a reviews on
+record can be scored again.
+
 Scoring rules, fixed before any gate run:
 
 - A page is scored under the form its label names: order pages under form

@@ -12,8 +12,6 @@ from nomouse.cli import main
 from nomouse.reviewer import (
     FORM_I_PROMPT,
     FORM_I_SCHEMA,
-    FORM_II_PROMPT,
-    FORM_II_SCHEMA,
     ReviewError,
     prompt_digest,
     review,
@@ -101,27 +99,16 @@ STEPS = [
 ]
 
 
-def default_answers(form: str, asked: list[int]) -> dict[str, Any]:
-    if form == "i":
-        return {
-            "instances": [
-                {
-                    "step": step,
-                    "opened": "yes",
-                    "inside": {"answer": "fail", "reason": "Focus stayed outside."},
-                    "returned": {"answer": "pass", "reason": "Back on Menu."},
-                }
-                for step in asked
-            ]
-        }
+def default_answers(asked: list[int]) -> dict[str, Any]:
     return {
-        "transitions": [
+        "instances": [
             {
                 "step": step,
-                "answer": "breaks" if n == 0 else "follows",
-                "reason": "Reason.",
+                "opened": "yes",
+                "inside": {"answer": "fail", "reason": "Focus stayed outside."},
+                "returned": {"answer": "pass", "reason": "Back on Menu."},
             }
-            for n, step in enumerate(asked)
+            for step in asked
         ]
     }
 
@@ -131,7 +118,7 @@ class ReviewTransport:
 
     def __init__(
         self,
-        answer: Callable[[str, list[int]], object] = default_answers,
+        answer: Callable[[list[int]], object] = default_answers,
     ) -> None:
         self.answer = answer
         self.bodies: list[dict[str, Any]] = []
@@ -141,10 +128,8 @@ class ReviewTransport:
     ) -> tuple[int, bytes]:
         request = json.loads(body)
         self.bodies.append(request)
-        form, payload = parse(request)
-        key = "instances" if form == "i" else "transitions"
-        asked = [item["step"] for item in payload[key]]
-        answer = self.answer(form, asked)
+        asked = [item["step"] for item in parse(request)["instances"]]
+        answer = self.answer(asked)
         images = len(request["input"][0]["content"]) - 1
         usage = {
             "input_tokens": 1037 * images + 300,
@@ -164,12 +149,11 @@ class ReviewTransport:
         return 200, json.dumps(reply).encode()
 
 
-def parse(request: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+def parse(request: dict[str, Any]) -> dict[str, Any]:
     text = request["input"][0]["content"][0]["text"]
-    for form, prompt in (("i", FORM_I_PROMPT), ("ii", FORM_II_PROMPT)):
-        if text.startswith(prompt):
-            return form, json.loads(text.removeprefix(prompt))
-    raise AssertionError("unknown prompt")
+    assert text.startswith(FORM_I_PROMPT)
+    payload: dict[str, Any] = json.loads(text.removeprefix(FORM_I_PROMPT))
+    return payload
 
 
 def images(request: dict[str, Any]) -> list[str]:
@@ -210,15 +194,14 @@ def test_review_asks_form_i_about_each_enter_with_its_escape(tmp_path: Path) -> 
 
     review(run_dir, transport=transport)
 
-    form_i = [b for b in transport.bodies if parse(b)[0] == "i"]
-    assert len(form_i) == 1
-    request = form_i[0]
+    assert len(transport.bodies) == 1
+    request = transport.bodies[0]
     assert request["model"] == "muse-spark-1.3"
     assert request["reasoning"] == {"effort": "minimal"}
     assert request["text"]["format"]["type"] == "json_schema"
     assert images(request) == ["step-001", "step-002", "step-003"]
     menu = {"role": "button", "name": "Menu", "box": box(50)}
-    assert parse(request)[1] == {
+    assert parse(request) == {
         "instances": [
             {
                 "step": 2,
@@ -232,43 +215,20 @@ def test_review_asks_form_i_about_each_enter_with_its_escape(tmp_path: Path) -> 
     }
 
 
-def test_review_asks_form_ii_with_one_layout_screenshot_per_view(
-    tmp_path: Path,
-) -> None:
-    run_dir = write_run(tmp_path / "run", STEPS)
+def test_review_asks_nothing_about_tab_order(tmp_path: Path) -> None:
+    tabs_only = [("Tab", focus(n, "link", f"L{n}", 10.0 * n), 0.0) for n in (1, 2, 3)]
+    run_dir = write_run(tmp_path / "run", tabs_only)
     transport = ReviewTransport()
 
-    review(run_dir, transport=transport)
+    result = review(run_dir, transport=transport)
 
-    form_ii = [b for b in transport.bodies if parse(b)[0] == "ii"]
-    assert len(form_ii) == 1
-    request = form_ii[0]
-    # A view is a scroll position between two non-Tab keys; its first
-    # screenshot stands for it.
-    assert images(request) == ["initial", "step-003", "step-005"]
-
-    def element(image: int, role: str, name: str, y: float) -> dict[str, Any]:
-        return {"image": image, "role": role, "name": name, "box": box(y)}
-
-    assert parse(request)[1] == {
-        "transitions": [
-            {
-                "step": 1,
-                "from": element(1, "link", "Home", 10),
-                "to": element(1, "button", "Menu", 50),
-            },
-            {
-                "step": 4,
-                "from": element(2, "button", "Menu", 50),
-                "to": element(2, "link", "About", 100),
-            },
-            {
-                "step": 5,
-                "from": element(2, "link", "About", 100),
-                "to": element(3, "link", "Contact", 100),
-            },
-        ]
-    }
+    assert transport.bodies == []
+    assert result["instances"] == []
+    with_enter = review(
+        write_run(tmp_path / "run2", STEPS), transport=(transport := ReviewTransport())
+    )
+    assert [i["form"] for i in with_enter["instances"]] == ["i"]
+    assert all("transitions" not in json.dumps(parse(b)) for b in transport.bodies)
 
 
 def test_review_never_shows_the_model_verdicts_or_dom_ids(tmp_path: Path) -> None:
@@ -300,7 +260,7 @@ def test_review_writes_answers_statuses_hash_and_usage(tmp_path: Path) -> None:
     assert written["model"] == "muse-spark-1.3"
     assert written["reasoning_effort"] == "minimal"
     frozen = json.dumps(
-        [FORM_I_PROMPT, FORM_II_PROMPT, FORM_I_SCHEMA, FORM_II_SCHEMA],
+        [FORM_I_PROMPT, FORM_I_SCHEMA],
         sort_keys=True,
         separators=(",", ":"),
     )
@@ -318,40 +278,26 @@ def test_review_writes_answers_statuses_hash_and_usage(tmp_path: Path) -> None:
             "finding": True,
             "status": "NEEDS REVIEW",
         },
-        {
-            "form": "ii",
-            "steps": {"from": 0, "to": 1},
-            "answer": {"answer": "breaks", "reason": "Reason."},
-            "finding": True,
-            "status": "best practice, NEEDS REVIEW",
-        },
-        {
-            "form": "ii",
-            "steps": {"from": 3, "to": 4},
-            "answer": {"answer": "follows", "reason": "Reason."},
-            "finding": False,
-            "status": None,
-        },
-        {
-            "form": "ii",
-            "steps": {"from": 4, "to": 5},
-            "answer": {"answer": "follows", "reason": "Reason."},
-            "finding": False,
-            "status": None,
-        },
     ]
     assert written["usage"] == {
-        "calls": 2,
-        "input_tokens": 1037 * 6 + 600,
+        "calls": 1,
+        "input_tokens": 1037 * 3 + 300,
         "cached_tokens": 0,
-        "output_tokens": 200,
-        "reasoning_tokens": 40,
-        "total_tokens": 1037 * 6 + 800,
+        "output_tokens": 100,
+        "reasoning_tokens": 20,
+        "total_tokens": 1037 * 3 + 400,
     }
     assert [(c["form"], c["images"], c["instances"]) for c in written["calls"]] == [
-        ("i", 3, 1),
-        ("ii", 3, 3),
+        ("i", 3, 1)
     ]
+
+
+def test_prompt_digest_is_the_form_i_hash_recorded_after_the_shrink() -> None:
+    # The form (i) prompt and schema are byte-identical to the gated ones
+    # (prompt hash fead4845...1262 covered both forms); only form (ii) left.
+    assert prompt_digest() == (
+        "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+    )
 
 
 def test_review_never_overwrites_a_review(tmp_path: Path) -> None:
@@ -389,24 +335,21 @@ def test_review_refuses_a_run_label_that_is_not_a_plain_name(
         review(run_dir, run=label, transport=ReviewTransport())
 
 
-def drop_first(form: str, asked: list[int]) -> object:
-    answers = default_answers(form, asked)
-    key = "instances" if form == "i" else "transitions"
-    answers[key] = answers[key][1:]
+def drop_first(asked: list[int]) -> object:
+    answers = default_answers(asked)
+    answers["instances"] = answers["instances"][1:]
     return answers
 
 
-def bad_enum(form: str, asked: list[int]) -> object:
-    answers = default_answers(form, asked)
-    if form == "i":
-        answers["instances"][0]["opened"] = "maybe"
+def bad_enum(asked: list[int]) -> object:
+    answers = default_answers(asked)
+    answers["instances"][0]["opened"] = "maybe"
     return answers
 
 
-def empty_reason(form: str, asked: list[int]) -> object:
-    answers = default_answers(form, asked)
-    if form == "i":
-        answers["instances"][0]["returned"]["reason"] = " "
+def empty_reason(asked: list[int]) -> object:
+    answers = default_answers(asked)
+    answers["instances"][0]["returned"]["reason"] = " "
     return answers
 
 
@@ -416,12 +359,12 @@ def empty_reason(form: str, asked: list[int]) -> object:
         drop_first,
         bad_enum,
         empty_reason,
-        lambda form, asked: "not json",
-        lambda form, asked: [],
+        lambda asked: "not json",
+        lambda asked: [],
     ],
 )
 def test_review_rejects_answers_that_do_not_fit_the_question(
-    tmp_path: Path, answer: Callable[[str, list[int]], object]
+    tmp_path: Path, answer: Callable[[list[int]], object]
 ) -> None:
     run_dir = write_run(tmp_path / "run", STEPS)
 
@@ -431,38 +374,36 @@ def test_review_rejects_answers_that_do_not_fit_the_question(
     assert not (run_dir / "review.json").exists()
 
 
-def test_review_splits_requests_to_stay_within_the_image_limit(
-    tmp_path: Path,
-) -> None:
+def twenty_buttons() -> list[tuple[str, dict[str, Any], float]]:
+    """Tab, Enter, Escape on 20 buttons: 60 screenshots, more than one request."""
     steps: list[tuple[str, dict[str, Any], float]] = []
     for n in range(20):
         button = focus(n + 1, "button", f"B{n}", 10)
         steps += [("Tab", button, 0.0), ("Enter", button, 0.0)]
         steps.append(("Escape", button, 0.0))
-    steps += [
-        ("Tab", focus(100 + n, "link", f"L{n}", 10), 100.0 * n) for n in range(60)
-    ]
-    run_dir = write_run(tmp_path / "run", steps)
+    return steps
+
+
+def test_review_splits_requests_to_stay_within_the_image_limit(
+    tmp_path: Path,
+) -> None:
+    run_dir = write_run(tmp_path / "run", twenty_buttons())
     transport = ReviewTransport()
 
     result = review(run_dir, transport=transport)
 
     for request in transport.bodies:
         assert len(images(request)) <= spark.MAX_IMAGES
-    assert sum(i["form"] == "i" for i in result["instances"]) == 20
-    assert sum(i["form"] == "ii" for i in result["instances"]) == 79
-    assert sum(c["form"] == "i" for c in result["calls"]) == 2
+    assert [len(images(request)) for request in transport.bodies] == [48, 12]
+    assert len(result["instances"]) == 20
+    assert len(result["calls"]) == 2
     asked = [
-        item["step"]
-        for body in transport.bodies
-        if parse(body)[0] == "ii"
-        for item in parse(body)[1]["transitions"]
+        item["step"] for body in transport.bodies for item in parse(body)["instances"]
     ]
-    assert asked == sorted(set(asked))
-    assert len(asked) == 79
+    assert asked == [3 * n + 1 for n in range(20)]
 
 
-def test_review_of_a_walk_without_buttons_or_moves_makes_no_call(
+def test_review_of_a_walk_without_buttons_makes_no_call(
     tmp_path: Path,
 ) -> None:
     run_dir = write_run(tmp_path / "run", [("Tab", focus(1, "link", "A", 10), 0.0)])
@@ -486,7 +427,7 @@ def test_cli_review_writes_a_labelled_review(
     out = capsys.readouterr().out
     assert (run_dir / "review-run2.json").is_file()
     assert hashlib.sha256(VERDICTS).hexdigest() in out
-    assert "2 NEEDS REVIEW findings" in out
+    assert "1 NEEDS REVIEW findings" in out
     assert str(run_dir / "review-run2.json") in out
 
 
@@ -551,7 +492,7 @@ def partial_lines(run_dir: Path, name: str = "review.partial.jsonl") -> list[Any
 def test_review_keeps_answers_already_paid_for_when_a_call_fails(
     tmp_path: Path,
 ) -> None:
-    run_dir = write_run(tmp_path / "run", STEPS)
+    run_dir = write_run(tmp_path / "run", twenty_buttons())
 
     with pytest.raises(spark.SparkError, match="server fell over"):
         review(run_dir, transport=FailingTransport(ok=1))
@@ -564,18 +505,17 @@ def test_review_keeps_answers_already_paid_for_when_a_call_fails(
     assert header["page"] == "http://127.0.0.1/p.html"
     assert header["prompt_sha256"] == prompt_digest()
     assert call["form"] == "i"
-    assert call["answers"] == [
-        {
-            "steps": {"trigger": 1, "enter": 2, "escape": 3},
-            "answer": {
-                "opened": "yes",
-                "inside": {"answer": "fail", "reason": "Focus stayed outside."},
-                "returned": {"answer": "pass", "reason": "Back on Menu."},
-            },
-        }
-    ]
-    assert call["usage"]["input_tokens"] == 1037 * 3 + 300
-    assert call["images"] == 3
+    assert len(call["answers"]) == 16
+    assert call["answers"][0] == {
+        "steps": {"trigger": 0, "enter": 1, "escape": 2},
+        "answer": {
+            "opened": "yes",
+            "inside": {"answer": "fail", "reason": "Focus stayed outside."},
+            "returned": {"answer": "pass", "reason": "Back on Menu."},
+        },
+    }
+    assert call["usage"]["input_tokens"] == 1037 * 48 + 300
+    assert call["images"] == 48
     assert failure == {"error": "HTTP 500: server fell over"}
 
 
@@ -630,7 +570,7 @@ def test_review_refusing_unfrozen_verdicts_leaves_no_partial_log(
 def test_cli_review_names_the_partial_log_when_a_call_fails(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    run_dir = write_run(tmp_path / "run", STEPS)
+    run_dir = write_run(tmp_path / "run", twenty_buttons())
     monkeypatch.setattr(spark, "urllib_transport", FailingTransport(ok=1))
 
     assert main(["review", str(run_dir)]) == 1

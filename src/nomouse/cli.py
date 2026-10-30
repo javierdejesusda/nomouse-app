@@ -82,7 +82,7 @@ def _parser() -> argparse.ArgumentParser:
     gate.add_argument("--window", type=int, default=g1.DEFAULT_WINDOW)
     review = commands.add_parser(
         "review",
-        help="focus reviewer: Muse Spark forms (i) and (ii) on a frozen walk",
+        help="focus reviewer: Muse Spark form (i) on a frozen walk",
     )
     review.add_argument("run_dir", type=Path, help="run directory of a frozen walk")
     review.add_argument(

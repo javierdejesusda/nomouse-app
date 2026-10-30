@@ -1,21 +1,14 @@
 """Focus reviewer: Muse Spark judges a frozen walk from its screenshots.
 
 Form (i) asks, for each Enter and the Escape after it, whether focus landed
-inside what visibly opened and came back to the trigger. Form (ii) asks, for
-each Tab transition, whether the move follows the visual reading order.
+inside what visibly opened and came back to the trigger. It is the only form:
+the Tab-order form (ii) failed gate G3a and left the product (owner decision,
+2026-10-30); order findings come from walker W1 alone.
 
 The model sees screenshots and the focused element's role, accessible name
 and box as JSON text, never labels, DOM ids or walker verdicts. It runs only
 on a walk whose walker verdicts are frozen and match their hash, and records
 that hash. Every model finding has status NEEDS REVIEW.
-
-Form (ii) sends one layout screenshot per view instead of one per Tab: a view
-is a scroll position between two non-Tab keys, during which a page without
-timers keeps its layout, so the first screenshot of the view shows where
-every element focused in it sits. A page that fits the viewport costs one
-image plus about 60 text tokens per transition, against about 1,037 tokens per
-screenshot. Limit: content that only shows while focused (a skip link) is
-absent from the layout screenshot; its box is still given.
 """
 
 import hashlib
@@ -39,7 +32,6 @@ from nomouse.walkers import VERDICTS_NAME
 
 REVIEW_NAME = "review.json"
 NEEDS_REVIEW = "NEEDS REVIEW"
-ORDER_STATUS = "best practice, NEEDS REVIEW"
 _PARTIAL_NOTE = (
     "incomplete: completed calls of a review that has not finished or failed;"
     " not a review"
@@ -69,21 +61,6 @@ FORM_I_PROMPT = (
     "Give each answer a one-sentence reason naming what you saw.\n"
 )
 
-FORM_II_PROMPT = (
-    "You are reviewing the Tab order of a web page from a keyboard-only walk."
-    " The attached screenshots of the 1024x768 viewport show the page layout,"
-    " numbered from 1 in the order attached; a screenshot may show a focus"
-    " indicator on some element, which you can ignore. The JSON below lists"
-    " the Tab transitions in the order they were pressed: for each, the"
-    " element focus left and the element it landed on, each with the number"
-    " of the screenshot that shows it, its role, accessible name and border"
-    " box in that screenshot's pixels. For each transition answer follows if"
-    " the move follows the visual reading order a sighted user would expect"
-    " from the layout, breaks if it breaks that order, or unsure if the"
-    " screenshots do not show enough, with a one-sentence reason naming what"
-    " you saw.\n"
-)
-
 _VERDICT = {"type": "string", "enum": ["pass", "fail", "unsure"]}
 _REASON = {"type": "string"}
 
@@ -111,18 +88,6 @@ FORM_I_SCHEMA = _answer_list(
         "returned": _JUDGED,
     },
 )
-FORM_II_SCHEMA = _answer_list(
-    "transitions",
-    {
-        "step": {"type": "integer"},
-        "answer": {"type": "string", "enum": ["follows", "breaks", "unsure"]},
-        "reason": _REASON,
-    },
-)
-
-# Keeps one reply's reasons short enough to stay reliable.
-_TAB_BATCH = 40
-
 _DOCUMENT_TAGS = frozenset({"BODY", "HTML"})
 _RUN_LABEL = re.compile(r"[A-Za-z0-9_-]+")
 
@@ -137,23 +102,22 @@ class AnswerError(ReviewError):
 
 @dataclass(frozen=True)
 class _Instance:
-    form: str
     steps: dict[str, int | None]
     question: dict[str, Any]
     images: list[str]
 
 
 def prompt_digest() -> str:
-    """Returns the SHA-256 of the prompts and answer schemas the model gets.
+    """Returns the SHA-256 of the prompt and answer schema the model gets.
 
-    A review records it, so a run can be matched to prompts frozen earlier.
+    A review records it, so a run can be matched to a prompt frozen earlier.
 
     Returns:
-        The hex SHA-256 of `[FORM_I_PROMPT, FORM_II_PROMPT, FORM_I_SCHEMA,
-        FORM_II_SCHEMA]` as compact JSON with sorted keys, UTF-8 encoded.
+        The hex SHA-256 of `[FORM_I_PROMPT, FORM_I_SCHEMA]` as compact JSON
+        with sorted keys, UTF-8 encoded.
     """
     frozen = json.dumps(
-        [FORM_I_PROMPT, FORM_II_PROMPT, FORM_I_SCHEMA, FORM_II_SCHEMA],
+        [FORM_I_PROMPT, FORM_I_SCHEMA],
         sort_keys=True,
         separators=(",", ":"),
     )
@@ -186,7 +150,7 @@ def review(
     run: str | None = None,
     transport: Transport = urllib_transport,
 ) -> dict[str, Any]:
-    """Reviews a frozen walk with forms (i) and (ii) and writes the review.
+    """Reviews a frozen walk with form (i) and writes the review.
 
     Each completed call is logged to the partial log (`partial_path`) as it
     returns, so a failed call does not lose answers already paid for; the log
@@ -236,28 +200,27 @@ def review(
 
     instances: list[dict[str, Any]] = []
     calls: list[dict[str, Any]] = []
-    batches = [
-        *(("i", b) for b in _batches(_enter_instances(observations))),
-        *(("ii", b) for b in _batches(_tab_instances(observations), _TAB_BATCH)),
-    ]
     with partial.open("x", encoding="utf-8") as log:
         _log_line(log, {"complete": False, "note": _PARTIAL_NOTE, **head})
-        for form, batch in batches:
+        for batch in _batches(_enter_instances(observations)):
             try:
-                answers, call = _ask(run_dir, form, batch, transport, log)
+                answers, call = _ask(run_dir, batch, transport, log)
             except Exception as error:
                 _log_line(log, {"error": str(error)})
                 raise
             calls.append(call)
             for instance, answer in zip(batch, answers, strict=True):
-                finding = _is_finding(form, answer)
+                finding = "fail" in (
+                    answer["inside"]["answer"],
+                    answer["returned"]["answer"],
+                )
                 instances.append(
                     {
-                        "form": form,
+                        "form": "i",
                         "steps": instance.steps,
                         "answer": answer,
                         "finding": finding,
-                        "status": _status(form) if finding else None,
+                        "status": NEEDS_REVIEW if finding else None,
                     }
                 )
     result = {
@@ -320,7 +283,6 @@ def _enter_instances(observations: Sequence[dict[str, Any]]) -> Iterator[_Instan
         if escape is not None:
             shown.append(("after Escape", escape))
         yield _Instance(
-            form="i",
             steps={
                 "trigger": observations[position - 1].get("index"),
                 "enter": step["index"],
@@ -337,60 +299,20 @@ def _enter_instances(observations: Sequence[dict[str, Any]]) -> Iterator[_Instan
         )
 
 
-def _tab_instances(observations: Sequence[dict[str, Any]]) -> Iterator[_Instance]:
-    """Yields a form (ii) instance per Tab that moves between two elements.
-
-    Each element carries the screenshot that opens its view, standing for
-    the layout it was focused in.
-    """
-    view_shot: dict[tuple[float, float, int], str] = {}
-    shots: list[str] = []
-    epoch = 0
-    for observation in observations:
-        if observation.get("key") not in (None, "Tab"):
-            epoch += 1
-        view = (observation["scroll_x"], observation["scroll_y"], epoch)
-        shots.append(view_shot.setdefault(view, observation["screenshot"]))
-    for position in range(1, len(observations)):
-        before, step = observations[position - 1], observations[position]
-        source, landing = before["focus"], step["focus"]
-        if (
-            step["key"] != "Tab"
-            or _focus(source) is None
-            or _focus(landing) is None
-            or source["backend_node_id"] == landing["backend_node_id"]
-        ):
-            continue
-        yield _Instance(
-            form="ii",
-            steps={"from": before.get("index"), "to": step["index"]},
-            question={
-                "step": step["index"],
-                "from": _focus(source),
-                "to": _focus(landing),
-            },
-            images=[shots[position - 1], shots[position]],
-        )
-
-
 def _focus(focus: Mapping[str, Any]) -> dict[str, Any] | None:
     if focus["tag"] is None or focus["tag"] in _DOCUMENT_TAGS or not focus["box"]:
         return None
     return {"role": focus["role"], "name": focus["name"], "box": focus["box"]}
 
 
-def _batches(
-    instances: Iterator[_Instance], size: int = MAX_IMAGES
-) -> Iterator[list[_Instance]]:
-    """Groups instances in order, each group within `size` and the image limit.
+def _batches(instances: Iterator[_Instance]) -> Iterator[list[_Instance]]:
+    """Groups instances in order, each group within the image limit.
 
-    Form (i) is bounded by images alone: 16 instances of 3 screenshots.
+    At 3 screenshots per instance a group holds up to 16 instances.
     """
     batch: list[_Instance] = []
     for instance in instances:
-        if batch and (
-            len(batch) >= size or len(_shots([*batch, instance])) > MAX_IMAGES
-        ):
+        if batch and len(_shots([*batch, instance])) > MAX_IMAGES:
             yield batch
             batch = []
         batch.append(instance)
@@ -399,18 +321,12 @@ def _batches(
 
 
 def _shots(batch: Sequence[_Instance]) -> list[str]:
-    """Returns the screenshots one request attaches, in order.
-
-    Form (i) attaches each instance's own screenshots; form (ii) attaches
-    each layout screenshot once.
-    """
-    shots = [shot for instance in batch for shot in instance.images]
-    return shots if batch[0].form == "i" else list(dict.fromkeys(shots))
+    """Returns the screenshots one request attaches, in order."""
+    return [shot for instance in batch for shot in instance.images]
 
 
 def _ask(
     run_dir: Path,
-    form: str,
     batch: Sequence[_Instance],
     transport: Transport,
     log: TextIO,
@@ -425,29 +341,20 @@ def _ask(
     first = 1
     for instance in batch:
         question = dict(instance.question)
-        if form == "i":
-            question["screenshots"] = [
-                {"image": n, **shown}
-                for n, shown in enumerate(question["screenshots"], start=first)
-            ]
-            first += len(instance.images)
-        else:
-            for end, shot in zip(("from", "to"), instance.images, strict=True):
-                question[end] = {"image": shots.index(shot) + 1, **question[end]}
+        question["screenshots"] = [
+            {"image": n, **shown}
+            for n, shown in enumerate(question["screenshots"], start=first)
+        ]
+        first += len(instance.images)
         questions.append(question)
-    key, prompt, schema, name = (
-        ("instances", FORM_I_PROMPT, FORM_I_SCHEMA, "FocusManagementReview")
-        if form == "i"
-        else ("transitions", FORM_II_PROMPT, FORM_II_SCHEMA, "TabOrderReview")
-    )
     reply = ask(
-        prompt + json.dumps({key: questions}),
+        FORM_I_PROMPT + json.dumps({"instances": questions}),
         [(run_dir / shot).read_bytes() for shot in shots],
-        schema=(name, schema),
+        schema=("FocusManagementReview", FORM_I_SCHEMA),
         transport=transport,
     )
     call = {
-        "form": form,
+        "form": "i",
         "images": len(shots),
         "instances": len(batch),
         "usage": reply.usage,
@@ -455,7 +362,7 @@ def _ask(
     }
     asked = [question["step"] for question in questions]
     try:
-        answers = _validated(reply.text, key, asked, schema)
+        answers = _validated(reply.text, asked)
     except AnswerError:
         steps = [instance.steps for instance in batch]
         _log_line(log, {**call, "steps": steps, "text": reply.text})
@@ -468,18 +375,16 @@ def _ask(
     return answers, call
 
 
-def _validated(
-    text: str, key: str, asked: Sequence[int], schema: Mapping[str, Any]
-) -> list[dict[str, Any]]:
+def _validated(text: str, asked: Sequence[int]) -> list[dict[str, Any]]:
     """Checks the reply against the schema and returns one answer per step."""
     try:
         data = json.loads(text)
     except ValueError as error:
         raise AnswerError("the model's answer is not JSON") from error
-    item_schema = schema["properties"][key]["items"]
-    if not isinstance(data, dict) or not isinstance(data.get(key), list):
-        raise AnswerError(f"the model's answer has no {key} list")
-    answers = data[key]
+    item_schema = FORM_I_SCHEMA["properties"]["instances"]["items"]
+    if not isinstance(data, dict) or not isinstance(data.get("instances"), list):
+        raise AnswerError("the model's answer has no instances list")
+    answers = data["instances"]
     for answer in answers:
         _check(answer, item_schema)
     by_step = {answer["step"]: answer for answer in answers}
@@ -507,16 +412,6 @@ def _check(value: object, schema: Mapping[str, Any]) -> None:
         )
     elif "enum" in schema and value not in schema["enum"]:
         raise AnswerError(f"the model's answer has an unknown value: {value!r}")
-
-
-def _is_finding(form: str, answer: Mapping[str, Any]) -> bool:
-    if form == "i":
-        return "fail" in (answer["inside"]["answer"], answer["returned"]["answer"])
-    return bool(answer["answer"] == "breaks")
-
-
-def _status(form: str) -> str:
-    return NEEDS_REVIEW if form == "i" else ORDER_STATUS
 
 
 def _totals(usages: Sequence[Mapping[str, Any]]) -> dict[str, int]:
