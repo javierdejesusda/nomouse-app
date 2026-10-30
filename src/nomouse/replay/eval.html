@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'; base-uri 'none'">
+<title>Eval counts - NoMouse replay</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header>
+  <p class="brand"><a href="index.html">NoMouse replay</a></p>
+  <nav aria-label="Site">
+    <ul>
+      <li><a href="index.html">Pages</a></li>
+      <li><a href="eval.html" aria-current="page">Eval counts</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="main" tabindex="-1">
+  <h1>Eval counts</h1>
+  <p>Counts only. Arms on the same frozen walk per page: W0; W1; NoMouse (W1 plus the form (i) model reviewer); bare Spark (one video call per page with the prompt "list the keyboard and focus failures"). Model arms ran twice. Most ground truth is on builder-made pages written and labelled by the builder, so read the clean-control columns.</p>
+  <div id="eval"></div>
+  <p class="reference">Reference point only: arXiv 2609.09379 reports 56% precision for its model. This eval computes no precision and the populations differ, so the figure is not compared with anything here. The counts to read beside it are the false flags on clean controls.</p>
+</main>
+<footer>
+  <p>Observed keyboard-only test evidence. Not a conformance claim and not legal advice.</p>
+</footer>
+<script src="common.js"></script>
+<script src="eval.js"></script>
+</body>
+</html>
