@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Escapable trap fixture</title></head>
+<body>
+<input id="first" aria-label="First">
+<input id="second" aria-label="Second">
+<input id="outside" aria-label="Outside">
+<script>
+  const first = document.getElementById("first");
+  const second = document.getElementById("second");
+  const outside = document.getElementById("outside");
+  function trapTab(from, to) {
+    from.addEventListener("keydown", (event) => {
+      if (event.key === "Tab") {
+        event.preventDefault();
+        to.focus();
+      } else if (event.key === "Escape") {
+        outside.focus();
+      }
+    });
+  }
+  trapTab(first, second);
+  trapTab(second, first);
+</script>
+</body>
+</html>

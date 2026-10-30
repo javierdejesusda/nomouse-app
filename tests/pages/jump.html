@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Jump fixture</title></head>
+<body>
+<button id="skip" type="button">Skip</button>
+<input id="mid" aria-label="Mid">
+<input id="last" aria-label="Last">
+<script>
+  document.getElementById("skip").addEventListener("click", () => {
+    document.getElementById("last").focus();
+  });
+</script>
+</body>
+</html>

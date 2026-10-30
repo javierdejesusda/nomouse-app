@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Returning trap fixture</title></head>
+<body>
+<button id="trigger" type="button">Trigger</button>
+<input id="first" aria-label="First">
+<input id="second" aria-label="Second">
+<input id="outside" aria-label="Outside">
+<script>
+  // Escape returns focus to the trigger just before the trap, so the next
+  // Tab re-enters it: Escape does leave the trap.
+  const trigger = document.getElementById("trigger");
+  const first = document.getElementById("first");
+  const second = document.getElementById("second");
+  function trapTab(from, to) {
+    from.addEventListener("keydown", (event) => {
+      if (event.key === "Tab") {
+        event.preventDefault();
+        to.focus();
+      } else if (event.key === "Escape") {
+        trigger.focus();
+      }
+    });
+  }
+  trapTab(first, second);
+  trapTab(second, first);
+</script>
+</body>
+</html>
