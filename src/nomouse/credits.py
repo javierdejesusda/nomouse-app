@@ -9,10 +9,11 @@ headers.
 
 import datetime
 import json
+import os
 import threading
 from collections.abc import Mapping
 from pathlib import Path
-from typing import Any
+from typing import Any, BinaryIO
 
 from nomouse.spark import Transport
 
@@ -24,6 +25,11 @@ OUTPUT_PRICE = 4.25e-6
 """USD per output token; reasoning tokens bill as output."""
 MAX_CAP_USD = 20.0
 """The live credit cap may never exceed this, for the life of the page."""
+TRUNCATED_LINE_USD = 0.75
+"""What a ledger line that is not JSON counts for: a write cut short by a
+crash, so its cost is unknown. Not less than the most a live run is
+expected to cost (`live.TASK_RESERVE_USD`), so the spend is never
+under-counted and live mode need not wait for a repair by hand."""
 
 
 class CapReachedError(Exception):
@@ -77,10 +83,19 @@ class CreditLedger:
         Args:
             run: When given, only that live run's calls are summed.
 
+        A line that is not JSON counts at `TRUNCATED_LINE_USD` in the total
+        and belongs to no run.
+
         Raises:
-            ValueError: A ledger line is not valid JSON.
+            ValueError: A JSON ledger line has no number `cost_usd`.
+            KeyError: A JSON ledger line has no `cost_usd`.
+            TypeError: A JSON ledger line is not an object.
         """
-        return sum(float(line["cost_usd"]) for line in self._lines(run))
+        lines = self._lines(run)
+        return sum(
+            TRUNCATED_LINE_USD if line is None else float(line["cost_usd"])
+            for line in lines
+        )
 
     def calls(self, run: str) -> int:
         """Returns how many answered calls a live run made.
@@ -89,17 +104,21 @@ class CreditLedger:
             run: The live run.
 
         Raises:
-            ValueError: A ledger line is not valid JSON.
+            KeyError: A JSON ledger line has no `run`.
+            TypeError: A JSON ledger line is not an object.
         """
         return len(self._lines(run))
 
-    def _lines(self, run: str | None) -> list[dict[str, Any]]:
+    def _lines(self, run: str | None) -> list[dict[str, Any] | None]:
+        """Returns the ledger lines of a run, or all, with None for non-JSON."""
         with self._lock:
             if not self.path.is_file():
                 return []
             text = self.path.read_text(encoding="utf-8")
-        lines = [json.loads(line) for line in text.splitlines()]
-        return [line for line in lines if run is None or line["run"] == run]
+        lines = [_parse(line) for line in text.splitlines()]
+        if run is None:
+            return lines
+        return [line for line in lines if line is not None and line["run"] == run]
 
     def record(self, run: str, usage: Mapping[str, Any]) -> None:
         """Appends one answered call to the ledger.
@@ -118,8 +137,10 @@ class CreditLedger:
         }
         with self._lock:
             self.path.parent.mkdir(parents=True, exist_ok=True)
-            with self.path.open("a", encoding="utf-8") as ledger:
-                ledger.write(json.dumps(line) + "\n")
+            with self.path.open("a+b") as ledger:
+                # A line cut short by a crash stays on its own line.
+                cut = ledger.tell() > 0 and _last_byte(ledger) != b"\n"
+                ledger.write((("\n" if cut else "") + json.dumps(line) + "\n").encode())
 
     def metered(self, transport: Transport, run: str) -> Transport:
         """Wraps a transport so every answered call is recorded.
@@ -155,3 +176,17 @@ class CreditLedger:
             return status, raw
 
         return send
+
+
+def _parse(line: str) -> dict[str, Any] | None:
+    """Returns a ledger line's data, or None when it is not JSON."""
+    try:
+        data: dict[str, Any] = json.loads(line)
+    except ValueError:
+        return None
+    return data
+
+
+def _last_byte(ledger: BinaryIO) -> bytes:
+    ledger.seek(-1, os.SEEK_END)
+    return ledger.read(1)

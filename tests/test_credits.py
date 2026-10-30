@@ -4,10 +4,12 @@ from pathlib import Path
 
 import pytest
 
+from nomouse import live
 from nomouse.credits import (
     CACHED_INPUT_PRICE,
     INPUT_PRICE,
     OUTPUT_PRICE,
+    TRUNCATED_LINE_USD,
     CapReachedError,
     CreditLedger,
     call_cost,
@@ -122,3 +124,41 @@ def test_the_metered_transport_sends_nothing_once_the_cap_is_reached(
 
     assert sent == [b"first", b"second"]
     assert ledger.spent_usd() == pytest.approx(0.015)
+
+
+def test_a_truncated_last_line_counts_at_the_largest_run_reserve(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "ledger.jsonl"
+    ledger = CreditLedger(path, cap_usd=20.0)
+    ledger.record("live-1", USAGE)
+    with path.open("a", encoding="utf-8") as cut:
+        cut.write('{"time": "2026-10-30T18:00:00Z", "run": "live-2", "us')
+
+    assert ledger.spent_usd() == pytest.approx(call_cost(USAGE) + TRUNCATED_LINE_USD)
+    assert TRUNCATED_LINE_USD >= live.TASK_RESERVE_USD >= live.RUN_RESERVE_USD
+
+
+def test_a_record_after_a_truncated_line_starts_a_new_line(tmp_path: Path) -> None:
+    path = tmp_path / "ledger.jsonl"
+    path.write_text('{"run": "live-1", "cost_us', encoding="utf-8")
+    ledger = CreditLedger(path, cap_usd=20.0)
+
+    ledger.record("live-2", USAGE)
+
+    assert ledger.spent_usd() == pytest.approx(call_cost(USAGE) + TRUNCATED_LINE_USD)
+    assert ledger.calls("live-2") == 1
+    assert (
+        path.read_text(encoding="utf-8").splitlines()[0] == '{"run": "live-1", "cost_us'
+    )
+
+
+@pytest.mark.parametrize("line", ['{"run": "live-1"}', "[1, 2]", '{"cost_usd": "x"}'])
+def test_a_json_line_of_the_wrong_shape_still_cannot_be_read(
+    tmp_path: Path, line: str
+) -> None:
+    path = tmp_path / "ledger.jsonl"
+    path.write_text(line + "\n", encoding="utf-8")
+
+    with pytest.raises((ValueError, KeyError, TypeError)):
+        CreditLedger(path, cap_usd=20.0).spent_usd()

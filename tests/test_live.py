@@ -8,7 +8,7 @@ from typing import Any
 
 import pytest
 
-from nomouse.credits import CreditLedger, call_cost
+from nomouse.credits import TRUNCATED_LINE_USD, CreditLedger, call_cost
 from nomouse.export import export_site
 from nomouse.live import (
     LIVE_MAX_KEYS,
@@ -375,12 +375,30 @@ def test_an_unreadable_ledger_keeps_live_mode_off(
 ) -> None:
     service, _ = make_service()
     (tmp_path / "state").mkdir()
-    (tmp_path / "state" / "live-usage.jsonl").write_text('{"cost_usd": 0.1}\n{"co')
+    (tmp_path / "state" / "live-usage.jsonl").write_text(
+        '{"cost_usd": 0.1}\n{"run": "x"}\n'
+    )
 
     code, reply = service.start("203.0.113.5", "before/home.html")
 
     assert code == 503
     assert "ledger cannot be read" in reply["message"]
+
+
+def test_a_truncated_last_ledger_line_counts_and_leaves_live_mode_on(
+    make_service: Callable[..., tuple[LiveService, Clock]], tmp_path: Path
+) -> None:
+    calls: list[object] = []
+    service, _ = make_service(lambda *a: calls.append(a))
+    (tmp_path / "state").mkdir()
+    (tmp_path / "state" / "live-usage.jsonl").write_text('{"cost_usd": 0.1}\n{"co')
+
+    code, _ = service.start("203.0.113.5", "before/home.html")
+    service.join()
+
+    assert code == 202
+    assert len(calls) == 1
+    assert service.status()["spent_usd"] == pytest.approx(0.1 + TRUNCATED_LINE_USD)
 
 
 def test_no_key_falls_back_to_replay(
