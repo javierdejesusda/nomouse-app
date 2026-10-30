@@ -1,0 +1,67 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: keyboard trap, failing variant. The card widget handles Tab itself
+  and wraps from the last field back to the first, so Tab never leaves the
+  card number, expiry and security code fields. Escape does nothing, and the
+  Pay button and everything after it cannot be reached.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout: payment (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #f5f6f8; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  main { padding: 24px 16px; max-width: 520px; }
+  .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+  .card { padding: 16px; background: #fff; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 16px; }
+  .card .row { display: flex; gap: 12px; }
+  .card .row .field { flex: 1; }
+  input { font: inherit; padding: 8px; }
+  button { font: inherit; padding: 8px 20px; }
+  footer { padding: 16px; font-size: 14px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Night train tickets</strong>
+  <a href="#trips">My trips</a>
+</header>
+<main>
+  <h1>Payment</h1>
+  <div class="field"><label for="card-name">Name on card</label><input id="card-name" autocomplete="cc-name"></div>
+  <div class="card" id="card-widget">
+    <div class="field"><label for="card-number">Card number</label><input id="card-number" inputmode="numeric" autocomplete="cc-number"></div>
+    <div class="row">
+      <div class="field"><label for="card-expiry">Expiry (MM/YY)</label><input id="card-expiry" autocomplete="cc-exp"></div>
+      <div class="field"><label for="card-cvc">Security code</label><input id="card-cvc" inputmode="numeric" autocomplete="cc-csc"></div>
+    </div>
+  </div>
+  <button id="pay" type="button">Pay 84.00 EUR</button>
+</main>
+<footer>
+  <a href="#terms">Terms of carriage</a>
+</footer>
+<script>
+  const fields = [...document.querySelectorAll("#card-widget input")];
+  // The failure under test: the widget cycles Tab inside itself and offers
+  // no way out, not even Escape.
+  document.getElementById("card-widget").addEventListener("keydown", (event) => {
+    if (event.key !== "Tab") {
+      return;
+    }
+    event.preventDefault();
+    const step = event.shiftKey ? -1 : 1;
+    const next = (fields.indexOf(document.activeElement) + step + fields.length) % fields.length;
+    fields[next].focus();
+  });
+</script>
+</body>
+</html>

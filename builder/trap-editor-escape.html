@@ -1,0 +1,74 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: keyboard trap look-alike, correct variant. In the code editor, Tab
+  inserts two spaces, so focus seems stuck. The hint under the editor says how
+  to leave: press Escape, and the next Tab moves on to the next control.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snippet editor (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #f7f7f7; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  main { padding: 16px; max-width: 760px; }
+  .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+  input { font: inherit; padding: 6px 8px; }
+  textarea { font: 14px/1.5 ui-monospace, monospace; padding: 8px; height: 180px; tab-size: 2; }
+  .hint { font-size: 14px; color: #444; margin: 0; }
+  .actions { display: flex; gap: 12px; }
+  button { font: inherit; padding: 6px 16px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Snippets</strong>
+  <a href="#mine">My snippets</a>
+</header>
+<main>
+  <h1>New snippet</h1>
+  <div class="field"><label for="snippet-title">Title</label><input id="snippet-title" value="Retry with backoff"></div>
+  <div class="field">
+    <label for="code">Code</label>
+    <textarea id="code" aria-describedby="code-hint" spellcheck="false">def retry(call, attempts=3):
+  for attempt in range(attempts):
+    try:
+      return call()
+    except TimeoutError:
+      sleep(2 ** attempt)</textarea>
+    <p id="code-hint" class="hint">Tab inserts two spaces. To leave the editor, press Escape and then Tab.</p>
+  </div>
+  <div class="actions">
+    <button id="save-snippet" type="button">Save snippet</button>
+    <a href="#cancel">Cancel</a>
+  </div>
+</main>
+<script>
+  const code = document.getElementById("code");
+  let released = false;
+  code.addEventListener("focus", () => { released = false; });
+  code.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      released = true;
+      return;
+    }
+    if (event.key !== "Tab") {
+      released = false;
+      return;
+    }
+    if (released || event.shiftKey) {
+      return;
+    }
+    event.preventDefault();
+    code.setRangeText("  ", code.selectionStart, code.selectionEnd, "end");
+  });
+</script>
+</body>
+</html>

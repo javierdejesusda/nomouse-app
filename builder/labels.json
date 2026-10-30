@@ -1,0 +1,294 @@
+{
+  "about": "Ground truth for the builder pages, written by the builder from each page's design before any walker or model judged them. status 'failure' carries a barrier; 'clean' is a control whose behaviour is correct. w1_design is the design intent for W1 on a failure ('should-catch' or 'should-miss'), null on a clean control. carrier_ids are DOM ids of the elements that carry the barrier or the behaviour under test.",
+  "pages": [
+    {
+      "page": "dialog-fades-in.html",
+      "form": "focus-management",
+      "status": "failure",
+      "kind": "dialog",
+      "w1_design": "should-miss",
+      "barrier": "Enter makes the already-rendered sign-in dialog opaque (opacity 0 to 1) but focus stays on the Sign in button behind the scrim.",
+      "transition": "Enter on #sign-in",
+      "carrier_ids": [
+        "sign-in",
+        "sign-in-dialog"
+      ]
+    },
+    {
+      "page": "dialog-focus-returns.html",
+      "form": "focus-management",
+      "status": "clean",
+      "kind": "dialog",
+      "w1_design": null,
+      "barrier": "Correct: Enter opens the modal dialog with focus on its first field; Escape closes it and returns focus to Edit address.",
+      "transition": "Enter then Escape on #edit-address",
+      "carrier_ids": [
+        "edit-address",
+        "address-dialog",
+        "address-street"
+      ]
+    },
+    {
+      "page": "dialog-focus-stays.html",
+      "form": "focus-management",
+      "status": "failure",
+      "kind": "dialog",
+      "w1_design": "should-catch",
+      "barrier": "Enter shows the Invite people modal dialog but focus stays on the button behind it.",
+      "transition": "Enter on #invite",
+      "carrier_ids": [
+        "invite",
+        "invite-dialog"
+      ]
+    },
+    {
+      "page": "disclosure-stays-on-toggle.html",
+      "form": "focus-management",
+      "status": "clean",
+      "kind": "disclosure",
+      "w1_design": null,
+      "barrier": "Correct: Enter shows each answer below its question and focus stays on the question button, as a disclosure should.",
+      "transition": "Enter on #faq-1, #faq-2 and #faq-3",
+      "carrier_ids": [
+        "faq-1",
+        "faq-2",
+        "faq-3"
+      ]
+    },
+    {
+      "page": "drawer-slides-in.html",
+      "form": "focus-management",
+      "status": "failure",
+      "kind": "dialog",
+      "w1_design": "should-miss",
+      "barrier": "Enter slides the already-rendered, off-screen menu drawer in with a transform but focus stays on the Menu button behind the scrim.",
+      "transition": "Enter on #menu-toggle",
+      "carrier_ids": [
+        "menu-toggle",
+        "drawer"
+      ]
+    },
+    {
+      "page": "menu-focus-moves.html",
+      "form": "focus-management",
+      "status": "clean",
+      "kind": "menu",
+      "w1_design": null,
+      "barrier": "Correct: Enter opens the Sort menu with focus on its first item; Escape closes it and returns focus to Sort.",
+      "transition": "Enter then Escape on #sort",
+      "carrier_ids": [
+        "sort",
+        "sort-menu",
+        "sort-newest"
+      ]
+    },
+    {
+      "page": "menu-focus-stays.html",
+      "form": "focus-management",
+      "status": "failure",
+      "kind": "menu",
+      "w1_design": "should-catch",
+      "barrier": "Enter opens the Actions menu but focus stays on the button instead of moving to the first item.",
+      "transition": "Enter on #actions",
+      "carrier_ids": [
+        "actions",
+        "actions-menu"
+      ]
+    },
+    {
+      "page": "order-address-rowwise.html",
+      "form": "order",
+      "status": "failure",
+      "kind": "monotone",
+      "w1_design": "should-miss",
+      "barrier": "Shipping and billing addresses are drawn as two columns but Tab alternates between them row by row, never up.",
+      "transition": "Tab from #ship-name to #bill-name, then every step between the two columns",
+      "carrier_ids": [
+        "ship-name",
+        "bill-name",
+        "ship-street",
+        "bill-street",
+        "ship-city",
+        "bill-city",
+        "ship-postcode",
+        "bill-postcode"
+      ]
+    },
+    {
+      "page": "order-filters-dialog.html",
+      "form": "order",
+      "status": "clean",
+      "kind": "non-top-to-bottom",
+      "w1_design": null,
+      "barrier": "Correct: a modal filter panel open on load keeps Tab inside it, skipping the visible but inert shop behind.",
+      "transition": "Every Tab inside #filters",
+      "carrier_ids": [
+        "filters",
+        "page"
+      ]
+    },
+    {
+      "page": "order-footer-rowwise.html",
+      "form": "order",
+      "status": "failure",
+      "kind": "monotone",
+      "w1_design": "should-miss",
+      "barrier": "Footer links sit in three headed columns but Tab reads across the columns row by row, never up.",
+      "transition": "Tab from #tour to #about, then every step across the columns",
+      "carrier_ids": [
+        "tour",
+        "about",
+        "help-center",
+        "integrations",
+        "careers",
+        "contact",
+        "changelog",
+        "press",
+        "status"
+      ]
+    },
+    {
+      "page": "order-glossary-columns.html",
+      "form": "order",
+      "status": "clean",
+      "kind": "non-top-to-bottom",
+      "w1_design": null,
+      "barrier": "Correct: an A to Z glossary flows down three newspaper columns and Tab moves up to the top of each next column.",
+      "transition": "Tab to #term-col2 and to #term-col3",
+      "carrier_ids": [
+        "term-first",
+        "term-col2",
+        "term-col3"
+      ]
+    },
+    {
+      "page": "order-login-reversed.html",
+      "form": "order",
+      "status": "failure",
+      "kind": "geometric",
+      "w1_design": "should-catch",
+      "barrier": "Password is in the Tab order before Email although Email is drawn above it, so Tab moves up from Password to Email.",
+      "transition": "Tab from #password to #email",
+      "carrier_ids": [
+        "password",
+        "email"
+      ]
+    },
+    {
+      "page": "order-pricing-rowwise.html",
+      "form": "order",
+      "status": "failure",
+      "kind": "monotone",
+      "w1_design": "should-miss",
+      "barrier": "Three plan cards are drawn side by side but Tab visits all three features links before any choose link, never up.",
+      "transition": "Tab from #features-basic to #features-pro, and from #features-team down to #choose-basic",
+      "carrier_ids": [
+        "features-basic",
+        "features-pro",
+        "features-team",
+        "choose-basic",
+        "choose-pro",
+        "choose-team"
+      ]
+    },
+    {
+      "page": "order-rtl-nav.html",
+      "form": "order",
+      "status": "clean",
+      "kind": "non-top-to-bottom",
+      "w1_design": null,
+      "barrier": "Correct: a right-to-left Hebrew page, so Tab moves leftwards along each row.",
+      "transition": "Tab from #nav-home to #nav-new, #nav-new to #nav-sale, #nav-sale to #nav-contact",
+      "carrier_ids": [
+        "nav-home",
+        "nav-new",
+        "nav-sale",
+        "nav-contact"
+      ]
+    },
+    {
+      "page": "order-settings-columns.html",
+      "form": "order",
+      "status": "clean",
+      "kind": "non-top-to-bottom",
+      "w1_design": null,
+      "barrier": "Correct: Tab finishes the Account column, then moves up to the top of the Notifications column.",
+      "transition": "Tab from #timezone to #notify-digest",
+      "carrier_ids": [
+        "timezone",
+        "notify-digest"
+      ]
+    },
+    {
+      "page": "order-sidebar-after-main.html",
+      "form": "order",
+      "status": "clean",
+      "kind": "non-top-to-bottom",
+      "w1_design": null,
+      "barrier": "Correct: the article is read before the right sidebar, so Tab moves up from the article's last link to the sidebar's first field.",
+      "transition": "Tab from #article-last to #newsletter-email",
+      "carrier_ids": [
+        "article-last",
+        "newsletter-email"
+      ]
+    },
+    {
+      "page": "order-toolbar-reversed.html",
+      "form": "order",
+      "status": "failure",
+      "kind": "geometric",
+      "w1_design": "should-catch",
+      "barrier": "The toolbar reads Bold, Italic, Underline, Link left to right but Tab visits it right to left (row-reverse).",
+      "transition": "Tab from #btn-link to #btn-underline, #btn-underline to #btn-italic, #btn-italic to #btn-bold",
+      "carrier_ids": [
+        "btn-link",
+        "btn-underline",
+        "btn-italic",
+        "btn-bold"
+      ]
+    },
+    {
+      "page": "reply-focus-search.html",
+      "form": "focus-management",
+      "status": "failure",
+      "kind": "region",
+      "w1_design": "should-miss",
+      "barrier": "Enter opens the reply box (no dialog semantics) but a toolbar re-render moves focus to the search field at the top, outside the box; the field looks unchanged but is a new node.",
+      "transition": "Enter on #reply-1",
+      "carrier_ids": [
+        "reply-1",
+        "reply-region",
+        "search"
+      ]
+    },
+    {
+      "page": "trap-card-fields.html",
+      "form": "trap",
+      "status": "failure",
+      "kind": "trap",
+      "w1_design": "should-catch",
+      "barrier": "The card widget wraps Tab among card number, expiry and security code; Escape does nothing, so Pay and the footer are unreachable.",
+      "transition": "Tab from #card-cvc back to #card-number; Escape inside #card-widget",
+      "carrier_ids": [
+        "card-widget",
+        "card-number",
+        "card-expiry",
+        "card-cvc"
+      ]
+    },
+    {
+      "page": "trap-editor-escape.html",
+      "form": "trap",
+      "status": "clean",
+      "kind": "trap-look-alike",
+      "w1_design": null,
+      "barrier": "Correct: Tab inserts spaces in the code editor, but Escape then Tab leaves it, as the visible hint says.",
+      "transition": "Tab inside #code; Escape then Tab to #save-snippet",
+      "carrier_ids": [
+        "code",
+        "code-hint",
+        "save-snippet"
+      ]
+    }
+  ]
+}
