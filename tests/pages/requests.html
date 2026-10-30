@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Requests fixture</title></head>
+<body>
+<button id="send" type="button">Send</button>
+<form action="landing.html" method="get"><button id="submit">Submit</button></form>
+<a id="away" href="landing.html">Away</a>
+<script>
+  document.getElementById("send").addEventListener("click", () => {
+    fetch("landing.html", {method: "POST"}).catch(() => {});
+  });
+</script>
+</body>
+</html>

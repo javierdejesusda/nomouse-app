@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+dist/
+build/
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Downloaded third-party content and walk outputs (never committed)
+.cache/
+runs/
+
+# Secrets
+.env
+.env.*
+*.key
+*.pem

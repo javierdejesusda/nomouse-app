@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Dialog fixture</title></head>
+<body>
+<button id="open" type="button" aria-haspopup="dialog">Open</button>
+<div id="dialog" role="dialog" aria-label="Settings" hidden>
+  <button id="close" type="button">Close</button>
+</div>
+<script>
+  const opener = document.getElementById("open");
+  const dialog = document.getElementById("dialog");
+  const closer = document.getElementById("close");
+  function hideDialog() {
+    dialog.hidden = true;
+    opener.focus();
+  }
+  opener.addEventListener("click", () => {
+    dialog.hidden = false;
+    closer.focus();
+  });
+  closer.addEventListener("click", hideDialog);
+  dialog.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      hideDialog();
+    }
+  });
+</script>
+</body>
+</html>

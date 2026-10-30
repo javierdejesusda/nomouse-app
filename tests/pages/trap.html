@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Trap fixture</title></head>
+<body>
+<input id="first" aria-label="First">
+<input id="second" aria-label="Second">
+<button id="outside" type="button">Outside</button>
+<script>
+  const first = document.getElementById("first");
+  const second = document.getElementById("second");
+  function trapTab(from, to) {
+    from.addEventListener("keydown", (event) => {
+      if (event.key === "Tab") {
+        event.preventDefault();
+        to.focus();
+      }
+    });
+  }
+  trapTab(first, second);
+  trapTab(second, first);
+</script>
+</body>
+</html>

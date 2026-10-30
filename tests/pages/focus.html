@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Focus fixture</title>
+<style>
+  body { margin: 0; }
+  #save { position: absolute; left: 100px; top: 50px; width: 120px; height: 30px; }
+  #docs { position: absolute; left: 100px; top: 120px; }
+  #email-label { position: absolute; left: 100px; top: 200px; }
+</style>
+</head>
+<body>
+<button id="save" type="button">Save</button>
+<a id="docs" href="landing.html">Docs</a>
+<label id="email-label">Email <input id="email"></label>
+<script>
+  window.keylog = [];
+  window.saveClicks = 0;
+  window.linkActivations = 0;
+  document.addEventListener("keydown", (event) => {
+    window.keylog.push([event.key, document.activeElement.id]);
+  });
+  document.getElementById("save").addEventListener("click", () => {
+    window.saveClicks += 1;
+  });
+  document.getElementById("docs").addEventListener("click", () => {
+    window.linkActivations += 1;
+  });
+</script>
+</body>
+</html>
