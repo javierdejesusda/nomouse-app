@@ -1,5 +1,6 @@
 import hashlib
 import json
+import re
 import threading
 import urllib.error
 from collections.abc import Callable
@@ -140,3 +141,23 @@ def test_navigate_keeps_an_incomplete_record_when_a_call_fails(
     assert f"incomplete record of 1 key: {out / 'walk.incomplete.json'}" in err
     assert not (out / "walk.json").exists()
     assert not (out / "verdicts.json").exists()
+
+
+def test_navigate_writes_to_the_navigator_runs_by_default(
+    site: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(spark, "urllib_transport", Navigator(["done"]))
+
+    code = in_thread(lambda: main(["navigate", site + "focus.html", "--task", "go"]))
+
+    assert code == 0
+    (run,) = (tmp_path / "runs" / "navigator").iterdir()
+    assert re.fullmatch(r"\d{8}T\d{6}Z", run.name)
+    assert (run / "verdicts.json").is_file()
+    assert str(Path("runs") / "navigator" / run.name / "walk.json") in (
+        capsys.readouterr().out
+    )

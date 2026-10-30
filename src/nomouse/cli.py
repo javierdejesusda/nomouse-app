@@ -116,7 +116,10 @@ def _parser() -> argparse.ArgumentParser:
     )
     navigate_command.add_argument("--cache", type=Path, default=_DEFAULT_CACHE)
     navigate_command.add_argument(
-        "--out", type=Path, help="run directory (default: runs/<UTC time>)"
+        "--out",
+        type=Path,
+        help="run directory (default: runs/navigator/<UTC time>, which the"
+        " replay export reads)",
     )
     gate = commands.add_parser(
         "g1", help="gate G1: Muse Spark token usage over one walk (live calls)"
@@ -509,7 +512,7 @@ def _walk(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
     if args.max_keys < 1:
         parser.error("--max-keys must be at least 1")
     with contextlib.ExitStack() as stack:
-        url, out = _open_target(parser, args, stack)
+        url, out = _open_target(parser, args, stack, _DEFAULT_RUNS)
         browser = _browser(stack)
         record = walk(new_walk_context(browser), url, out, max_keys=args.max_keys)
     print(f"{len(record.keys)} keys, ended by {record.end_reason}: {out / RECORD_NAME}")
@@ -523,7 +526,7 @@ def _navigate(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
     except ValueError as error:
         parser.error(str(error))
     with contextlib.ExitStack() as stack:
-        url, out = _open_target(parser, args, stack)
+        url, out = _open_target(parser, args, stack, _DEFAULT_RUNS / "navigator")
         browser = _browser(stack)
         try:
             record = navigator.navigate(
@@ -567,8 +570,13 @@ def _open_target(
     parser: argparse.ArgumentParser,
     args: argparse.Namespace,
     stack: contextlib.ExitStack,
+    runs: Path,
 ) -> tuple[str, Path]:
-    """Serves a walk target if needed and returns its URL and run directory."""
+    """Serves a walk target if needed and returns its URL and run directory.
+
+    The run directory is `--out`, or a new one named by the UTC time in
+    `runs`.
+    """
     target: str = args.target
     if target in WALK_PAGES:
         root = mirror_root(args.cache)
@@ -587,7 +595,7 @@ def _open_target(
             "target must be a loopback URL, builder/<file>.html or one of: "
             + ", ".join(WALK_PAGES)
         )
-    out: Path = args.out or _DEFAULT_RUNS / _timestamp()
+    out: Path = args.out or runs / _timestamp()
     if (out / VERDICTS_NAME).exists():
         parser.error(f"{out} already holds frozen verdicts; choose another --out")
     return url, out
