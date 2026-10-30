@@ -135,6 +135,18 @@ function about() {
   } else {
     box.append(el("p", { class: "provenance" }, "builder-made: written and labelled by the builder (MIT)"));
   }
+  if (page.live) {
+    const live = page.live;
+    box.append(
+      el(
+        "p",
+        { class: "facts live" },
+        `Live run of ${live.page}, ${live.started_at} to ${live.finished_at}: ${plural(page.keys.length, "key")}` +
+          ` (at most ${live.max_keys}), ${plural(live.calls, "model call")} to ${live.model}, reasoning effort` +
+          ` ${live.reasoning_effort}, about USD ${live.cost_usd.toFixed(4)}.`,
+      ),
+    );
+  }
   if (page.superseded_by) {
     box.append(
       el("p", { class: "facts" }, `Superseded by ${page.superseded_by}: the page was revised before any model run, and this run is not scored.`),

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'; base-uri 'none'">
+<title>Privacy - NoMouse replay</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header>
+  <p class="brand"><a href="index.html">NoMouse replay</a></p>
+  <nav aria-label="Site">
+    <ul>
+      <li><a href="index.html">Pages</a></li>
+      <li><a href="eval.html">Eval counts</a></li>
+      <li><a href="live.html">Live run</a></li>
+      <li><a href="privacy.html" aria-current="page">Privacy</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="main" tabindex="-1">
+  <h1>Privacy</h1>
+  <p>The replay makes no model call. Data goes to the Meta Model API only during a live run that a visitor starts on the <a href="live.html">Live run</a> page.</p>
+  <h2>What a live run sends to the Meta Model API</h2>
+  <ul>
+    <li>Screenshots of the allowlisted demo page being walked (a W3C Before and After Demonstration page or a builder-made page), 1024 by 768 pixels: for each Enter pressed on a button, the screenshots before Enter, after Enter and after Escape.</li>
+    <li>With them, the focused element's role, accessible name and focus box (its position and size on the screenshot), and the fixed reviewer prompt.</li>
+    <li>One text-only call for the packets: the findings on that page (rule, key step, element role and name, focus boxes) and the fixed writer prompt.</li>
+    <li>Nothing about you: no address you type (only listed pages can be walked), no cookies, no form input and no network address.</li>
+  </ul>
+  <p>Every call uses the model <code>muse-spark-1.3</code> on the Standard tier (not the Contributor-mode variant), reasoning effort minimal, and asks the API not to store the response for later retrieval (<code>store: false</code>; the documented default is to store it).</p>
+  <h2>What Meta says about use and retention</h2>
+  <p>From the <a href="https://dev.meta.ai/legal/commitments">Meta Model API Data Commitments</a> (read 2026-10-30):</p>
+  <blockquote>
+    <p>Standard Services: Meta does not use your Content from Standard Services to train Meta Models. Meta may process Content as necessary to detect, prevent, and respond to violations of the Model API AUP or the Terms of Service, and to develop and improve systems that protect the safety and security of Meta's products and services.</p>
+    <p>Data Retention. Meta will retain your Content as described in the Terms and Privacy Policy. You can view and delete your Content through your Account. Certain retention may apply as described in the Terms.</p>
+  </blockquote>
+  <p>From the <a href="https://dev.meta.ai/legal/terms-of-service">Meta Model API Terms of Service</a>, section 4.4 Retention (last updated October 9, 2026):</p>
+  <blockquote>
+    <p>Meta will retain your Content and Usage Data as needed: (i) to provide the Services under these Terms; (ii) to the extent necessary for compliance with applicable laws; (iii) in connection with the exercise of Meta's rights to use your Content and Usage Data under these Terms; (iv) when our systems flag data for a potential policy violation; and (v) for security, safety, abuse, and policy review and improvements.</p>
+  </blockquote>
+  <p>We found no fixed retention period (a number of days) in Meta's developer documentation at <a href="https://dev.meta.ai/docs">dev.meta.ai/docs</a> or its legal pages as read on 2026-10-30. Meta's <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a> also applies.</p>
+  <h2>What this server keeps</h2>
+  <ul>
+    <li>Each live run: its screenshots, focus record, frozen verdicts, model answers and packets, shown in the replay viewer at the run's link.</li>
+    <li>A credit ledger with, per model call, the time, the run id, the token counts and the cost. No prompts, images or request headers.</li>
+    <li>Start times per network address, in memory only and for at most an hour, to limit how many runs one address can start. Nothing is written about visitors, and there are no cookies or analytics.</li>
+  </ul>
+  <h2>Contact</h2>
+  <p>Questions or requests: open an issue at <a href="https://github.com/javierdejesusda/nomouse/issues">https://github.com/javierdejesusda/nomouse/issues</a>.</p>
+</main>
+<footer>
+  <p>Observed keyboard-only test evidence. Not a conformance claim and not legal advice.</p>
+  <p>Live runs send page screenshots to the Meta Model API: any use of this page must comply with the <a href="https://dev.meta.ai/legal/acceptable-use-policy">Meta Model API Acceptable Use Policy</a>. See <a href="privacy.html">what is sent and kept</a>.</p>
+</footer>
+</body>
+</html>

@@ -362,6 +362,7 @@ def test_export_run_adds_one_live_run_to_an_existing_site(
     assert summary["id"] == page["id"] == "live-20261030T170000Z"
     assert page["live"] == info
     assert page["label"] == "builder-made"
+    assert page["title"] == "Menu"
     assert [review["run"] for review in page["reviews"]] == ["live"]
     assert (site / "captures" / "live-20261030T170000Z" / "step-002.png").is_file()
     assert "live-20261030T170000Z" not in (site / "data" / "index.json").read_text()

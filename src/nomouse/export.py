@@ -113,7 +113,8 @@ def export_run(
 ) -> dict[str, Any]:
     """Adds one live run to an exported site, viewable at `page.html?id=<name>`.
 
-    The site index is left unchanged.
+    The site index is left unchanged. A builder page is titled after its
+    file, not after the run.
 
     Args:
         run_dir: The live run directory, named after the run.
@@ -132,6 +133,8 @@ def export_run(
     if (site / "data" / "pages" / f"{run_dir.name}.json").exists():
         raise ExportError(f"the site already holds a page named {run_dir.name}")
     page = {**_page(run_dir, set(), review_runs), "live": live}
+    if page["set"] == "builder":
+        page["title"] = Path(page["page"]).stem.replace("-", " ").capitalize()
     _write_page(site, page, run_dir)
     return _summary(page)
 
