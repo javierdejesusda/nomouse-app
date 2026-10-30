@@ -169,13 +169,14 @@ def write_packets(
         if review["verdicts_sha256"] != digest:
             raise PacketError(f"{review_file.name} was made on other verdicts")
 
+    observations = [record["initial"], *record["steps"]]
     packets = _walker_packets(w1["findings"])
     if review is not None:
-        observations = [record["initial"], *record["steps"]]
         packets += _model_packets(review["instances"], observations, packets)
     for number, packet in enumerate(packets, start=1):
         packet["id"] = f"P{number}"
-    writer = _write_sentences(packets, template or not packets, transport)
+    witnesses = [_witness(packet, observations) for packet in packets]
+    writer = _write_sentences(packets, witnesses, template or not packets, transport)
     result = {
         "page": record["url"],
         "verdicts_sha256": digest,
@@ -229,9 +230,10 @@ def _model_packets(
         focus = observations[0 if trigger is None else trigger + 1]["focus"]
         for question, step_name in _QUESTION_STEP.items():
             judged = instance["answer"][question]
-            if judged["answer"] != "fail":
-                continue
             step = instance["steps"][step_name]
+            # Without an Escape there was nothing to return from.
+            if judged["answer"] != "fail" or step is None:
+                continue
             if step in walker_steps:
                 walker_steps[step]["reviewer"] = {"question": question, **judged}
                 continue
@@ -251,11 +253,14 @@ def _model_packets(
 
 
 def _element(found: Mapping[str, Any]) -> dict[str, Any]:
-    return {"role": found["role"], "name": found["name"]}
+    return {key: found[key] for key in ("tag", "dom_id", "role", "name")}
 
 
 def _write_sentences(
-    packets: list[dict[str, Any]], template: bool, transport: Transport
+    packets: list[dict[str, Any]],
+    witnesses: Sequence[Mapping[str, Any]],
+    template: bool,
+    transport: Transport,
 ) -> dict[str, Any]:
     """Fills each packet's sentence and returns how they were written."""
     if template:
@@ -265,7 +270,7 @@ def _write_sentences(
     usage = None
     try:
         reply = ask(
-            WRITER_PROMPT + json.dumps({"findings": [_witness(p) for p in packets]}),
+            WRITER_PROMPT + json.dumps({"findings": witnesses}),
             schema=("PacketSentences", WRITER_SCHEMA),
             transport=transport,
         )
@@ -298,9 +303,33 @@ def _write_sentences(
     }
 
 
-def _witness(packet: Mapping[str, Any]) -> dict[str, Any]:
-    keys = ("id", "rule", "status", "step", "element", "observed")
-    return {key: packet[key] for key in keys}
+def _witness(
+    packet: Mapping[str, Any], observations: Sequence[Mapping[str, Any]]
+) -> dict[str, Any]:
+    """Returns what the writer call sees of a packet: no DOM ids.
+
+    A walker detail names the element focus left or moved to as `TAG#id`
+    (the element before the step, or at it); it is restated by role and
+    accessible name.
+    """
+    observed = packet["observed"]
+    if packet["source"] == "W1" and packet["step"] is not None:
+        step = packet["step"]
+        for observation in observations[step : step + 2]:
+            focus = observation["focus"]
+            if focus["dom_id"]:
+                label = re.escape(f"{focus['tag']}#{focus['dom_id']}")
+                plain = _describe(focus, with_id=False).replace("\\", "\\\\")
+                observed = re.sub(rf"{label}(?=\)|$)", plain, observed)
+    element = packet["element"]
+    return {
+        "id": packet["id"],
+        "rule": packet["rule"],
+        "status": packet["status"],
+        "step": packet["step"],
+        "element": {key: element[key] for key in ("role", "name", "tag")},
+        "observed": observed,
+    }
 
 
 def _sentences(text: str, ids: Sequence[str]) -> dict[str, str]:
@@ -335,13 +364,18 @@ def _template(packet: Mapping[str, Any]) -> str:
     return f"{title} at step {packet['step']} on the {target}: {packet['observed']}."
 
 
-def _describe(element: Mapping[str, Any]) -> str:
-    role, name = element["role"], element["name"]
+def _describe(element: Mapping[str, Any], *, with_id: bool = True) -> str:
+    role, name, tag = element["role"], element["name"], element["tag"]
     if role and name:
         return f'{role} "{name}"'
     if name:
         return f'element "{name}"'
-    return str(role or "page")
+    if role:
+        return str(role)
+    if not tag or tag in ("BODY", "HTML"):
+        return "page"
+    dom_id = element["dom_id"]
+    return f"element {tag}#{dom_id}" if with_id and dom_id else f"element {tag}"
 
 
 def _ordered(packet: Mapping[str, Any]) -> dict[str, Any]:

@@ -1,5 +1,6 @@
 import hashlib
 import json
+import re
 import urllib.error
 from collections.abc import Callable, Mapping
 from pathlib import Path
@@ -24,6 +25,8 @@ def element(dom_id: str, role: str, name: str, tag: str = "BUTTON") -> dict[str,
 INVITE = element("invite", "button", "Invite people")
 MENU = element("menu", "button", "Menu")
 EMAIL = element("email", "textbox", "Email", "INPUT")
+NAME = element("name", "textbox", "Name", "INPUT")
+HELP = {"dom_id": "help", "role": None, "name": None, "tag": "A"}
 
 W1_FINDINGS = [
     {
@@ -41,7 +44,7 @@ W1_FINDINGS = [
     {
         "rule": "unreachable",
         "step": None,
-        "element": element("help", "link", "Help", "A"),
+        "element": HELP,
         "detail": "never focused in a full Tab cycle",
     },
 ]
@@ -62,10 +65,11 @@ def write_run(
 ) -> Path:
     """Writes a walk record, frozen verdicts and optionally a review.
 
-    Steps: 0 Tab to Menu, 1 Enter, 2 Escape, 3 Enter on Invite, 4 Escape.
+    Steps: 0 Tab to Menu, 1 Enter, 2 Escape, 3 Enter on Invite, 4 Escape,
+    5 Tab to Name, 6 Tab to Email.
     """
     run_dir.mkdir(parents=True)
-    path = [MENU, MENU, MENU, INVITE, INVITE, None, EMAIL]
+    path = [MENU, MENU, MENU, INVITE, INVITE, NAME, EMAIL]
     keys = ["Tab", "Enter", "Escape", "Enter", "Escape", "Tab", "Tab"]
     record = {
         "url": "http://127.0.0.1/p.html",
@@ -179,7 +183,8 @@ def test_packets_cover_walker_and_model_findings_with_statuses(
     assert [p["id"] for p in packets] == ["P1", "P2", "P3", "P4"]
     assert [p["best_practice"] for p in packets] == [False, True, False, False]
     assert packets[0]["step"] == 3
-    assert packets[0]["element"] == {"role": "button", "name": "Invite people"}
+    assert packets[0]["element"] == INVITE
+    assert packets[2]["element"] == HELP
     assert packets[0]["observed"] == W1_FINDINGS[0]["detail"]
     assert packets[0]["reviewer"] == {
         "question": "inside",
@@ -189,7 +194,7 @@ def test_packets_cover_walker_and_model_findings_with_statuses(
     model = packets[3]
     assert model["question"] == "inside"
     assert model["step"] == 1
-    assert model["element"] == {"role": "button", "name": "Menu"}
+    assert model["element"] == MENU
     assert model["observed"] == "Focus stayed on Menu while the menu opened."
     for packet in packets:
         assert packet["disclaimer"] == DISCLAIMER
@@ -223,7 +228,7 @@ def test_template_packets_make_no_call_and_record_their_inputs(
         " after Enter, focus is outside the 13 elements that appeared."
     )
     assert result["packets"][2]["sentence"] == (
-        'Unreachable: the link "Help" was never focused in a full Tab cycle.'
+        "Unreachable: the element A#help was never focused in a full Tab cycle."
     )
     assert result["packets"][3]["sentence"] == (
         'Focus management at step 1 on the button "Menu": a model saw focus'
@@ -252,15 +257,16 @@ def test_spark_writes_one_sentence_per_finding_from_the_witness_data(
         "rule": "focus-management",
         "status": "VERIFIED",
         "step": 3,
-        "element": {"role": "button", "name": "Invite people"},
+        "element": {"role": "button", "name": "Invite people", "tag": "BUTTON"},
         "observed": W1_FINDINGS[0]["detail"],
     }
+    assert sent[1]["observed"] == 'jumps up 92 px from textbox "Name"'
+    assert sent[2]["element"] == {"role": None, "name": None, "tag": "A"}
     assert sent[3]["status"] == "NEEDS REVIEW"
-    assert "invite" not in json.dumps(sent).replace("Invite", "")
     assert [p["sentence"] for p in result["packets"]] == [
         "Observed focus-management on Invite people.",
         "Observed order on Email.",
-        "Observed unreachable on Help.",
+        "Observed unreachable on None.",
         "Observed focus-management on Menu.",
     ]
     assert {p["sentence_source"] for p in result["packets"]} == {"spark"}
@@ -304,6 +310,44 @@ def test_a_sentence_that_claims_status_or_is_not_one_sentence_falls_back(
         " jumps up 92 px from INPUT#name."
     )
     assert result["packets"][1]["rejected"] == sentence
+
+
+def strings(value: Any) -> list[str]:
+    if isinstance(value, dict):
+        return [s for item in value.values() for s in strings(item)]
+    if isinstance(value, list):
+        return [s for item in value for s in strings(item)]
+    return [value] if isinstance(value, str) else []
+
+
+def test_the_writer_call_never_sees_dom_ids_or_the_page_file(tmp_path: Path) -> None:
+    findings = [
+        *W1_FINDINGS,
+        {
+            "rule": "focus-management",
+            "step": 6,
+            "element": INVITE,
+            "detail": "after Escape, focus did not return to the trigger"
+            " (now INPUT#email)",
+        },
+    ]
+    run_dir = write_run(tmp_path / "run", findings=findings)
+    transport = SentenceTransport(plain)
+
+    result = write_packets(run_dir, transport=transport)
+
+    text = transport.bodies[0]["input"][0]["content"][0]["text"]
+    sent = json.loads(text[text.index("{") :])["findings"]
+    assert sent[3]["observed"] == (
+        'after Escape, focus did not return to the trigger (now textbox "Email")'
+    )
+    values = strings(sent)
+    for dom_id in ("invite", "menu", "email", "name", "help"):
+        assert not any(re.search(rf"\b{dom_id}\b", value) for value in values)
+    assert "#" not in text
+    assert "p.html" not in text
+    assert "127.0.0.1" not in text
+    assert result["packets"][3]["observed"] == findings[3]["detail"]
 
 
 def no_network(url: str, body: bytes, headers: Mapping[str, str]) -> tuple[int, bytes]:
@@ -415,6 +459,16 @@ def test_a_returned_fail_the_walker_missed_is_its_own_packet(tmp_path: Path) -> 
         'Focus management at step 2 on the button "Menu": a model saw focus'
         " not return to it after Escape; a person should confirm."
     )
+
+
+def test_a_returned_answer_without_an_escape_makes_no_packet(tmp_path: Path) -> None:
+    instance = form_i(0, "fail", "fail")
+    instance["steps"]["escape"] = None
+    run_dir = write_run(tmp_path / "run", findings=[], review=[instance])
+
+    result = write_packets(run_dir, template=True)
+
+    assert [(p["question"], p["step"]) for p in result["packets"]] == [("inside", 1)]
 
 
 def test_packets_refuse_unfrozen_verdicts_or_a_review_of_other_verdicts(
