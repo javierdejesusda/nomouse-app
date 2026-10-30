@@ -202,6 +202,20 @@ def ask(
     return reply
 
 
+def error_kind(error: Exception) -> str:
+    """Names a failed call's error without its message.
+
+    Args:
+        error: The error a call raised.
+
+    Returns:
+        `HTTP <status>` for a `SparkError`, else the error's type name.
+    """
+    if isinstance(error, SparkError):
+        return f"HTTP {error.status}"
+    return type(error).__name__
+
+
 def _output_text(output: list[dict[str, Any]]) -> str:
     return "".join(
         part["text"]

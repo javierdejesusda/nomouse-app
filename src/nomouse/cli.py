@@ -8,6 +8,7 @@ import ipaddress
 import json
 import os
 import sys
+import urllib.error
 from collections.abc import Sequence
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -27,7 +28,13 @@ from nomouse import (
     scorer,
     spark,
 )
-from nomouse.driver import DEFAULT_MAX_KEYS, RECORD_NAME, new_walk_context, walk
+from nomouse.driver import (
+    DEFAULT_MAX_KEYS,
+    INCOMPLETE_RECORD_NAME,
+    RECORD_NAME,
+    new_walk_context,
+    walk,
+)
 from nomouse.mirror import WALK_PAGES, fetch_mirror, mirror_root
 from nomouse.server import make_server, serve_directory
 from nomouse.walkers import VERDICTS_NAME, freeze
@@ -526,8 +533,19 @@ def _navigate(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
                 task,
                 transport=spark.urllib_transport,
             )
-        except spark.SparkError as error:
+        except (
+            spark.SparkError,
+            urllib.error.URLError,
+            TimeoutError,
+            ConnectionError,
+        ) as error:
+            kept = out / INCOMPLETE_RECORD_NAME
+            keys = len(json.loads(kept.read_text(encoding="utf-8"))["keys"])
             print(f"nomouse navigate: call failed: {error}", file=sys.stderr)
+            print(
+                f"incomplete record of {keys} key{'' if keys == 1 else 's'}: {kept}",
+                file=sys.stderr,
+            )
             return 1
     assert record.navigator is not None
     usage = record.navigator["usage"]

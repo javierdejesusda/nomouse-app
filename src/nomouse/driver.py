@@ -15,12 +15,17 @@ from nomouse.witness import Focus, FocusWitness, Target
 VIEWPORT: ViewportSize = {"width": 1024, "height": 768}
 DEFAULT_MAX_KEYS = 300
 RECORD_NAME = "walk.json"
+INCOMPLETE_RECORD_NAME = "walk.incomplete.json"
+"""Where a run that stopped on an error keeps the keys it pressed; nothing
+that reads `RECORD_NAME` (freeze, review, export) picks it up."""
 
 # Chromium reports <summary> as DisclosureTriangle; it is activated with Enter
 # like any other button, so the driver treats it as one.
 BUTTON_ROLES = frozenset({"button", "DisclosureTriangle"})
 
-EndReason = Literal["cycle", "repeat", "max_keys", "done", "stuck", "invalid_reply"]
+EndReason = Literal[
+    "cycle", "repeat", "max_keys", "done", "stuck", "invalid_reply", "call_failed"
+]
 
 # Two full cycles of a keyboard trap land on its first element three times.
 _REPEAT_VISITS = 3
@@ -87,7 +92,8 @@ class WalkRecord:
         end_reason: Why the walk stopped: a full Tab cycle, a Tab target
             reached a third time, or the key cap; for a navigator run, the
             navigator answered done or stuck, gave an answer outside its
-            schema, or asked for a key past the cap.
+            schema, or asked for a key past the cap; `call_failed` only in
+            an incomplete record.
         repeat_step: Index of the Tab step that reached a target a third
             time, when that ended the walk.
         keys: The key sequence, in order.
@@ -281,6 +287,7 @@ class KeySession:
         repeat_step: int | None = None,
         *,
         navigator: dict[str, Any] | None = None,
+        incomplete: bool = False,
     ) -> WalkRecord:
         """Builds the walk record and writes it to the run directory.
 
@@ -290,9 +297,12 @@ class KeySession:
                 time, when that ended the walk.
             navigator: For a keyboard navigator run, what the navigator was
                 asked and answered.
+            incomplete: The run stopped on an error; the record is written
+                to `INCOMPLETE_RECORD_NAME` instead.
 
         Returns:
-            The walk record, also written to `run_dir / RECORD_NAME`.
+            The walk record, also written to `run_dir / RECORD_NAME`, or to
+            `run_dir / INCOMPLETE_RECORD_NAME` when incomplete.
         """
         record = WalkRecord(
             url=self.initial.url,
@@ -309,7 +319,8 @@ class KeySession:
             ],
             navigator=navigator,
         )
-        (self._run_dir / RECORD_NAME).write_text(
+        name = INCOMPLETE_RECORD_NAME if incomplete else RECORD_NAME
+        (self._run_dir / name).write_text(
             json.dumps(record.to_dict(), indent=2), encoding="utf-8"
         )
         return record

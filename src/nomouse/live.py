@@ -29,7 +29,13 @@ from nomouse.driver import new_walk_context, walk
 from nomouse.export import BUILDER_LABEL, export_run
 from nomouse.mirror import WALK_PAGES
 from nomouse.server import serve_directory
-from nomouse.spark import MODEL, REASONING_EFFORT, SparkError, Transport
+from nomouse.spark import (
+    MODEL,
+    REASONING_EFFORT,
+    SparkError,
+    Transport,
+    error_kind,
+)
 from nomouse.walkers import freeze
 
 LIVE_MAX_KEYS = 40
@@ -392,7 +398,7 @@ class LiveService:
             }
             export_run(run_dir, self._site, review_runs=(REVIEW_RUN,), live=live)
         except (SparkError, urllib.error.URLError, TimeoutError, ConnectionError) as e:
-            _log.warning("live run %s: API call failed (%s)", run_id, _kind(e))
+            _log.warning("live run %s: API call failed (%s)", run_id, error_kind(e))
             self._paused_until = self._clock() + API_PAUSE_S
             self._fail(
                 run_id,
@@ -401,7 +407,7 @@ class LiveService:
                 " the replay below needs no key.",
             )
         except Exception as error:
-            _log.warning("live run %s failed (%s)", run_id, _kind(error))
+            _log.warning("live run %s failed (%s)", run_id, error_kind(error))
             self._fail(
                 run_id,
                 "The live run could not finish. The replay below needs no key.",
@@ -493,10 +499,3 @@ class LiveService:
 
 def _utc_now() -> str:
     return datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S UTC")
-
-
-def _kind(error: Exception) -> str:
-    """Names an error for the server log without its message."""
-    if isinstance(error, SparkError):
-        return f"HTTP {error.status}"
-    return type(error).__name__

@@ -1,6 +1,7 @@
 import hashlib
 import json
 import threading
+import urllib.error
 from collections.abc import Callable
 from pathlib import Path
 
@@ -106,4 +107,36 @@ def test_navigate_reports_a_failed_call_without_freezing(
 
     assert code == 1
     assert "call failed" in capsys.readouterr().err
+    assert not (out / "verdicts.json").exists()
+
+
+@pytest.mark.parametrize(
+    "transport",
+    [
+        Navigator(["Tab"], fail_from=1, error=urllib.error.URLError("unreachable")),
+        Navigator(["Tab"], fail_from=1, error=TimeoutError()),
+        Navigator(["Tab"], 502, fail_from=1),
+    ],
+)
+def test_navigate_keeps_an_incomplete_record_when_a_call_fails(
+    site: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    transport: Navigator,
+) -> None:
+    out = tmp_path / "run"
+    monkeypatch.setattr(spark, "urllib_transport", transport)
+
+    code = in_thread(
+        lambda: main(
+            ["navigate", site + "focus.html", "--task", "go", "--out", str(out)]
+        )
+    )
+
+    assert code == 1
+    err = capsys.readouterr().err
+    assert "call failed" in err
+    assert f"incomplete record of 1 key: {out / 'walk.incomplete.json'}" in err
+    assert not (out / "walk.json").exists()
     assert not (out / "verdicts.json").exists()

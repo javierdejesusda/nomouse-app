@@ -26,7 +26,14 @@ from playwright.sync_api import BrowserContext
 
 from nomouse.driver import EndReason, KeySession, Observation, Step, WalkRecord
 from nomouse.reviewer import usage_totals
-from nomouse.spark import MODEL, REASONING_EFFORT, Transport, ask, urllib_transport
+from nomouse.spark import (
+    MODEL,
+    REASONING_EFFORT,
+    Transport,
+    ask,
+    error_kind,
+    urllib_transport,
+)
 
 NAVIGATOR_KEYS = (
     "Tab",
@@ -147,14 +154,51 @@ def navigate(
     Raises:
         ValueError: The task is not acceptable or `max_keys` is not between
             1 and 40.
-        SparkError: A model call failed; no record is written.
+        SparkError: A model call failed. Any error from a call or a key
+            press is raised after the keys pressed so far are written to
+            `INCOMPLETE_RECORD_NAME`, with `end_reason` `call_failed` and
+            `navigator.incomplete` true; no `RECORD_NAME` is written, so the
+            run is never frozen, reviewed or exported.
     """
     task = clean_task(task)
     if not 1 <= max_keys <= NAVIGATOR_MAX_KEYS:
         raise ValueError(f"max_keys must be between 1 and {NAVIGATOR_MAX_KEYS}")
     session = KeySession(context, url, run_dir)
     turns: list[dict[str, Any]] = []
-    end_reason: EndReason
+
+    def facts(**extra: Any) -> dict[str, Any]:
+        return {
+            "task": task,
+            "model": MODEL,
+            "reasoning_effort": REASONING_EFFORT,
+            "prompt_sha256": prompt_digest(),
+            "max_keys": max_keys,
+            "turns": turns,
+            "usage": usage_totals([turn["usage"] for turn in turns]),
+            **extra,
+        }
+
+    try:
+        end_reason = _drive(session, run_dir, task, max_keys, transport, turns)
+    except Exception as error:
+        session.finish(
+            "call_failed",
+            navigator=facts(incomplete=True, error=error_kind(error)),
+            incomplete=True,
+        )
+        raise
+    return session.finish(end_reason, navigator=facts())
+
+
+def _drive(
+    session: KeySession,
+    run_dir: Path,
+    task: str,
+    max_keys: int,
+    transport: Transport,
+    turns: list[dict[str, Any]],
+) -> EndReason:
+    """Asks for and presses keys until the run ends; appends each turn."""
     while True:
         keys = [step.key for step in session.steps]
         shown = [session.initial, *session.steps][-SCREENSHOTS_SHOWN:]
@@ -168,31 +212,13 @@ def navigate(
         call = {"usage": reply.usage, "latency_s": reply.latency_s}
         if answer is None:
             turns.append({"answer": None, "text": reply.text, **call})
-            end_reason = "invalid_reply"
-            break
+            return "invalid_reply"
         turns.append({**answer, **call})
-        if answer["answer"] == "done":
-            end_reason = "done"
-            break
-        if answer["answer"] == "stuck":
-            end_reason = "stuck"
-            break
+        if answer["answer"] in STOP_ANSWERS:
+            return "done" if answer["answer"] == "done" else "stuck"
         if len(keys) >= max_keys:
-            end_reason = "max_keys"
-            break
+            return "max_keys"
         session.press(answer["answer"])
-    return session.finish(
-        end_reason,
-        navigator={
-            "task": task,
-            "model": MODEL,
-            "reasoning_effort": REASONING_EFFORT,
-            "prompt_sha256": prompt_digest(),
-            "max_keys": max_keys,
-            "turns": turns,
-            "usage": usage_totals([turn["usage"] for turn in turns]),
-        },
-    )
 
 
 def _question(

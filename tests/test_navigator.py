@@ -1,5 +1,6 @@
 import base64
 import json
+import urllib.error
 from collections.abc import Iterator, Mapping, Sequence
 from pathlib import Path
 from typing import Any
@@ -7,7 +8,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import Browser, BrowserContext
 
-from nomouse.driver import new_walk_context
+from nomouse.driver import INCOMPLETE_RECORD_NAME, new_walk_context
 from nomouse.guard import BlockedRequest
 from nomouse.navigator import (
     MAX_TASK_CHARS,
@@ -34,16 +35,28 @@ def context(browser: Browser) -> Iterator[BrowserContext]:
 class Navigator:
     """Answers navigator calls from a script, like the API, keeping requests."""
 
-    def __init__(self, answers: Sequence[str], status: int = 200) -> None:
+    def __init__(
+        self,
+        answers: Sequence[str],
+        status: int = 200,
+        *,
+        fail_from: int = 0,
+        error: Exception | None = None,
+    ) -> None:
         self.answers = list(answers)
         self.status = status
+        self.fail_from = fail_from
+        self.error = error
         self.requests: list[dict[str, Any]] = []
 
     def __call__(
         self, url: str, body: bytes, headers: Mapping[str, str]
     ) -> tuple[int, bytes]:
         self.requests.append(json.loads(body))
-        if self.status != 200:
+        failing = len(self.requests) > self.fail_from
+        if failing and self.error is not None:
+            raise self.error
+        if failing and self.status != 200:
             return self.status, b'{"error": {"message": "upstream failed"}}'
         answer = self.answers.pop(0) if self.answers else "Tab"
         text = (
@@ -352,3 +365,51 @@ def test_a_failed_call_raises(
             "go",
             transport=Navigator([], status=502),
         )
+
+
+@pytest.mark.parametrize(
+    ("error", "status", "kind"),
+    [
+        (None, 502, "HTTP 502"),
+        (urllib.error.URLError("unreachable"), 200, "URLError"),
+        (TimeoutError(), 200, "TimeoutError"),
+    ],
+)
+def test_a_call_failing_mid_run_keeps_an_incomplete_record(
+    context: BrowserContext,
+    site: str,
+    tmp_path: Path,
+    error: Exception | None,
+    status: int,
+    kind: str,
+) -> None:
+    transport = Navigator(["Tab", "Tab"], status, fail_from=2, error=error)
+
+    with pytest.raises(type(error) if error else SparkError):
+        navigate(context, site + "focus.html", tmp_path, "go", transport=transport)
+
+    assert not (tmp_path / "walk.json").exists()
+    kept = json.loads((tmp_path / INCOMPLETE_RECORD_NAME).read_text(encoding="utf-8"))
+    assert kept["end_reason"] == "call_failed"
+    assert kept["keys"] == ["Tab", "Tab"]
+    assert [step["screenshot"] for step in kept["steps"]] == [
+        "step-000.png",
+        "step-001.png",
+    ]
+    navigator = kept["navigator"]
+    assert navigator["incomplete"] is True
+    assert navigator["error"] == kind
+    assert [turn["answer"] for turn in navigator["turns"]] == ["Tab", "Tab"]
+    assert navigator["usage"]["calls"] == 2
+
+
+def test_a_finished_run_writes_no_incomplete_record(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = navigate(
+        context, site + "focus.html", tmp_path, "go", transport=Navigator(["done"])
+    )
+
+    assert record.navigator is not None
+    assert "incomplete" not in record.navigator
+    assert not (tmp_path / INCOMPLETE_RECORD_NAME).exists()
