@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Restless fixture</title></head>
+<body>
+<button id="start" type="button">Start</button>
+<script>
+  // Moves focus to a brand new button every few milliseconds, so focus read
+  // at two different moments is never the same element.
+  let count = 0;
+  setInterval(() => {
+    const button = document.createElement("button");
+    button.textContent = `Moving ${count++}`;
+    document.body.append(button);
+    button.focus();
+  }, 1);
+</script>
+</body>
+</html>

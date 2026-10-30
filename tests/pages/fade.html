@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fade fixture</title>
+<style>
+  #panel { visibility: hidden; transition: visibility 0s 0.3s; }
+  #panel.open { visibility: visible; }
+</style>
+</head>
+<body>
+<button id="open" type="button">Open</button>
+<div id="panel"><p>Opened after a delay.</p></div>
+<script>
+  document.getElementById("open").addEventListener("click", () => {
+    document.getElementById("panel").classList.add("open");
+  });
+</script>
+</body>
+</html>

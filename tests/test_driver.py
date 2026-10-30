@@ -8,7 +8,7 @@ from playwright.sync_api import Browser, BrowserContext
 from nomouse.driver import WalkRecord, new_walk_context, walk
 from nomouse.guard import BlockedRequest
 from nomouse.server import serve_directory
-from nomouse.witness import Box
+from nomouse.witness import Box, Cover
 
 PAGES_DIR = Path(__file__).parent / "pages"
 
@@ -284,6 +284,72 @@ def test_walk_follows_focus_into_a_same_origin_frame(
     assert first_tab.box == Box(x=310, y=320, width=100, height=30)
 
 
+def test_walk_marks_steps_where_focus_moved_during_the_screenshot(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "restless.html", tmp_path, max_keys=1)
+
+    assert record.steps[0].settled is False
+
+
+def test_walk_marks_steps_with_steady_focus_as_settled(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "focus.html", tmp_path)
+
+    assert record.initial.settled is True
+    assert all(step.settled for step in record.steps)
+
+
+def test_walk_records_which_nodes_appeared_after_each_key(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "dialog.html", tmp_path)
+
+    tab, enter, escape = record.steps[:3]
+    assert record.initial.appeared == []
+    assert tab.appeared == []
+    assert enter.focus.backend_node_id in enter.appeared
+    assert tab.focus.backend_node_id not in enter.appeared
+    assert escape.appeared == []
+    assert enter.appeared == sorted(enter.appeared)
+
+
+def test_walk_samples_what_covers_the_focus_box(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "cover.html", tmp_path, max_keys=12)
+
+    covers = {
+        step.focus.dom_id: step.focus.cover
+        for step in record.steps
+        if step.key == "Tab"
+    }
+    assert covers["hidden"] == Cover(sampled=9, covered=9)
+    assert covers["partly"] == Cover(sampled=9, covered=3)
+    assert covers["clear"] == Cover(sampled=9, covered=0)
+    assert record.initial.focus.cover is None
+
+
+def test_walk_records_nodes_shown_by_a_delayed_transition_on_the_key_that_opened_them(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "fade.html", tmp_path)
+
+    tab, enter, escape = record.steps[:3]
+    assert (tab.key, enter.key, escape.key) == ("Tab", "Enter", "Escape")
+    assert enter.appeared != []
+    assert escape.appeared == []
+
+
+def test_walk_records_nothing_as_appeared_before_the_first_key(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "restless.html", tmp_path, max_keys=1)
+
+    assert record.initial.appeared == []
+
+
 def test_walk_records_a_scrollable_frame_without_focusable_content_as_the_frame(
     context: BrowserContext, site: str, tmp_path: Path
 ) -> None:
@@ -292,6 +358,16 @@ def test_walk_records_a_scrollable_frame_without_focusable_content_as_the_frame(
     first_tab = record.steps[0].focus
     assert (first_tab.tag, first_tab.dom_id) == ("IFRAME", "scroller")
     assert not first_tab.is_document
+
+
+def test_walk_samples_nothing_over_a_focused_box_without_area(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "zero.html", tmp_path)
+
+    first_tab = record.steps[0].focus
+    assert first_tab.dom_id == "empty"
+    assert first_tab.cover == Cover(sampled=0, covered=0)
 
 
 def test_walk_records_the_canonical_page_url(

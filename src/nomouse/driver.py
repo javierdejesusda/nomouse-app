@@ -25,6 +25,9 @@ EndReason = Literal["cycle", "repeat", "max_keys"]
 # Two full cycles of a keyboard trap land on its first element three times.
 _REPEAT_VISITS = 3
 
+# Screenshots taken before giving up on focus and scroll holding still.
+_SETTLE_ATTEMPTS = 3
+
 _TWO_FRAMES = (
     "() => new Promise(resolve =>"
     " requestAnimationFrame(() => requestAnimationFrame(resolve)))"
@@ -41,6 +44,12 @@ class Observation:
         scroll_y: Vertical scroll offset in CSS pixels.
         focus: The focused element.
         screenshot: File name of the viewport screenshot in the run directory.
+        settled: Whether focus and scroll were the same just before and just
+            after the screenshot. When False, a script kept moving them and
+            the screenshot may not show the recorded focus.
+        appeared: Backend node ids, ascending, of the elements rendered now
+            that were not rendered at the previous observation; empty for the
+            initial one. After Enter, they are the set that opened.
     """
 
     url: str
@@ -48,6 +57,8 @@ class Observation:
     scroll_y: float
     focus: Focus
     screenshot: str
+    settled: bool
+    appeared: list[int]
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -181,17 +192,19 @@ def walk(
     page.set_viewport_size(VIEWPORT)
     page.goto(url)
     guard.pin(page.url)
-    witness = FocusWitness(context.new_cdp_session(page))
     origin = _origin_prefix(page.url)
+    observer = _Observer(
+        page, FocusWitness(context.new_cdp_session(page)), run_dir, origin
+    )
 
-    initial = _observe(page, witness, run_dir, "initial.png", origin)
+    initial = observer.observe("initial.png")
     steps: list[Step] = []
 
     def press(key: str) -> Step:
         page.keyboard.press(key)
         page.evaluate(_TWO_FRAMES)
         index = len(steps)
-        state = _observe(page, witness, run_dir, f"step-{index:03d}.png", origin)
+        state = observer.observe(f"step-{index:03d}.png")
         step = Step(index=index, key=key, **vars(state))
         steps.append(step)
         return step
@@ -229,20 +242,54 @@ def walk(
     return record
 
 
-def _observe(
-    page: Page, witness: FocusWitness, run_dir: Path, screenshot: str, origin: str
-) -> Observation:
-    page.screenshot(
-        path=run_dir / screenshot, animations="disabled", caret="hide", scale="css"
-    )
-    scroll_x, scroll_y = witness.scroll()
-    return Observation(
-        url=_relative(page.url, origin),
-        scroll_x=scroll_x,
-        scroll_y=scroll_y,
-        focus=witness.focus(),
-        screenshot=screenshot,
-    )
+class _Observer:
+    """Captures page state, tracking which elements each key made appear."""
+
+    def __init__(
+        self, page: Page, witness: FocusWitness, run_dir: Path, origin: str
+    ) -> None:
+        self._page = page
+        self._witness = witness
+        self._run_dir = run_dir
+        self._origin = origin
+        self._rendered: frozenset[int] | None = None
+
+    def observe(self, screenshot: str) -> Observation:
+        """Takes a screenshot and records the state it shows.
+
+        Args:
+            screenshot: File name for the screenshot in the run directory.
+
+        Returns:
+            The observation.
+        """
+        # Focus and scroll are read on both sides of the screenshot, so a
+        # script that moves them meanwhile cannot pair the image with the
+        # wrong box.
+        for _ in range(_SETTLE_ATTEMPTS):
+            before = self._witness.focus(), self._witness.scroll()
+            self._page.screenshot(
+                path=self._run_dir / screenshot,
+                animations="disabled",
+                caret="hide",
+                scale="css",
+            )
+            after = self._witness.focus(), self._witness.scroll()
+            if before == after:
+                break
+        # Read after the screenshot, which fast-forwards finite transitions,
+        # so nodes they reveal count for the key that started them.
+        previous, self._rendered = self._rendered, self._witness.rendered()
+        focus, (scroll_x, scroll_y) = after
+        return Observation(
+            url=_relative(self._page.url, self._origin),
+            scroll_x=scroll_x,
+            scroll_y=scroll_y,
+            focus=focus,
+            screenshot=screenshot,
+            settled=before == after,
+            appeared=[] if previous is None else sorted(self._rendered - previous),
+        )
 
 
 def _origin_prefix(url: str) -> str:
