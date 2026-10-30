@@ -20,3 +20,6 @@ runs/
 .env.*
 *.key
 *.pem
+
+# Live mode state (runs and the credit ledger)
+live-state/
