@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright
 
-from nomouse import g1, packets, reviewer, scorer, spark
+from nomouse import bare, g1, packets, reviewer, scorer, spark
 from nomouse.driver import DEFAULT_MAX_KEYS, RECORD_NAME, new_walk_context, walk
 from nomouse.mirror import WALK_PAGES, fetch_mirror, mirror_root
 from nomouse.server import serve_directory
@@ -42,6 +42,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _g1(parser, args)
     if args.command == "review":
         return _review(parser, args)
+    if args.command == "bare":
+        return _bare(parser, args)
     if args.command == "packets":
         return _packets(parser, args)
     if args.command == "score":
@@ -90,6 +92,16 @@ def _parser() -> argparse.ArgumentParser:
     review.add_argument(
         "--run",
         help="run label: writes review-<run>.json instead of review.json",
+    )
+    bare_command = commands.add_parser(
+        "bare",
+        help="bare-Spark eval arm: the walk's video with the bare prompt",
+    )
+    bare_command.add_argument(
+        "run_dir", type=Path, help="run directory of a frozen walk"
+    )
+    bare_command.add_argument(
+        "--run", required=True, help="run label: writes bare-<run>.json"
     )
     packets_command = commands.add_parser(
         "packets", help="packet writer: one packet per finding (Muse Spark text)"
@@ -207,6 +219,32 @@ def _review(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
         f" {usage['output_tokens']} output tokens"
     )
     print(f"review: {reviewer.review_path(args.run_dir, args.run)}")
+    return 0
+
+
+def _bare(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
+    try:
+        result = bare.bare_review(
+            args.run_dir, run=args.run, transport=spark.urllib_transport
+        )
+    except reviewer.AnswerError as error:
+        print(
+            f"nomouse bare: {error}; no answer written, the reply is in"
+            f" {bare.partial_path(args.run_dir, args.run)}",
+            file=sys.stderr,
+        )
+        return 1
+    except spark.SparkError as error:
+        print(f"nomouse bare: call failed: {error}", file=sys.stderr)
+        return 1
+    except (FileExistsError, ValueError, reviewer.ReviewError) as error:
+        parser.error(str(error))
+    usage = result["usage"]
+    print(
+        f"{len(result['failures'])} failures listed;"
+        f" {usage['input_tokens']} input and {usage['output_tokens']} output tokens"
+    )
+    print(f"answer: {bare.bare_path(args.run_dir, args.run)}")
     return 0
 
 

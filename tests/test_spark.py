@@ -119,6 +119,30 @@ def test_ask_asks_for_structured_output_when_given_a_schema() -> None:
     }
 
 
+def test_ask_sends_an_mp4_video_inline_after_the_text() -> None:
+    transport = FakeTransport()
+    mp4 = b"\x00\x00\x00\x18ftypisomfake-video"
+
+    ask("q", video=mp4, transport=transport, env={})
+
+    assert transport.calls[0][1]["input"][0]["content"] == [
+        {"type": "input_text", "text": "q"},
+        {
+            "type": "input_video",
+            "video_url": "data:video/mp4;base64," + base64.b64encode(mp4).decode(),
+        },
+    ]
+
+
+def test_ask_refuses_images_and_a_video_in_one_request() -> None:
+    transport = FakeTransport()
+
+    with pytest.raises(ValueError, match="images or a video"):
+        ask("q", [PNG], video=b"mp4", transport=transport, env={})
+
+    assert transport.calls == []
+
+
 def test_ask_sends_a_bearer_header_when_the_key_is_in_the_environment() -> None:
     transport = FakeTransport()
 

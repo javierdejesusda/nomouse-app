@@ -99,13 +99,14 @@ def ask(
     prompt: str,
     images: Sequence[bytes] = (),
     *,
+    video: bytes | None = None,
     schema: tuple[str, Mapping[str, Any]] | None = None,
     transport: Transport = urllib_transport,
     log_path: Path | None = None,
     env: Mapping[str, str] = os.environ,
     clock: Callable[[], float] = time.monotonic,
 ) -> SparkReply:
-    """Sends one user message (text, then PNG images) to Muse Spark 1.3.
+    """Sends one user message (text, then PNG images or a video) to Muse Spark.
 
     Reasoning effort is pinned at `minimal`. The API key, with surrounding
     whitespace stripped, is sent as a Bearer token only when `META_API_KEY`
@@ -115,6 +116,8 @@ def ask(
     Args:
         prompt: The text part of the message.
         images: PNG files, sent inline as base64 data URLs in this order.
+        video: An mp4 file, sent inline as a base64 data URL in place of
+            images.
         schema: When given, a name and a JSON Schema that the reply text must
             follow; the API constrains decoding to it (`text.format`, strict).
         transport: Sends the HTTP request.
@@ -128,13 +131,16 @@ def ask(
         The reply text, model, usage and latency.
 
     Raises:
-        ValueError: More than 50 images were given, or the key holds spaces
-            or control characters (the message never includes the key).
+        ValueError: More than 50 images, or images and a video, were given,
+            or the key holds spaces or control characters (the message
+            never includes the key).
         SparkError: The API answered with a status other than 200, or with a
             body that is not a Responses API reply.
     """
     if len(images) > MAX_IMAGES:
         raise ValueError(f"the API takes at most {MAX_IMAGES} images per request")
+    if images and video is not None:
+        raise ValueError("send images or a video, not both")
     content: list[dict[str, str]] = [{"type": "input_text", "text": prompt}]
     content += [
         {
@@ -143,6 +149,14 @@ def ask(
         }
         for png in images
     ]
+    if video is not None:
+        content.append(
+            {
+                "type": "input_video",
+                "video_url": "data:video/mp4;base64,"
+                + base64.b64encode(video).decode(),
+            }
+        )
     body: dict[str, Any] = {
         "model": MODEL,
         "reasoning": {"effort": REASONING_EFFORT},
