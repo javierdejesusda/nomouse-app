@@ -1,6 +1,9 @@
 import base64
+import http.server
 import json
-from collections.abc import Mapping
+import threading
+from collections.abc import Iterator, Mapping
+from contextlib import contextmanager
 from pathlib import Path
 
 import pytest
@@ -11,6 +14,7 @@ from nomouse.spark import (
     MODEL,
     SparkError,
     ask,
+    urllib_transport,
 )
 
 PNG = b"\x89PNG\r\n\x1a\nfake-image-bytes"
@@ -209,3 +213,91 @@ def test_ask_writes_no_log_line_for_a_failed_call(tmp_path: Path) -> None:
         )
 
     assert not log.exists()
+
+
+@pytest.mark.parametrize("key", ["fake-key\n", "fake-key\r\n", " fake-key "])
+def test_ask_strips_whitespace_around_the_key(key: str) -> None:
+    transport = FakeTransport()
+
+    ask("q", transport=transport, env={"META_API_KEY": key})
+
+    assert transport.calls[0][2]["Authorization"] == "Bearer fake-key"
+
+
+@pytest.mark.parametrize("key", ["fake\r\nkey", "fake key", "fake\x00key"])
+def test_ask_refuses_a_malformed_key_without_echoing_it(key: str) -> None:
+    transport = FakeTransport()
+
+    with pytest.raises(ValueError, match="META_API_KEY") as caught:
+        ask("q", transport=transport, env={"META_API_KEY": key})
+
+    assert "fake" not in str(caught.value)
+    assert transport.calls == []
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        b"<html>proxy error</html>",
+        b'{"error": "x"}',
+        b'{"model": "m", "output": null, "usage": {}}',
+        b"[]",
+    ],
+)
+def test_ask_raises_spark_error_on_a_malformed_reply(
+    body: bytes, tmp_path: Path
+) -> None:
+    log = tmp_path / "spark.jsonl"
+
+    with pytest.raises(SparkError) as caught:
+        ask("q", transport=FakeTransport(200, body), log_path=log)
+
+    assert caught.value.status == 200
+    assert caught.value.message == "malformed Responses API reply"
+    assert not log.exists()
+
+
+@contextmanager
+def serve(handler: type[http.server.BaseHTTPRequestHandler]) -> Iterator[str]:
+    server = http.server.HTTPServer(("127.0.0.1", 0), handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield f"http://127.0.0.1:{server.server_address[1]}"
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join()
+
+
+def test_urllib_transport_returns_a_redirect_without_following_it() -> None:
+    received: list[str | None] = []
+
+    class Other(http.server.BaseHTTPRequestHandler):
+        def do_GET(self) -> None:
+            received.append(self.headers.get("Authorization"))
+            self.send_response(200)
+            self.end_headers()
+
+        def log_message(self, format: str, *args: object) -> None:
+            pass
+
+    with serve(Other) as other:
+
+        class Redirect(http.server.BaseHTTPRequestHandler):
+            def do_POST(self) -> None:
+                self.send_response(302)
+                self.send_header("Location", other.replace("127.0.0.1", "localhost"))
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+
+            def log_message(self, format: str, *args: object) -> None:
+                pass
+
+        with serve(Redirect) as api:
+            status, _ = urllib_transport(
+                api + "/v1/responses", b"{}", {"Authorization": "Bearer fake-key"}
+            )
+
+    assert status == 302
+    assert received == []

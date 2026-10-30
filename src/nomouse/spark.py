@@ -64,6 +64,14 @@ class SparkReply:
     latency_s: float
 
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *args: Any, **kwargs: Any) -> None:
+        return None
+
+
+_OPENER = urllib.request.build_opener(_NoRedirect)
+
+
 def urllib_transport(
     url: str, body: bytes, headers: Mapping[str, str]
 ) -> tuple[int, bytes]:
@@ -75,11 +83,13 @@ def urllib_transport(
         headers: Request headers.
 
     Returns:
-        The HTTP status and the response body, for error statuses too.
+        The HTTP status and the response body, for error and redirect
+        statuses too. Redirects are not followed, so the Authorization
+        header never reaches another host.
     """
     request = urllib.request.Request(url, data=body, headers=dict(headers))
     try:
-        with urllib.request.urlopen(request, timeout=_TIMEOUT_S) as response:
+        with _OPENER.open(request, timeout=_TIMEOUT_S) as response:
             return response.status, response.read()
     except urllib.error.HTTPError as error:
         return error.code, error.read()
@@ -96,9 +106,10 @@ def ask(
 ) -> SparkReply:
     """Sends one user message (text, then PNG images) to Muse Spark 1.3.
 
-    Reasoning effort is pinned at `minimal`. The API key is sent as a Bearer
-    token only when `META_API_KEY` is set and non-empty; otherwise no
-    Authorization header is sent and the egress proxy adds it.
+    Reasoning effort is pinned at `minimal`. The API key, with surrounding
+    whitespace stripped, is sent as a Bearer token only when `META_API_KEY`
+    is set and non-blank; otherwise no Authorization header is sent and the
+    egress proxy adds it.
 
     Args:
         prompt: The text part of the message.
@@ -114,8 +125,10 @@ def ask(
         The reply text, model, usage and latency.
 
     Raises:
-        ValueError: More than 50 images were given.
-        SparkError: The API answered with a status other than 200.
+        ValueError: More than 50 images were given, or the key holds spaces
+            or control characters (the message never includes the key).
+        SparkError: The API answered with a status other than 200, or with a
+            body that is not a Responses API reply.
     """
     if len(images) > MAX_IMAGES:
         raise ValueError(f"the API takes at most {MAX_IMAGES} images per request")
@@ -133,20 +146,26 @@ def ask(
         "input": [{"type": "message", "role": "user", "content": content}],
     }
     headers = {"Content-Type": "application/json"}
-    if key := env.get(KEY_VARIABLE):
+    if key := env.get(KEY_VARIABLE, "").strip():
+        # http.client quotes an invalid header value in its exception.
+        if " " in key or not key.isprintable():
+            raise ValueError(f"{KEY_VARIABLE} holds spaces or control characters")
         headers["Authorization"] = f"Bearer {key}"
     started = clock()
     status, raw = transport(API_URL, json.dumps(body).encode(), headers)
     latency_s = clock() - started
     if status != 200:
         raise SparkError(status, _error_message(raw))
-    data = json.loads(raw)
-    reply = SparkReply(
-        text=_output_text(data["output"]),
-        model=data["model"],
-        usage=data["usage"],
-        latency_s=latency_s,
-    )
+    try:
+        data = json.loads(raw)
+        reply = SparkReply(
+            text=_output_text(data["output"]),
+            model=str(data["model"]),
+            usage=dict(data["usage"]),
+            latency_s=latency_s,
+        )
+    except (ValueError, KeyError, TypeError) as error:
+        raise SparkError(status, "malformed Responses API reply") from error
     if log_path is not None:
         _log(log_path, reply, len(images))
     return reply
