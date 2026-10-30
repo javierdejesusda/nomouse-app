@@ -7,6 +7,8 @@ from typing import Any
 
 import pytest
 
+from nomouse import spark
+from nomouse.cli import main
 from nomouse.packets import (
     DISCLAIMER,
     PacketError,
@@ -455,3 +457,65 @@ def test_a_walk_without_findings_makes_no_call(tmp_path: Path) -> None:
     assert transport.bodies == []
     assert result["packets"] == []
     assert result["writer"] == {"mode": "template", "error": None, "usage": None}
+
+
+def test_cli_packets_writes_the_file_and_prints_the_counts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = write_run(tmp_path / "run", review=REVIEW)
+    transport = SentenceTransport(plain)
+    monkeypatch.setattr(spark, "urllib_transport", transport)
+
+    assert main(["packets", str(run_dir)]) == 0
+
+    out = capsys.readouterr().out
+    assert len(transport.bodies) == 1
+    assert (run_dir / "packets.json").is_file()
+    assert "4 packets: 3 VERIFIED, 1 NEEDS REVIEW" in out
+    assert "sentences: spark (4 from the model, 0 from the template)" in out
+    assert "400 input and 90 output tokens" in out
+    assert str(run_dir / "packets.json") in out
+
+
+def test_cli_packets_with_template_makes_no_call(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = write_run(tmp_path / "run", review=REVIEW, review_name="review-g.json")
+    transport = SentenceTransport(plain)
+    monkeypatch.setattr(spark, "urllib_transport", transport)
+
+    assert main(["packets", str(run_dir), "--run", "g", "--template"]) == 0
+
+    assert transport.bodies == []
+    out = capsys.readouterr().out
+    assert "sentences: template (0 from the model, 4 from the template)" in out
+    written = json.loads((run_dir / "packets.json").read_text(encoding="utf-8"))
+    assert written["review"]["file"] == "review-g.json"
+
+
+def test_cli_packets_names_the_fallback_error(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = write_run(tmp_path / "run", review=REVIEW)
+    monkeypatch.setattr(spark, "urllib_transport", server_error)
+
+    assert main(["packets", str(run_dir)]) == 0
+
+    assert "template fallback: HTTP 500: down" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("existing", ["packets.json", None])
+def test_cli_packets_refuses_an_existing_file_or_unfrozen_verdicts(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], existing: str | None
+) -> None:
+    run_dir = write_run(tmp_path / "run", review=REVIEW)
+    if existing:
+        (run_dir / existing).write_text("{}", encoding="utf-8")
+    else:
+        (run_dir / "verdicts.json").write_text("{}", encoding="utf-8")
+
+    with pytest.raises(SystemExit) as exit_info:
+        main(["packets", str(run_dir), "--template"])
+
+    assert exit_info.value.code == 2
+    assert ("already exists" if existing else "hash") in capsys.readouterr().err

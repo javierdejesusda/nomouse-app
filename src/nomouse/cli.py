@@ -1,4 +1,4 @@
-"""Command line interface: `nomouse mirror`, `walk`, `g1`, `review` and `score`."""
+"""Command line interface: the `nomouse` subcommands."""
 
 import argparse
 import contextlib
@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright
 
-from nomouse import g1, reviewer, scorer, spark
+from nomouse import g1, packets, reviewer, scorer, spark
 from nomouse.driver import DEFAULT_MAX_KEYS, RECORD_NAME, new_walk_context, walk
 from nomouse.mirror import WALK_PAGES, fetch_mirror, mirror_root
 from nomouse.server import serve_directory
@@ -42,6 +42,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _g1(parser, args)
     if args.command == "review":
         return _review(parser, args)
+    if args.command == "packets":
+        return _packets(parser, args)
     if args.command == "score":
         return _score(parser, args)
     return _walk(parser, args)
@@ -88,6 +90,18 @@ def _parser() -> argparse.ArgumentParser:
     review.add_argument(
         "--run",
         help="run label: writes review-<run>.json instead of review.json",
+    )
+    packets_command = commands.add_parser(
+        "packets", help="packet writer: one packet per finding (Muse Spark text)"
+    )
+    packets_command.add_argument(
+        "run_dir", type=Path, help="run directory of a frozen walk"
+    )
+    packets_command.add_argument(
+        "--run", help="review run label: reads review-<run>.json"
+    )
+    packets_command.add_argument(
+        "--template", action="store_true", help="template sentences, no model call"
     )
     score_command = commands.add_parser(
         "score", help="score reviews against the hashed builder labels (no model)"
@@ -193,6 +207,39 @@ def _review(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
         f" {usage['output_tokens']} output tokens"
     )
     print(f"review: {reviewer.review_path(args.run_dir, args.run)}")
+    return 0
+
+
+def _packets(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
+    try:
+        result = packets.write_packets(
+            args.run_dir,
+            run=args.run,
+            template=args.template,
+            transport=spark.urllib_transport,
+        )
+    except (FileExistsError, ValueError, packets.PacketError) as error:
+        parser.error(str(error))
+    written = result["packets"]
+    verified = sum(p["status"] == packets.VERIFIED for p in written)
+    from_model = sum(p["sentence_source"] == "spark" for p in written)
+    writer = result["writer"]
+    print(
+        f"{len(written)} packets: {verified} VERIFIED,"
+        f" {len(written) - verified} NEEDS REVIEW"
+    )
+    print(
+        f"sentences: {writer['mode']} ({from_model} from the model,"
+        f" {len(written) - from_model} from the template)"
+    )
+    if writer["error"]:
+        print(f"template fallback: {writer['error']}")
+    if writer["usage"]:
+        usage = writer["usage"]
+        print(
+            f"{usage['input_tokens']} input and {usage['output_tokens']} output tokens"
+        )
+    print(f"packets: {args.run_dir / packets.PACKETS_NAME}")
     return 0
 
 
