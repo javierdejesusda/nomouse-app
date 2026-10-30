@@ -6,7 +6,8 @@ from typing import Any
 
 import pytest
 
-from nomouse.evaluation import EvalError, evaluate, names_match
+from nomouse.cli import main
+from nomouse.evaluation import EvalError, counts_table, evaluate, names_match
 
 RUNS = ("r1", "r2")
 
@@ -483,3 +484,73 @@ def test_arm_counts_are_also_split_by_label_set(tmp_path: Path) -> None:
     w1 = report["arms"]["W1"]
     assert (w1["builder"]["failures"], w1["w3c"]["failures"]) == (4, 3)
     assert (w1["builder"]["clean"], w1["w3c"]["clean"]) == (1, 1)
+
+
+def test_counts_table_shows_arms_bar_and_every_row(tmp_path: Path) -> None:
+    runs = all_runs(tmp_path)
+    runs.append(
+        write_run(
+            tmp_path,
+            "fm-miss.html",
+            FM_WALK,
+            reviews={"r1": [enter(1, "fail")]},
+        )
+    )
+    report = run_eval(tmp_path, runs)
+
+    table = counts_table(report, own_rows=["b-06"])
+
+    assert "| NoMouse r1 | 1 of 7 | 0 | 1 | 1 | 0 of 2 | 0 | 0 of 2 |" in table
+    assert "| W0 | 0 of 7 | 0 | 0 | 0 | 0 of 2 | 0 | 0 of 2 |" in table
+    assert "| fm-miss | builder | failure |" in table
+    assert "NEEDS REVIEW" in table
+    assert "Reporting bar (form (i)): r1 1 model-only, 0 control flags" in table
+    assert "not met" in table
+    assert "### b-06" in table
+    with pytest.raises(ValueError, match="no row nope"):
+        counts_table(report, own_rows=["nope"])
+
+
+def test_cli_eval_prints_the_table_and_writes_the_report(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    runs = [*all_runs(tmp_path), write_run(tmp_path, "fm-miss.html", FM_WALK)]
+    builder, w3c = labels(tmp_path)
+    out = tmp_path / "report.json"
+    args = ["eval", *map(str, runs), "--runs", "r1", "r2"]
+    args += ["--builder-labels", str(builder), "--w3c-labels", str(w3c)]
+
+    assert main([*args, "--out", str(out), "--own-row", "b-06"]) == 0
+
+    printed = capsys.readouterr().out
+    assert "| W1 |" in printed and "### b-06" in printed
+    assert json.loads(out.read_text(encoding="utf-8"))["complete"] is True
+    with pytest.raises(SystemExit) as exit_info:
+        main([*args, "--out", str(out)])
+    assert exit_info.value.code == 2
+
+
+def test_cli_eval_reports_untrusted_inputs_as_usage_errors(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    runs = all_runs(tmp_path)
+    builder, w3c = labels(tmp_path)
+    w3c.write_text("{}", encoding="utf-8")
+
+    with pytest.raises(SystemExit) as exit_info:
+        main(
+            [
+                "eval",
+                *map(str, runs),
+                "--runs",
+                "r1",
+                "r2",
+                "--w3c-labels",
+                str(w3c),
+                "--builder-labels",
+                str(builder),
+            ]
+        )
+
+    assert exit_info.value.code == 2
+    assert "hash" in capsys.readouterr().err

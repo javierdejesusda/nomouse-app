@@ -431,5 +431,85 @@ def _counts(
     }
 
 
+def counts_table(report: Mapping[str, Any], own_rows: Sequence[str] = ()) -> str:
+    """Renders an eval report as Markdown: counts only, no page content.
+
+    Args:
+        report: A report from `evaluate`.
+        own_rows: Row ids shown again on their own, one small table each.
+
+    Returns:
+        The counts per arm (all rows, then by label set), the reporting bar,
+        the disagreements between runs, the own rows and every row's result
+        per arm.
+
+    Raises:
+        ValueError: An own row id is not in the report.
+    """
+    arms = list(report["arms"])
+    lines = [
+        "| Arm | Barriers found (strict) | VERIFIED | NEEDS REVIEW | Found (loose)"
+        " | False flags on clean controls (loose) | False flags (strict)"
+        " | Clean pages with any finding |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for arm in arms:
+        c = report["arms"][arm]
+        lines.append(
+            f"| {arm} | {c['found']} of {c['failures']} | {c['verified']}"
+            f" | {c['needs_review']} | {c['found_loose']}"
+            f" | {c['false_flags']} of {c['clean']} | {c['false_flags_strict']}"
+            f" | {c['clean_pages_any_finding']} of {c['clean_pages']} |"
+        )
+    lines += [
+        "",
+        "| Arm | Builder found | W3C found | Builder false flags | W3C false flags |",
+        "|---|---|---|---|---|",
+    ]
+    for arm in arms:
+        b, w = report["arms"][arm]["builder"], report["arms"][arm]["w3c"]
+        lines.append(
+            f"| {arm} | {b['found']} of {b['failures']} | {w['found']} of"
+            f" {w['failures']} | {b['false_flags']} of {b['clean']}"
+            f" | {w['false_flags']} of {w['clean']} |"
+        )
+    bar = report["bar"]
+    runs = "; ".join(
+        f"{run} {r['model_only_catches']} model-only, {r['control_flags']} control"
+        f" flags ({_met(r['met'])})"
+        for run, r in bar["runs"].items()
+    )
+    lines += ["", f"Reporting bar (form (i)): {runs}. Overall: {_met(bar['met'])}."]
+    for run, ids in report["model_only"].items():
+        lines.append(f"Model-only catches over W1, {run}: {', '.join(ids) or 'none'}.")
+    for kind, ids in report["disagreements"].items():
+        lines.append(f"Disagreements between runs, {kind}: {', '.join(ids) or 'none'}.")
+    rows = {r["id"]: r for r in report["rows"]}
+    if unknown := [row_id for row_id in own_rows if row_id not in rows]:
+        raise ValueError(f"no row {', '.join(unknown)} in the report")
+    for row_id in own_rows:
+        lines += ["", f"### {row_id}", "", "| Arm | Result |", "|---|---|"]
+        lines += [f"| {arm} | {_cell(rows[row_id]['arms'][arm])} |" for arm in arms]
+    lines += [
+        "",
+        "| Row | Set | Status | " + " | ".join(arms) + " |",
+        "|---|---|---|" + "---|" * len(arms),
+    ]
+    for r in report["rows"]:
+        cells = " | ".join(_cell(r["arms"][arm]) for arm in arms)
+        lines.append(f"| {r['id']} | {r['set']} | {r['status']} | {cells} |")
+    return "\n".join(lines) + "\n"
+
+
+def _met(met: bool) -> str:
+    return "met" if met else "not met"
+
+
+def _cell(result: Mapping[str, Any]) -> str:
+    if result["strict"]:
+        return str(result["status"])
+    return "loose" if result["loose"] else "-"
+
+
 def _pair(result: Mapping[str, Any]) -> tuple[bool, bool]:
     return result["strict"], result["loose"]

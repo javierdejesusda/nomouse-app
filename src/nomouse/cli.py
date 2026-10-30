@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright
 
-from nomouse import bare, g1, packets, reviewer, scorer, spark
+from nomouse import bare, evaluation, g1, packets, reviewer, scorer, spark
 from nomouse.driver import DEFAULT_MAX_KEYS, RECORD_NAME, new_walk_context, walk
 from nomouse.mirror import WALK_PAGES, fetch_mirror, mirror_root
 from nomouse.server import serve_directory
@@ -23,6 +23,7 @@ _DEFAULT_RUNS = Path("runs")
 _BUILDER_PREFIX = "builder/"
 BUILDER_ROOT = Path(__file__).resolve().parents[2] / "builder"
 _DEFAULT_LABELS = BUILDER_ROOT / "labels.json"
+_DEFAULT_W3C_LABELS = BUILDER_ROOT.parent / "eval" / "w3c-labels.json"
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -48,6 +49,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _packets(parser, args)
     if args.command == "score":
         return _score(parser, args)
+    if args.command == "eval":
+        return _eval(parser, args)
     return _walk(parser, args)
 
 
@@ -126,6 +129,21 @@ def _parser() -> argparse.ArgumentParser:
     )
     score_command.add_argument("--labels", type=Path, default=_DEFAULT_LABELS)
     score_command.add_argument("--out", type=Path, help="write the report as JSON")
+    eval_command = commands.add_parser(
+        "eval", help="four-arm eval: W0, W1, NoMouse, bare Spark (no model call)"
+    )
+    eval_command.add_argument(
+        "run_dirs", type=Path, nargs="+", help="frozen walk run directories"
+    )
+    eval_command.add_argument(
+        "--runs", nargs="+", required=True, help="model arm run labels"
+    )
+    eval_command.add_argument("--builder-labels", type=Path, default=_DEFAULT_LABELS)
+    eval_command.add_argument("--w3c-labels", type=Path, default=_DEFAULT_W3C_LABELS)
+    eval_command.add_argument(
+        "--own-row", action="append", default=[], help="row id shown on its own"
+    )
+    eval_command.add_argument("--out", type=Path, help="write the report as JSON")
     return parser
 
 
@@ -302,6 +320,36 @@ def _score(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
             f" loose {len(gate['caught_loose'])} of {failures};"
             f" false flags {len(gate['false_flags'])} of {clean}: {gate['verdict']}"
         )
+    return 0
+
+
+def _eval(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
+    out: Path | None = args.out
+    if out is not None and out.exists():
+        parser.error(f"{out} already exists; choose another --out")
+    try:
+        report = evaluation.evaluate(
+            args.builder_labels, args.w3c_labels, args.run_dirs, runs_labels=args.runs
+        )
+        table = evaluation.counts_table(report, args.own_row)
+    except (OSError, ValueError, evaluation.EvalError) as error:
+        parser.error(str(error))
+    if out is not None:
+        with out.open("x", encoding="utf-8") as file:
+            file.write(json.dumps(report, indent=2) + "\n")
+    print(f"labels sha256 builder {report['labels_sha256']['builder']}")
+    print(f"labels sha256 w3c {report['labels_sha256']['w3c']}")
+    for kind, digests in report["prompt_sha256"].items():
+        print(f"{kind} prompt sha256 {', '.join(digests)}")
+    total = report["usage"]["total"]
+    print(
+        f"{total['calls']} calls, {total['input_tokens']} input and"
+        f" {total['output_tokens']} output tokens, about USD {total['cost_usd']:.2f}"
+    )
+    if report["missing"]:
+        print(f"INCOMPLETE: no run for {', '.join(report['missing'])}")
+    print()
+    print(table, end="")
     return 0
 
 
