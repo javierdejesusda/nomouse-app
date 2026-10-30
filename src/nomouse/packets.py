@@ -85,9 +85,13 @@ _MODEL_SAW = {
 }
 _QUESTION_STEP = {"inside": "enter", "returned": "escape"}
 _MAX_SENTENCE = 300
+# Over-rejects on purpose ("accessible name", "lawn"): a rejected sentence
+# falls back to the template, which states the measured facts only.
 _FORBIDDEN = re.compile(
-    r"complian|conform|violat|\blaw|legal|lawsuit|\bADA\b|section 508|WCAG"
-    r"|certif|success criteri",
+    r"complian|conform|violat|\blaw|legal|\bsue[ds]?\b|liab|regulat|\bADA\b"
+    r"|section\s*508|301\s*549|WCAG|\bA{2,3}\b|\blevel\s+A\b"
+    r"|\d\.\d\.\d|certif|success criteri|accessib|requirement|\bstandards?\b"
+    r"|guideline",
     re.IGNORECASE,
 )
 
@@ -108,8 +112,8 @@ def acceptable_sentence(text: str) -> bool:
 
     Returns:
         True when it is one line, one sentence ending in a period, at most
-        300 characters, and says nothing about conformance, compliance,
-        certification or the law.
+        300 characters, and names no law, standard, criterion, requirement,
+        certification, conformance, compliance or accessibility status.
     """
     sentence = text.strip()
     return (
