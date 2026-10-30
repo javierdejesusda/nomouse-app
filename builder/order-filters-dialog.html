@@ -5,7 +5,10 @@
   Pattern: Tab order, correct variant that is not top to bottom. A modal
   filter panel is open when the page loads and holds focus; the shop behind
   it stays visible but inert, so Tab skips the header and product grid and
-  cycles through the panel only.
+  moves through the panel only. Escape or "Close filters" closes the panel,
+  makes the shop usable again and returns focus to the "Filters" button,
+  which reopens the panel with focus on its first field. "Apply" keeps the
+  panel open and reports how many products match.
 -->
 <html lang="en">
 <head>
@@ -21,8 +24,9 @@
   .products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; list-style: none; padding: 0; }
   .products li { background: #fff; border: 1px solid #ddd; padding: 12px; height: 80px; }
   .scrim { position: fixed; inset: 0; background: rgba(20, 20, 30, .35); z-index: 1; }
-  [role="dialog"] { position: fixed; top: 0; right: 0; bottom: 0; width: 320px; box-sizing: border-box; padding: 56px 24px 24px; background: #fff; z-index: 2; box-shadow: -4px 0 16px rgba(0,0,0,.2); }
+  [role="dialog"] { position: fixed; top: 0; right: 0; bottom: 0; width: 320px; box-sizing: border-box; padding: 88px 24px 24px; background: #fff; z-index: 2; box-shadow: -4px 0 16px rgba(0,0,0,.2); }
   [role="dialog"] h2 { margin: 0 0 12px; font-size: 20px; }
+  #filters-close { position: absolute; top: 40px; right: 16px; }
   fieldset { border: 0; padding: 0; margin: 0 0 16px; }
   legend { font-weight: 600; margin-bottom: 4px; }
   .option { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
@@ -42,6 +46,7 @@
   </header>
   <main>
     <h1>Backpacks</h1>
+    <button id="filters-open" type="button" aria-haspopup="dialog">Filters</button>
     <ul class="products">
       <li><a href="#p1">Ridge 30 L</a></li>
       <li><a href="#p2">Summit 45 L</a></li>
@@ -52,37 +57,62 @@
     </ul>
   </main>
 </div>
-<div class="scrim"></div>
-<div id="filters" role="dialog" aria-modal="true" aria-labelledby="filters-title">
-  <h2 id="filters-title">Filter backpacks</h2>
-  <fieldset>
-    <legend>Brand</legend>
-    <div class="option"><input id="brand-ridge" type="checkbox"><label for="brand-ridge">Ridgeline</label></div>
-    <div class="option"><input id="brand-north" type="checkbox"><label for="brand-north">Northfold</label></div>
-    <div class="option"><input id="brand-pine" type="checkbox"><label for="brand-pine">Pinecrest</label></div>
-  </fieldset>
-  <fieldset>
-    <legend>Capacity</legend>
-    <div class="option"><label for="capacity">Up to</label>
-      <select id="capacity"><option>20 L</option><option selected>40 L</option><option>60 L</option></select>
+<div id="filters-layer">
+  <div class="scrim"></div>
+  <div id="filters" role="dialog" aria-modal="true" aria-labelledby="filters-title">
+    <h2 id="filters-title">Filter backpacks</h2>
+    <button id="filters-close" type="button">Close filters</button>
+    <fieldset>
+      <legend>Brand</legend>
+      <div class="option"><input id="brand-ridge" type="checkbox"><label for="brand-ridge">Ridgeline</label></div>
+      <div class="option"><input id="brand-north" type="checkbox"><label for="brand-north">Northfold</label></div>
+      <div class="option"><input id="brand-pine" type="checkbox"><label for="brand-pine">Pinecrest</label></div>
+    </fieldset>
+    <fieldset>
+      <legend>Capacity</legend>
+      <div class="option"><label for="capacity">Up to</label>
+        <select id="capacity"><option>20 L</option><option selected>40 L</option><option>60 L</option></select>
+      </div>
+    </fieldset>
+    <div class="actions">
+      <button id="filters-reset" type="button">Reset</button>
+      <button id="filters-apply" type="button">Apply</button>
     </div>
-  </fieldset>
-  <div class="actions">
-    <button id="filters-reset" type="button">Reset</button>
-    <button id="filters-apply" type="button">Show results</button>
+    <p id="filters-status" role="status"></p>
   </div>
-  <p id="filters-status" role="status"></p>
 </div>
 <script>
-  document.getElementById("brand-ridge").focus();
+  const trigger = document.getElementById("filters-open");
+  const layer = document.getElementById("filters-layer");
+  const page = document.getElementById("page");
+  const firstField = document.getElementById("brand-ridge");
+  function open() {
+    layer.hidden = false;
+    page.inert = true;
+    firstField.focus();
+  }
+  function close() {
+    layer.hidden = true;
+    page.inert = false;
+    trigger.focus();
+  }
+  trigger.addEventListener("click", open);
+  document.getElementById("filters-close").addEventListener("click", close);
   document.getElementById("filters-reset").addEventListener("click", () => {
     for (const box of document.querySelectorAll("#filters input")) {
       box.checked = false;
     }
   });
   document.getElementById("filters-apply").addEventListener("click", () => {
-    document.getElementById("filters-status").textContent = "6 backpacks match.";
+    document.getElementById("filters-status").textContent =
+      "6 backpacks match. Close filters to see them.";
   });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !layer.hidden) {
+      close();
+    }
+  });
+  firstField.focus();
 </script>
 </body>
 </html>

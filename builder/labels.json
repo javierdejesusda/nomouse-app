@@ -120,11 +120,14 @@
       "status": "clean",
       "kind": "non-top-to-bottom",
       "w1_design": null,
-      "barrier": "Correct: a modal filter panel open on load keeps Tab inside it, skipping the visible but inert shop behind.",
-      "transition": "Every Tab inside #filters",
+      "barrier": "Correct: a modal filter panel open on load keeps Tab inside it (Close filters, the brand checkboxes, capacity, Reset, Apply), skipping the visible but inert shop behind; Escape or Close filters closes it, removes inert and returns focus to Filters, which reopens it with focus on the first checkbox.",
+      "transition": "Every Tab inside #filters, from #brand-ridge on load; Escape in #filters and Enter then Escape on #filters-open",
       "carrier_ids": [
         "filters",
-        "page"
+        "page",
+        "brand-ridge",
+        "filters-close",
+        "filters-open"
       ]
     },
     {
@@ -180,12 +183,12 @@
       "status": "failure",
       "kind": "monotone",
       "w1_design": "should-miss",
-      "barrier": "Three plan cards are drawn side by side but Tab visits all three features links before any choose link, never up.",
-      "transition": "Tab from #features-basic to #features-pro, and from #features-team down to #choose-basic",
+      "barrier": "Three plan cards, each with a seats field and a Choose button, are drawn side by side but Tab goes from Basic seats to Pro seats and Team seats before Choose Basic, breaking the task inside each card, never up.",
+      "transition": "Tab from #seats-basic to #seats-pro, and from #seats-team down to #choose-basic",
       "carrier_ids": [
-        "features-basic",
-        "features-pro",
-        "features-team",
+        "seats-basic",
+        "seats-pro",
+        "seats-team",
         "choose-basic",
         "choose-pro",
         "choose-team"

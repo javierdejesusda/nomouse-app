@@ -3,9 +3,11 @@
   builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
   MIT License (see LICENSE at the repository root).
   Pattern: Tab order, failing variant (after WCAG F44). Three plan cards are
-  drawn side by side, but their parts sit on a shared grid written row by
-  row, so Tab visits every card's features link before any card's choose
-  link. Each step moves right on the same row or down, never up.
+  drawn side by side, each with a seats field and its own Choose button, but
+  their parts sit on a shared grid written row by row. Tab goes from the
+  Basic seats field to the Pro and Team seats fields before reaching Choose
+  Basic, so the task inside each card is broken. Each step moves right on
+  the same row or down, never up.
 -->
 <html lang="en">
 <head>
@@ -25,8 +27,11 @@
   .part.name h2 { margin: 0; font-size: 20px; }
   .part.price { font-size: 28px; font-weight: 600; }
   .part.price small { font-size: 14px; font-weight: 400; }
+  .part.seats label { display: block; font-size: 14px; }
+  .part.seats input { font: inherit; width: 5em; padding: 4px 8px; }
   .part.choose { border-bottom: 1px solid #ccd; border-radius: 0 0 10px 10px; padding-bottom: 20px; padding-top: 16px; }
-  .part.choose a { display: inline-block; padding: 8px 16px; background: #1a5fd0; color: #fff; border-radius: 6px; text-decoration: none; }
+  .part.choose button { font: inherit; padding: 8px 16px; background: #1a5fd0; color: #fff; border: 0; border-radius: 6px; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   :focus { outline: 2px solid #c2410c; outline-offset: 2px; }
 </style>
 </head>
@@ -43,17 +48,27 @@
     <div class="part name"><h2>Basic</h2></div>
     <div class="part name"><h2>Pro</h2></div>
     <div class="part name"><h2>Team</h2></div>
-    <div class="part price">$0 <small>per month</small></div>
-    <div class="part price">$12 <small>per month</small></div>
-    <div class="part price">$30 <small>per month</small></div>
-    <div class="part"><a id="features-basic" href="#basic">See Basic features</a></div>
-    <div class="part"><a id="features-pro" href="#pro">See Pro features</a></div>
-    <div class="part"><a id="features-team" href="#team">See Team features</a></div>
-    <div class="part choose"><a id="choose-basic" href="#choose-basic">Choose Basic</a></div>
-    <div class="part choose"><a id="choose-pro" href="#choose-pro">Choose Pro</a></div>
-    <div class="part choose"><a id="choose-team" href="#choose-team">Choose Team</a></div>
+    <div class="part price">$4 <small>per seat per month</small></div>
+    <div class="part price">$12 <small>per seat per month</small></div>
+    <div class="part price">$30 <small>per seat per month</small></div>
+    <div class="part seats"><label for="seats-basic">Seats<span class="vh"> for Basic</span></label><input id="seats-basic" type="number" min="1" value="1"></div>
+    <div class="part seats"><label for="seats-pro">Seats<span class="vh"> for Pro</span></label><input id="seats-pro" type="number" min="1" value="1"></div>
+    <div class="part seats"><label for="seats-team">Seats<span class="vh"> for Team</span></label><input id="seats-team" type="number" min="1" value="1"></div>
+    <div class="part choose"><button id="choose-basic" type="button" data-plan="Basic" data-seats="seats-basic">Choose Basic</button></div>
+    <div class="part choose"><button id="choose-pro" type="button" data-plan="Pro" data-seats="seats-pro">Choose Pro</button></div>
+    <div class="part choose"><button id="choose-team" type="button" data-plan="Team" data-seats="seats-team">Choose Team</button></div>
   </div>
+  <p id="plan-status" role="status"></p>
   <p><a href="#compare">Compare all plans</a></p>
 </main>
+<script>
+  for (const button of document.querySelectorAll(".choose button")) {
+    button.addEventListener("click", () => {
+      const seats = document.getElementById(button.dataset.seats).value;
+      document.getElementById("plan-status").textContent =
+        `${button.dataset.plan} plan with ${seats} seats added to your order.`;
+    });
+  }
+</script>
 </body>
 </html>
