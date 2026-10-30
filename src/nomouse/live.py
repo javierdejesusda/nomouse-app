@@ -388,7 +388,8 @@ class LiveService:
         if spent + RUN_RESERVE_USD > cap:
             return (
                 f"Live mode is off: the lifetime live credit cap of USD {cap:.2f}"
-                f" is used up (USD {spent:.2f} spent). {_REPLAY_NOTE}"
+                f" is used up (USD {spent:.2f} spent; a run may cost up to USD"
+                f" {RUN_RESERVE_USD:.2f}). {_REPLAY_NOTE}"
             )
         if self._clock() < self._paused_until:
             return (

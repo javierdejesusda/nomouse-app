@@ -267,6 +267,7 @@ def test_an_exhausted_cap_falls_back_to_replay_without_a_call(
     assert status["message"].startswith(
         "Live mode is off: the lifetime live credit cap of USD 1.00 is used up"
     )
+    assert "spent; a run may cost up to USD 0.25)" in status["message"]
     assert "replay" in status["message"]
     assert code == 503
     assert reply["message"] == status["message"]
