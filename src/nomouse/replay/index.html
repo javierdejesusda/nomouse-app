@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'; base-uri 'none'">
+<title>NoMouse replay</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header>
+  <p class="brand"><a href="index.html">NoMouse replay</a></p>
+  <nav aria-label="Site">
+    <ul>
+      <li><a href="index.html" aria-current="page">Pages</a></li>
+      <li><a href="eval.html">Eval counts</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="main" tabindex="-1">
+  <h1>Replay of frozen keyboard walks</h1>
+  <p>A driver pressed Tab, Enter and Escape on each page and recorded where the browser put focus after every key. The walker verdicts were frozen and hashed before any model call. This replay makes no model call and needs no API key.</p>
+  <section aria-labelledby="w3c-heading">
+    <h2 id="w3c-heading">W3C Before and After Demonstration</h2>
+    <p>Third-party pages, shown unmodified with their original address and notice.</p>
+    <ul id="w3c-pages" class="pages"></ul>
+  </section>
+  <section aria-labelledby="builder-heading">
+    <h2 id="builder-heading">Builder-made pages</h2>
+    <p>Written and labelled by the builder, MIT licensed.</p>
+    <ul id="builder-pages" class="pages"></ul>
+  </section>
+</main>
+<footer>
+  <p>Observed keyboard-only test evidence. Not a conformance claim and not legal advice.</p>
+</footer>
+<script src="common.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
