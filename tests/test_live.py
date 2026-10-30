@@ -372,6 +372,27 @@ def test_the_replay_link_follows_a_revised_page_to_its_v2_run(
     assert service.status()["pages"][0]["replay_id"] == "menu-v1-v2"
 
 
+def in_thread(target: Callable[[], None]) -> None:
+    """Runs a pipeline off the main thread, as the live service does.
+
+    The session's Playwright already runs on the main thread, and the sync
+    API allows one per thread.
+    """
+    errors: list[BaseException] = []
+
+    def run() -> None:
+        try:
+            target()
+        except BaseException as error:
+            errors.append(error)
+
+    thread = threading.Thread(target=run)
+    thread.start()
+    thread.join()
+    if errors:
+        raise errors[0]
+
+
 class ModelTransport:
     """Answers the reviewer and the packet writer like the API."""
 
@@ -427,7 +448,11 @@ def test_the_pipeline_walks_freezes_reviews_and_writes_packets(
     stages: list[str] = []
     run_dir = tmp_path / "live-1"
 
-    walk_and_review(page, run_dir, transport, stages.append, roots={"builder": pages})
+    in_thread(
+        lambda: walk_and_review(
+            page, run_dir, transport, stages.append, roots={"builder": pages}
+        )
+    )
 
     assert stages == ["walking", "reviewing", "writing packets"]
     record = json.loads((run_dir / "walk.json").read_text())
@@ -456,8 +481,10 @@ def test_the_pipeline_stops_the_walk_at_forty_keys(tmp_path: Path) -> None:
     page = LivePage("builder/many.html", "Many", "builder", "many")
     run_dir = tmp_path / "live-1"
 
-    walk_and_review(
-        page, run_dir, ModelTransport(), lambda stage: None, roots={"builder": root}
+    in_thread(
+        lambda: walk_and_review(
+            page, run_dir, ModelTransport(), lambda _: None, roots={"builder": root}
+        )
     )
 
     record = json.loads((run_dir / "walk.json").read_text())
