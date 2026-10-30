@@ -1,0 +1,57 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: Tab order, failing variant (after WCAG F44). The shipping and
+  billing addresses are drawn as two columns, but the source is written row
+  by row, so Tab alternates between the columns. Each step moves right on the
+  same row or down to the next row, never up.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout: addresses (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #fafafa; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  main { padding: 16px; max-width: 880px; }
+  h1 { font-size: 24px; margin: 0 0 16px; }
+  .addresses { display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; }
+  .cell { display: flex; flex-direction: column; gap: 4px; padding: 8px 16px; background: #fff; border-left: 1px solid #ccc; border-right: 1px solid #ccc; }
+  .cell.head { border-top: 1px solid #ccc; border-radius: 8px 8px 0 0; padding-top: 16px; }
+  .cell.last { border-bottom: 1px solid #ccc; border-radius: 0 0 8px 8px; padding-bottom: 16px; }
+  h2 { font-size: 18px; margin: 0; }
+  input { font: inherit; padding: 6px 8px; }
+  .next { margin-top: 24px; }
+  button { font: inherit; padding: 8px 16px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Greenhouse supply</strong>
+  <a href="#cart">Cart</a>
+  <a href="#account">Account</a>
+</header>
+<main>
+  <h1>Where should we send your order?</h1>
+  <div class="addresses">
+    <div class="cell head"><h2>Shipping address</h2></div>
+    <div class="cell head"><h2>Billing address</h2></div>
+    <div class="cell"><label for="ship-name">Full name</label><input id="ship-name" autocomplete="shipping name"></div>
+    <div class="cell"><label for="bill-name">Full name</label><input id="bill-name" autocomplete="billing name"></div>
+    <div class="cell"><label for="ship-street">Street and number</label><input id="ship-street" autocomplete="shipping street-address"></div>
+    <div class="cell"><label for="bill-street">Street and number</label><input id="bill-street" autocomplete="billing street-address"></div>
+    <div class="cell"><label for="ship-city">City</label><input id="ship-city" autocomplete="shipping address-level2"></div>
+    <div class="cell"><label for="bill-city">City</label><input id="bill-city" autocomplete="billing address-level2"></div>
+    <div class="cell last"><label for="ship-postcode">Postcode</label><input id="ship-postcode" autocomplete="shipping postal-code"></div>
+    <div class="cell last"><label for="bill-postcode">Postcode</label><input id="bill-postcode" autocomplete="billing postal-code"></div>
+  </div>
+  <div class="next"><a href="#payment">Continue to payment</a></div>
+</main>
+</body>
+</html>

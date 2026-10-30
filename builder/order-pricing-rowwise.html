@@ -1,0 +1,59 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: Tab order, failing variant (after WCAG F44). Three plan cards are
+  drawn side by side, but their parts sit on a shared grid written row by
+  row, so Tab visits every card's features link before any card's choose
+  link. Each step moves right on the same row or down, never up.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plans and pricing (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #f4f4f7; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  main { padding: 24px 16px; max-width: 900px; }
+  h1 { font-size: 28px; margin: 0 0 16px; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 24px; }
+  .part { background: #fff; padding: 8px 20px; border-left: 1px solid #ccd; border-right: 1px solid #ccd; }
+  .part.name { border-top: 1px solid #ccd; border-radius: 10px 10px 0 0; padding-top: 20px; }
+  .part.name h2 { margin: 0; font-size: 20px; }
+  .part.price { font-size: 28px; font-weight: 600; }
+  .part.price small { font-size: 14px; font-weight: 400; }
+  .part.choose { border-bottom: 1px solid #ccd; border-radius: 0 0 10px 10px; padding-bottom: 20px; padding-top: 16px; }
+  .part.choose a { display: inline-block; padding: 8px 16px; background: #1a5fd0; color: #fff; border-radius: 6px; text-decoration: none; }
+  :focus { outline: 2px solid #c2410c; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Inkwell</strong>
+  <a href="#product">Product</a>
+  <a href="#customers">Customers</a>
+</header>
+<main>
+  <h1>Pick a plan</h1>
+  <div class="plans">
+    <div class="part name"><h2>Basic</h2></div>
+    <div class="part name"><h2>Pro</h2></div>
+    <div class="part name"><h2>Team</h2></div>
+    <div class="part price">$0 <small>per month</small></div>
+    <div class="part price">$12 <small>per month</small></div>
+    <div class="part price">$30 <small>per month</small></div>
+    <div class="part"><a id="features-basic" href="#basic">See Basic features</a></div>
+    <div class="part"><a id="features-pro" href="#pro">See Pro features</a></div>
+    <div class="part"><a id="features-team" href="#team">See Team features</a></div>
+    <div class="part choose"><a id="choose-basic" href="#choose-basic">Choose Basic</a></div>
+    <div class="part choose"><a id="choose-pro" href="#choose-pro">Choose Pro</a></div>
+    <div class="part choose"><a id="choose-team" href="#choose-team">Choose Team</a></div>
+  </div>
+  <p><a href="#compare">Compare all plans</a></p>
+</main>
+</body>
+</html>
