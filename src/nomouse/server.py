@@ -27,8 +27,13 @@ class LiveApi(Protocol):
     def status(self) -> dict[str, Any]:
         """Returns live mode's status."""
 
-    def start(self, client: str, page_id: object) -> tuple[int, dict[str, Any]]:
-        """Starts a run; returns the HTTP status and JSON body."""
+    def start(
+        self, client: str, page_id: object, task: object = None
+    ) -> tuple[int, dict[str, Any]]:
+        """Starts a run, with an optional typed task, as the client sent them.
+
+        Returns the HTTP status and JSON body.
+        """
 
     def run(self, run_id: str) -> dict[str, Any] | None:
         """Returns a run's state, or None."""
@@ -124,8 +129,9 @@ class _Handler(SimpleHTTPRequestHandler):
         except ValueError:
             self._json(400, {"error": "bad_json", "message": "Send a JSON object."})
             return
-        page = body.get("page") if isinstance(body, dict) else None
-        self._json(*live.start(self._client(), page))
+        if not isinstance(body, dict):
+            body = {}
+        self._json(*live.start(self._client(), body.get("page"), body.get("task")))
 
     def _client(self) -> str:
         """Returns the client address, from the trusted proxy when set."""

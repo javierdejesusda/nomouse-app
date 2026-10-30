@@ -18,12 +18,16 @@ from nomouse.server import make_server
 class FakeLive:
     def __init__(self) -> None:
         self.starts: list[tuple[str, object]] = []
+        self.tasks: list[object] = []
 
     def status(self) -> dict[str, Any]:
         return {"live": True, "pages": [{"id": "before/home.html"}]}
 
-    def start(self, client: str, page_id: object) -> tuple[int, dict[str, Any]]:
+    def start(
+        self, client: str, page_id: object, task: object = None
+    ) -> tuple[int, dict[str, Any]]:
         self.starts.append((client, page_id))
+        self.tasks.append(task)
         return 202, {"run": "live-1"}
 
     def run(self, run_id: str) -> dict[str, Any] | None:
@@ -105,6 +109,17 @@ def test_a_post_starts_a_run_for_the_client_address(served: Served) -> None:
     assert status == 202
     assert json.loads(body) == {"run": "live-1"}
     assert live.starts == [("127.0.0.1", "before/home.html")]
+    assert live.tasks == [None]
+
+
+def test_a_post_passes_the_typed_task_on_as_sent(served: Served) -> None:
+    base, live = served
+    body = {"page": "builder/dialog-focus-returns.html", "task": ["open", 1]}
+
+    status, _, _ = request(base + "/api/live/runs", json.dumps(body).encode(), JSON)
+
+    assert status == 202
+    assert live.tasks == [["open", 1]]
 
 
 @pytest.mark.parametrize(

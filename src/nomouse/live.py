@@ -2,7 +2,9 @@
 
 A live run walks one page from a fixed list (the W3C demo pages without
 News, and the builder pages), freezes the walker verdicts, asks the form (i)
-reviewer and writes packets, then adds the run to the replay site. One run
+reviewer and writes packets, then adds the run to the replay site. With a
+typed task, the keyboard navigator chooses the keys instead of the
+deterministic driver, under the same page list, key cap and guard. One run
 goes at a time, each client may start only a few runs per window, and when
 the credit cap is used up, no key is configured or the API cannot be
 reached, live mode is off and the replay carries the page.
@@ -21,7 +23,7 @@ from typing import Any
 
 from playwright.sync_api import sync_playwright
 
-from nomouse import packets, reviewer
+from nomouse import navigator, packets, reviewer
 from nomouse.credits import CreditLedger
 from nomouse.driver import new_walk_context, walk
 from nomouse.export import BUILDER_LABEL, export_run
@@ -36,6 +38,9 @@ RUN_RESERVE_USD = 0.25
 """The most one 40-key run is expected to cost; a run starts only while the
 spend plus this reserve stays within the cap. The T10 eval reviews cost
 under USD 0.03 a page."""
+TASK_RESERVE_USD = 0.75
+"""The most one run with a typed task is expected to cost: up to 41
+navigator calls with up to five screenshots each, then the review."""
 API_PAUSE_S = 600.0
 """How long live mode stays off after a run could not reach the API."""
 MAX_STORED_RUNS = 200
@@ -47,8 +52,9 @@ _REPLAY_NOTE = "The replay of every frozen run still works with no key."
 _log = logging.getLogger(__name__)
 
 Progress = Callable[[str], None]
-Pipeline = Callable[["LivePage", Path, Transport, Progress], None]
-"""Runs one live run: (page, run directory, metered transport, progress)."""
+Pipeline = Callable[["LivePage", Path, Transport, Progress, str | None], None]
+"""Runs one live run: (page, run directory, metered transport, progress,
+typed task or None)."""
 
 
 @dataclass(frozen=True)
@@ -104,37 +110,47 @@ def walk_and_review(
     run_dir: Path,
     transport: Transport,
     progress: Progress,
+    task: str | None,
     *,
     roots: Mapping[str, Path],
 ) -> None:
-    """Runs one live run: walk, freeze, form (i) review, then packets.
+    """Runs one live run: walk or navigate, freeze, form (i) review, packets.
 
     The page is served from its root on 127.0.0.1 and walked with at most
     40 keys under the walk's request guard (no other origin, no non-GET
-    request). The verdicts are frozen before any model call.
+    request, no navigation off the page): by the deterministic driver, or,
+    with a task, by the keyboard navigator. The verdicts are frozen before
+    any review call.
 
     Args:
         page: A listed page.
         run_dir: New directory for the run.
         transport: Sends the model calls.
         progress: Told each stage as it starts.
+        task: A task cleaned by `navigator.clean_task`, or None.
         roots: The directory serving each page set (`w3c`, `builder`).
 
     Raises:
-        SparkError: A review call failed.
+        SparkError: A navigator or review call failed.
         reviewer.AnswerError: A review answer did not fit its question.
     """
-    progress("walking")
+    progress("walking" if task is None else "navigating")
     path = page.id.removeprefix("builder/")
     with serve_directory(roots[page.set]) as base_url, sync_playwright() as pw:
         browser = pw.chromium.launch()
         try:
-            record = walk(
-                new_walk_context(browser),
-                base_url + path,
-                run_dir,
-                max_keys=LIVE_MAX_KEYS,
-            )
+            context = new_walk_context(browser)
+            if task is None:
+                record = walk(context, base_url + path, run_dir, max_keys=LIVE_MAX_KEYS)
+            else:
+                record = navigator.navigate(
+                    context,
+                    base_url + path,
+                    run_dir,
+                    task,
+                    transport=transport,
+                    max_keys=LIVE_MAX_KEYS,
+                )
         finally:
             browser.close()
     freeze(record, run_dir)
@@ -243,6 +259,7 @@ class LiveService:
             "message": message,
             "busy": self._busy(),
             "max_keys": LIVE_MAX_KEYS,
+            "max_task_chars": navigator.MAX_TASK_CHARS,
             "model": MODEL,
             "reasoning_effort": REASONING_EFFORT,
             "cap_usd": self._ledger.cap_usd,
@@ -253,17 +270,25 @@ class LiveService:
             ],
         }
 
-    def start(self, client: str, page_id: object) -> tuple[int, dict[str, Any]]:
+    def start(
+        self, client: str, page_id: object, task: object = None
+    ) -> tuple[int, dict[str, Any]]:
         """Starts a live run of a listed page, if live mode allows it.
 
         Args:
             client: The client's address, for the rate limit.
             page_id: The page id the client sent.
+            task: The typed task the client sent, or None for a driver walk.
+                It is untrusted text: it goes to the navigator only, cleaned
+                and capped, and changes neither the page, the key cap nor
+                the key whitelist.
 
         Returns:
             An HTTP status and its JSON body: 202 with the run id; 400 for a
-            page that is not listed; 503 when live mode is off; 409 while
-            another run is going; 429 when the client is over its limit.
+            page that is not listed or a task that is not one short line of
+            text; 503 when live mode is off, or for a task when the cap
+            cannot take the larger task reserve; 409 while another run is
+            going; 429 when the client is over its limit.
         """
         page = self._pages.get(page_id) if isinstance(page_id, str) else None
         if page is None:
@@ -272,6 +297,15 @@ class LiveService:
                 "message": "Choose one of the listed pages; live runs take no"
                 " other address.",
             }
+        if task is not None:
+            try:
+                task = navigator.clean_task(task)
+            except ValueError:
+                return 400, {
+                    "error": "bad_task",
+                    "message": "The task must be one line of text, at most"
+                    f" {navigator.MAX_TASK_CHARS} characters.",
+                }
         fallback = {"replay_id": self._replay_id(page)}
         # Checked under the lock, after the busy check, so the cap is read
         # only once the previous run has recorded all of its calls.
@@ -285,6 +319,8 @@ class LiveService:
                 }
             if (message := self._off_reason()) is not None:
                 return 503, {"error": "live_off", "message": message, **fallback}
+            if task is not None and (message := self._task_off_reason()):
+                return 503, {"error": "live_off", "message": message, **fallback}
             if not self._limiter.allow(client):
                 return 429, {
                     "error": "rate_limited",
@@ -297,6 +333,7 @@ class LiveService:
             self._runs[run_id] = {
                 "run": run_id,
                 "page": page.id,
+                "task": task,
                 "state": "queued",
                 "message": None,
                 "page_id": None,
@@ -304,7 +341,7 @@ class LiveService:
                 **fallback,
             }
             self._thread = threading.Thread(
-                target=self._run, args=(run_id, page), daemon=True
+                target=self._run, args=(run_id, page, task), daemon=True
             )
             self._thread.start()
         return 202, {"run": run_id}
@@ -324,7 +361,7 @@ class LiveService:
         if self._thread is not None:
             self._thread.join()
 
-    def _run(self, run_id: str, page: LivePage) -> None:
+    def _run(self, run_id: str, page: LivePage, task: str | None) -> None:
         run_dir = self._state / "runs" / run_id
         started = _utc_now()
 
@@ -333,11 +370,16 @@ class LiveService:
 
         try:
             self._pipeline(
-                page, run_dir, self._ledger.metered(self._transport, run_id), progress
+                page,
+                run_dir,
+                self._ledger.metered(self._transport, run_id),
+                progress,
+                task,
             )
             cost = self._ledger.spent_usd(run_id)
             live = {
                 "page": page.id,
+                "task": task,
                 "started_at": started,
                 "finished_at": _utc_now(),
                 "max_keys": LIVE_MAX_KEYS,
@@ -414,6 +456,18 @@ class LiveService:
                 f" Model API. Try again in a few minutes. {_REPLAY_NOTE}"
             )
         return None
+
+    def _task_off_reason(self) -> str | None:
+        """Returns why a run with a typed task cannot start, or None."""
+        spent = self._spent() or 0.0
+        cap = self._ledger.cap_usd
+        if spent + TASK_RESERVE_USD <= cap:
+            return None
+        return (
+            f"A run with a typed task may cost up to USD {TASK_RESERVE_USD:.2f},"
+            f" more than the USD {cap - spent:.2f} left under the lifetime live"
+            " credit cap. Start a run without a task, or open the replay."
+        )
 
     def _replay_id(self, page: LivePage) -> str | None:
         """Returns the replay page of a page's frozen run, if exported.

@@ -13,12 +13,14 @@ from nomouse.export import export_site
 from nomouse.live import (
     LIVE_MAX_KEYS,
     RUN_RESERVE_USD,
+    TASK_RESERVE_USD,
     LivePage,
     LiveService,
     RateLimiter,
     live_pages,
     walk_and_review,
 )
+from nomouse.navigator import NAVIGATOR_PROMPT
 from nomouse.packets import WRITER_PROMPT
 from nomouse.reviewer import FORM_I_PROMPT
 from nomouse.spark import SparkError, Transport
@@ -46,15 +48,23 @@ def api_reply(url: str, body: bytes, headers: Mapping[str, str]) -> tuple[int, b
     return 200, json.dumps(reply).encode()
 
 
-def copy_menu(fixture_runs: Path) -> Callable[..., None]:
-    """Returns a pipeline that 'walks' by copying the fixture menu run."""
+def copy_menu(
+    fixture_runs: Path, tasks: list[str | None] | None = None
+) -> Callable[..., None]:
+    """Returns a pipeline that 'walks' by copying the fixture menu run.
+
+    Each run's task is appended to `tasks` when given.
+    """
 
     def pipeline(
         page: LivePage,
         run_dir: Path,
         transport: Transport,
         progress: Callable[[str], None],
+        task: str | None,
     ) -> None:
+        if tasks is not None:
+            tasks.append(task)
         progress("walking")
         shutil.copytree(fixture_runs / "builder" / "menu", run_dir)
         (run_dir / "review-eval1.json").rename(run_dir / "review-live.json")
@@ -153,6 +163,7 @@ def test_status_lists_the_pages_and_the_caps(
     assert status["reasoning_effort"] == "minimal"
     assert status["cap_usd"] == 20.0
     assert status["spent_usd"] == 0.0
+    assert status["max_task_chars"] == 200
     assert len(status["pages"]) == 26
     assert status["pages"][0] == {
         "id": "before/home.html",
@@ -305,12 +316,16 @@ def test_a_start_checks_the_cap_after_the_previous_run_has_spent(
     walk = copy_menu(fixture_runs)
 
     def spend_after_release(
-        page: LivePage, run_dir: Path, transport: Transport, progress: Any
+        page: LivePage,
+        run_dir: Path,
+        transport: Transport,
+        progress: Any,
+        task: str | None,
     ) -> None:
         walks.append(page.id)
         release.wait(5)
         if len(walks) == 1:
-            walk(page, run_dir, transport, progress)
+            walk(page, run_dir, transport, progress, task)
 
     ledger = StaleLedger(tmp_path / "state" / "live-usage.jsonl", 1.0)
     big = {"input_tokens": 640_000, "output_tokens": 0}
@@ -475,10 +490,11 @@ def in_thread(target: Callable[[], None]) -> None:
 
 
 class ModelTransport:
-    """Answers the reviewer and the packet writer like the API."""
+    """Answers the navigator, the reviewer and the packet writer like the API."""
 
-    def __init__(self) -> None:
+    def __init__(self, keys: list[str] | None = None) -> None:
         self.bodies: list[dict[str, Any]] = []
+        self.keys = keys or []
 
     def __call__(
         self, url: str, body: bytes, headers: Mapping[str, str]
@@ -486,9 +502,12 @@ class ModelTransport:
         request = json.loads(body)
         self.bodies.append(request)
         text = request["input"][0]["content"][0]["text"]
-        if text.startswith(FORM_I_PROMPT):
+        if text.startswith(NAVIGATOR_PROMPT):
+            key = self.keys.pop(0) if self.keys else "stuck"
+            answer: dict[str, Any] = {"answer": key, "reason": "Seen."}
+        elif text.startswith(FORM_I_PROMPT):
             asked = json.loads(text.removeprefix(FORM_I_PROMPT))["instances"]
-            answer: dict[str, Any] = {
+            answer = {
                 "instances": [
                     {
                         "step": item["step"],
@@ -531,7 +550,7 @@ def test_the_pipeline_walks_freezes_reviews_and_writes_packets(
 
     in_thread(
         lambda: walk_and_review(
-            page, run_dir, transport, stages.append, roots={"builder": pages}
+            page, run_dir, transport, stages.append, None, roots={"builder": pages}
         )
     )
 
@@ -564,10 +583,129 @@ def test_the_pipeline_stops_the_walk_at_forty_keys(tmp_path: Path) -> None:
 
     in_thread(
         lambda: walk_and_review(
-            page, run_dir, ModelTransport(), lambda _: None, roots={"builder": root}
+            page,
+            run_dir,
+            ModelTransport(),
+            lambda _: None,
+            None,
+            roots={"builder": root},
         )
     )
 
     record = json.loads((run_dir / "walk.json").read_text())
     assert len(record["keys"]) == 40
     assert record["end_reason"] == "max_keys"
+
+
+def test_a_typed_task_has_the_navigator_choose_the_keys(tmp_path: Path) -> None:
+    pages = Path(__file__).parent / "pages"
+    page = LivePage("builder/dialog.html", "Dialog", "builder", "dialog")
+    transport = ModelTransport(["Tab", "Enter", "Escape", "done"])
+    stages: list[str] = []
+    run_dir = tmp_path / "live-1"
+
+    in_thread(
+        lambda: walk_and_review(
+            page,
+            run_dir,
+            transport,
+            stages.append,
+            "open the settings and close them",
+            roots={"builder": pages},
+        )
+    )
+
+    assert stages == ["navigating", "reviewing", "writing packets"]
+    record = json.loads((run_dir / "walk.json").read_text())
+    assert record["keys"] == ["Tab", "Enter", "Escape"]
+    assert record["end_reason"] == "done"
+    assert record["navigator"]["task"] == "open the settings and close them"
+    assert record["navigator"]["max_keys"] == 40
+    verdicts = json.loads((run_dir / "verdicts.json").read_text())
+    assert verdicts["keys"] == ["Tab", "Enter", "Escape"]
+    review = json.loads((run_dir / "review-live.json").read_text())
+    assert [i["steps"] for i in review["instances"]] == [
+        {"trigger": 0, "enter": 1, "escape": 2}
+    ]
+    assert (run_dir / "packets-live.json").is_file()
+    prompts = [b["input"][0]["content"][0]["text"] for b in transport.bodies]
+    assert sum(p.startswith(NAVIGATOR_PROMPT) for p in prompts) == 4
+    assert not any(
+        "open the settings" in p for p in prompts if not p.startswith(NAVIGATOR_PROMPT)
+    )
+
+
+def test_a_start_passes_the_cleaned_task_to_the_pipeline(
+    make_service: Callable[..., tuple[LiveService, Clock]],
+    fixture_runs: Path,
+    tmp_path: Path,
+) -> None:
+    tasks: list[str | None] = []
+    service, _ = make_service(copy_menu(fixture_runs, tasks))
+
+    code, reply = service.start(
+        "203.0.113.5", "builder/menu-focus-stays.html", "  open\nthe menu  "
+    )
+    service.join()
+
+    assert code == 202
+    assert tasks == ["open the menu"]
+    state = service.run(reply["run"])
+    assert state is not None
+    assert state["task"] == "open the menu"
+    page = json.loads(
+        (tmp_path / "site" / "data" / "pages" / f"{reply['run']}.json").read_text()
+    )
+    assert page["live"]["task"] == "open the menu"
+
+
+def test_a_start_without_a_task_walks_with_the_driver(
+    make_service: Callable[..., tuple[LiveService, Clock]], fixture_runs: Path
+) -> None:
+    tasks: list[str | None] = []
+    service, _ = make_service(copy_menu(fixture_runs, tasks))
+
+    code, reply = service.start("203.0.113.5", "builder/menu-focus-stays.html")
+    service.join()
+
+    assert code == 202
+    assert tasks == [None]
+    state = service.run(reply["run"])
+    assert state is not None
+    assert state["task"] is None
+
+
+@pytest.mark.parametrize("task", [3, ["open"], "", "x" * 201, "open\x00it"])
+def test_a_task_that_is_not_a_short_line_is_refused_before_any_run(
+    make_service: Callable[..., tuple[LiveService, Clock]], task: object
+) -> None:
+    calls: list[object] = []
+    service, _ = make_service(lambda *args: calls.append(args))
+
+    code, reply = service.start("203.0.113.5", "builder/menu-focus-stays.html", task)
+
+    assert code == 400
+    assert reply["error"] == "bad_task"
+    assert "200 characters" in reply["message"]
+    assert calls == []
+    assert service.status()["busy"] is False
+
+
+def test_a_task_run_needs_the_larger_reserve(
+    make_service: Callable[..., tuple[LiveService, Clock]], tmp_path: Path
+) -> None:
+    ledger = CreditLedger(tmp_path / "ledger.jsonl", 1.0)
+    ledger.record("earlier", {"input_tokens": 400_000, "output_tokens": 0})
+    assert RUN_RESERVE_USD < 0.5 < TASK_RESERVE_USD
+    service, _ = make_service(ledger=ledger)
+
+    code, reply = service.start(
+        "203.0.113.5", "builder/menu-focus-stays.html", "open the menu"
+    )
+
+    assert code == 503
+    assert reply["error"] == "live_off"
+    assert f"USD {TASK_RESERVE_USD:.2f}" in reply["message"]
+    code, _ = service.start("203.0.113.5", "builder/menu-focus-stays.html")
+    service.join()
+    assert code == 202
