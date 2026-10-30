@@ -493,6 +493,21 @@ def test_a_named_review_is_used_and_must_exist(tmp_path: Path) -> None:
 
     assert result["review"]["file"] == "review-g.json"
     assert len(result["packets"]) == 4
+    written = json.loads((run_dir / "packets-g.json").read_text(encoding="utf-8"))
+    assert written == result
+    assert not (run_dir / "packets.json").exists()
+
+
+def test_each_review_run_gets_its_own_packets_file(tmp_path: Path) -> None:
+    run_dir = write_run(tmp_path / "run", review=REVIEW, review_name="review-g.json")
+    (run_dir / "review-h.json").write_bytes((run_dir / "review-g.json").read_bytes())
+    write_packets(run_dir, run="g", template=True)
+
+    write_packets(run_dir, run="h", template=True)
+    with pytest.raises(FileExistsError, match="packets-g.json"):
+        write_packets(run_dir, run="g", template=True)
+
+    assert (run_dir / "packets-h.json").is_file()
 
 
 def test_tab_order_answers_in_an_old_review_make_no_packet(tmp_path: Path) -> None:
@@ -607,7 +622,8 @@ def test_cli_packets_with_template_makes_no_call(
     assert transport.bodies == []
     out = capsys.readouterr().out
     assert "sentences: template (0 from the model, 4 from the template)" in out
-    written = json.loads((run_dir / "packets.json").read_text(encoding="utf-8"))
+    assert str(run_dir / "packets-g.json") in out
+    written = json.loads((run_dir / "packets-g.json").read_text(encoding="utf-8"))
     assert written["review"]["file"] == "review-g.json"
 
 

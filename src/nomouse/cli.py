@@ -277,7 +277,7 @@ def _packets(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
         print(
             f"{usage['input_tokens']} input and {usage['output_tokens']} output tokens"
         )
-    print(f"packets: {args.run_dir / packets.PACKETS_NAME}")
+    print(f"packets: {packets.packets_path(args.run_dir, args.run)}")
     return 0
 
 

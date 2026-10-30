@@ -145,6 +145,24 @@ def acceptable_sentence(text: str) -> bool:
     )
 
 
+def packets_path(run_dir: Path, run: str | None = None) -> Path:
+    """Returns where the packets of a run are written.
+
+    Args:
+        run_dir: The walk's run directory.
+        run: Optional review run label.
+
+    Returns:
+        `packets.json`, or `packets-<run>.json` when a label is given.
+
+    Raises:
+        ValueError: The label is not made of letters, digits, `_` and `-`.
+    """
+    if run is None:
+        return run_dir / PACKETS_NAME
+    return run_dir / review_path(run_dir, run).name.replace("review-", "packets-", 1)
+
+
 def write_packets(
     run_dir: Path,
     *,
@@ -152,7 +170,10 @@ def write_packets(
     template: bool = False,
     transport: Transport = urllib_transport,
 ) -> dict[str, Any]:
-    """Writes `packets.json` for a frozen walk and, if present, its review.
+    """Writes the packets of a frozen walk and, if present, its review.
+
+    They go to `packets.json`, or `packets-<run>.json` with a run label, so
+    each review run of the same walk keeps its own packets.
 
     Args:
         run_dir: Run directory with the walk record and frozen verdicts.
@@ -168,12 +189,12 @@ def write_packets(
 
     Raises:
         ValueError: The run label is not a plain name.
-        FileExistsError: `packets.json` already exists.
+        FileExistsError: The packets file already exists.
         PacketError: The verdicts are missing or do not match their hash,
             the named review is missing, or the review was made on other
             verdicts.
     """
-    out = run_dir / PACKETS_NAME
+    out = packets_path(run_dir, run)
     if out.exists():
         raise FileExistsError(f"{out} already exists")
     try:
