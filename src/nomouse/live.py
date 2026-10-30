@@ -40,7 +40,9 @@ spend plus this reserve stays within the cap. The T10 eval reviews cost
 under USD 0.03 a page."""
 TASK_RESERVE_USD = 0.75
 """The most one run with a typed task is expected to cost: up to 41
-navigator calls with up to five screenshots each, then the review."""
+navigator calls with up to five screenshots each, then the review. A
+40-key navigator run on W3C Tickets cost USD 0.31 with its review and
+packets (2026-10-30)."""
 API_PAUSE_S = 600.0
 """How long live mode stays off after a run could not reach the API."""
 MAX_STORED_RUNS = 200

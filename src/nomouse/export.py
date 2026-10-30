@@ -135,10 +135,8 @@ def export_run(
     if (site / "data" / "pages" / f"{run_dir.name}.json").exists():
         raise ExportError(f"the site already holds a page named {run_dir.name}")
     page = {**_page(run_dir, set(), review_runs), "live": live}
-    if page["set"] == "builder":
+    if page["set"] == "builder" and page["navigator"] is None:
         page["title"] = Path(page["page"]).stem.replace("-", " ").capitalize()
-        if page["navigator"] is not None:
-            page["title"] += _NAVIGATOR_TITLE
     _write_page(site, page, run_dir)
     return _summary(page)
 
