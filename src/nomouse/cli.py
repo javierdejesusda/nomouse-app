@@ -1,4 +1,4 @@
-"""Command line interface: `nomouse mirror`, `nomouse walk` and `nomouse g1`."""
+"""Command line interface: `nomouse mirror`, `walk`, `g1` and `review`."""
 
 import argparse
 import contextlib
@@ -11,7 +11,7 @@ from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright
 
-from nomouse import g1, spark
+from nomouse import g1, reviewer, spark
 from nomouse.driver import DEFAULT_MAX_KEYS, RECORD_NAME, new_walk_context, walk
 from nomouse.mirror import WALK_PAGES, fetch_mirror, mirror_root
 from nomouse.server import serve_directory
@@ -38,6 +38,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _mirror(args.cache)
     if args.command == "g1":
         return _g1(parser, args)
+    if args.command == "review":
+        return _review(parser, args)
     return _walk(parser, args)
 
 
@@ -74,6 +76,15 @@ def _parser() -> argparse.ArgumentParser:
     )
     gate.add_argument("--calls", type=int, default=g1.DEFAULT_CALLS)
     gate.add_argument("--window", type=int, default=g1.DEFAULT_WINDOW)
+    review = commands.add_parser(
+        "review",
+        help="focus reviewer: Muse Spark forms (i) and (ii) on a frozen walk",
+    )
+    review.add_argument("run_dir", type=Path, help="run directory of a frozen walk")
+    review.add_argument(
+        "--run",
+        help="run label: writes review-<run>.json instead of review.json",
+    )
     return parser
 
 
@@ -139,6 +150,30 @@ def _g1(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
     print(f"usage log: {log}")
     print("G1 PASS" if summary.passed else "G1 FAIL")
     return 0 if summary.passed else 1
+
+
+def _review(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
+    try:
+        result = reviewer.review(
+            args.run_dir, run=args.run, transport=spark.urllib_transport
+        )
+    except FileExistsError as error:
+        parser.error(f"{error}; give another --run label")
+    except (spark.SparkError, reviewer.AnswerError) as error:
+        print(f"nomouse review: {error}; no review written", file=sys.stderr)
+        return 1
+    except (ValueError, reviewer.ReviewError) as error:
+        parser.error(str(error))
+    findings = sum(instance["finding"] for instance in result["instances"])
+    usage = result["usage"]
+    print(f"verdicts sha256 {result['verdicts_sha256']}")
+    print(
+        f"{len(result['instances'])} instances, {findings} NEEDS REVIEW findings;"
+        f" {usage['calls']} calls, {usage['input_tokens']} input and"
+        f" {usage['output_tokens']} output tokens"
+    )
+    print(f"review: {reviewer.review_path(args.run_dir, args.run)}")
+    return 0
 
 
 def _walk(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:

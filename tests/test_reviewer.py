@@ -8,6 +8,7 @@ from typing import Any
 import pytest
 
 from nomouse import spark
+from nomouse.cli import main
 from nomouse.reviewer import (
     FORM_I_PROMPT,
     FORM_II_PROMPT,
@@ -459,3 +460,55 @@ def test_review_of_a_walk_without_buttons_or_moves_makes_no_call(
     assert transport.bodies == []
     assert result["instances"] == []
     assert result["usage"]["calls"] == 0
+
+
+def test_cli_review_writes_a_labelled_review(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS)
+    monkeypatch.setattr(spark, "urllib_transport", ReviewTransport())
+
+    assert main(["review", str(run_dir), "--run", "run2"]) == 0
+
+    out = capsys.readouterr().out
+    assert (run_dir / "review-run2.json").is_file()
+    assert hashlib.sha256(VERDICTS).hexdigest() in out
+    assert "2 NEEDS REVIEW findings" in out
+    assert str(run_dir / "review-run2.json") in out
+
+
+def test_cli_review_refuses_a_run_without_frozen_verdicts(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS, freeze=False)
+
+    with pytest.raises(SystemExit) as exit_info:
+        main(["review", str(run_dir)])
+
+    assert exit_info.value.code == 2
+    assert "verdicts" in capsys.readouterr().err
+
+
+def test_cli_review_refuses_to_overwrite(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS)
+    (run_dir / "review.json").write_text("{}", encoding="utf-8")
+
+    with pytest.raises(SystemExit) as exit_info:
+        main(["review", str(run_dir)])
+
+    assert exit_info.value.code == 2
+    assert "--run" in capsys.readouterr().err
+
+
+def test_cli_review_reports_an_unfit_answer_as_a_failed_run(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = write_run(tmp_path / "run", STEPS)
+    monkeypatch.setattr(spark, "urllib_transport", ReviewTransport(drop_first))
+
+    assert main(["review", str(run_dir)]) == 1
+
+    assert "answer" in capsys.readouterr().err
+    assert not (run_dir / "review.json").exists()
