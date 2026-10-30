@@ -1,0 +1,76 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: modal dialog, failing variant. The sign-in dialog is always
+  rendered at opacity 0 and inert. Enter on "Sign in" makes it opaque, but
+  focus stays on the header button behind the scrim. Nothing becomes
+  rendered that was not rendered before.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recipe box (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #fffaf5; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  button { font: inherit; padding: 6px 12px; }
+  input { font: inherit; padding: 6px 8px; }
+  main { padding: 16px; max-width: 760px; }
+  .recipes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; list-style: none; padding: 0; }
+  .recipes li { background: #fff; border: 1px solid #eadfd3; padding: 12px; }
+  .layer { position: fixed; inset: 0; opacity: 0; pointer-events: none; }
+  .layer.open { opacity: 1; pointer-events: auto; }
+  .scrim { position: absolute; inset: 0; background: rgba(40, 20, 10, .45); }
+  [role="dialog"] { position: absolute; top: 110px; left: 50%; width: 380px; margin-left: -190px; padding: 24px; background: #fff; border-radius: 10px; box-sizing: border-box; }
+  [role="dialog"] h2 { margin: 0 0 12px; font-size: 20px; }
+  .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Recipe box</strong>
+  <a href="#browse">Browse</a>
+  <button id="sign-in" type="button" aria-haspopup="dialog">Sign in</button>
+</header>
+<main>
+  <h1>Soups for cold evenings</h1>
+  <ul class="recipes">
+    <li><a href="#lentil">Red lentil and lemon</a></li>
+    <li><a href="#leek">Leek and potato</a></li>
+    <li><a href="#miso">Miso with greens</a></li>
+    <li><a href="#squash">Roast squash and sage</a></li>
+  </ul>
+</main>
+<div id="sign-in-layer" class="layer" inert>
+  <div class="scrim"></div>
+  <div id="sign-in-dialog" role="dialog" aria-modal="true" aria-labelledby="sign-in-title">
+    <h2 id="sign-in-title">Sign in to save recipes</h2>
+    <div class="field"><label for="login-email">Email</label><input id="login-email" type="email"></div>
+    <div class="field"><label for="login-password">Password</label><input id="login-password" type="password"></div>
+    <button id="login-submit" type="button">Sign in</button>
+  </div>
+</div>
+<script>
+  const trigger = document.getElementById("sign-in");
+  const layer = document.getElementById("sign-in-layer");
+  function setOpen(open) {
+    layer.classList.toggle("open", open);
+    layer.inert = !open;
+  }
+  // The failure under test: the dialog becomes opaque but focus never moves.
+  trigger.addEventListener("click", () => setOpen(true));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && layer.classList.contains("open")) {
+      setOpen(false);
+      trigger.focus();
+    }
+  });
+</script>
+</body>
+</html>

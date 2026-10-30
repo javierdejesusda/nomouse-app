@@ -1,0 +1,93 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: inline region without dialog semantics, failing variant. Enter on
+  "Reply" opens a reply box under the comment. The app re-renders the page
+  toolbar at the same moment (to show a draft counter) and its render code
+  focuses the toolbar's search field, so focus lands on a field that looks
+  unchanged at the top of the page, outside the reply box. Escape closes the
+  box and returns focus to "Reply".
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discussion (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #f8f8fa; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 24px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  header strong { margin-right: auto; }
+  #toolbar { display: flex; gap: 12px; align-items: center; padding: 12px 16px; background: #eef1f6; }
+  #toolbar .drafts { margin-left: auto; font-size: 14px; }
+  main { padding: 16px; max-width: 720px; }
+  .comment { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; }
+  .comment p { margin: 4px 0 8px; }
+  #reply-region { margin-top: 12px; padding: 12px; border-top: 1px solid #e3e3e3; }
+  #reply-region textarea { display: block; width: 100%; box-sizing: border-box; height: 80px; font: inherit; padding: 8px; margin: 4px 0 8px; }
+  button { font: inherit; padding: 6px 12px; }
+  input { font: inherit; padding: 6px 8px; }
+  [hidden] { display: none; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <strong>Neighbourhood forum</strong>
+  <a href="#topics">Topics</a>
+  <a href="#members">Members</a>
+</header>
+<div id="toolbar"></div>
+<main>
+  <h1>Should the library open on Sundays?</h1>
+  <div class="comment">
+    <strong>Marta</strong>
+    <p>Yes, even for a few hours. Weekdays are impossible for anyone who works.</p>
+    <button id="reply-1" type="button" aria-expanded="false" aria-controls="reply-region">Reply</button>
+    <div id="reply-region" hidden>
+      <label for="reply-text">Your reply to Marta</label>
+      <textarea id="reply-text"></textarea>
+      <button id="reply-post" type="button">Post reply</button>
+    </div>
+  </div>
+  <div class="comment">
+    <strong>Joe</strong>
+    <p>Only if the staff get the weekday back. <a href="#joe">Read more</a></p>
+  </div>
+</main>
+<script>
+  const toolbar = document.getElementById("toolbar");
+  const replyButton = document.getElementById("reply-1");
+  const region = document.getElementById("reply-region");
+  // The toolbar is rebuilt from markup on every state change, as a template
+  // renderer would, and the render focuses the element marked data-autofocus.
+  function renderToolbar(drafts, autofocus) {
+    toolbar.innerHTML =
+      '<label for="search">Search this topic</label>' +
+      '<input id="search" type="search"' + (autofocus ? " data-autofocus" : "") + ">" +
+      '<span class="drafts">' + drafts + " draft" + (drafts === 1 ? "" : "s") + "</span>";
+    toolbar.querySelector("[data-autofocus]")?.focus();
+  }
+  function setOpen(open) {
+    region.hidden = !open;
+    replyButton.setAttribute("aria-expanded", String(open));
+  }
+  renderToolbar(0, false);
+  // The failure under test: opening the reply box re-renders the toolbar with
+  // the autofocus marker left on, which steals focus from the reply box.
+  replyButton.addEventListener("click", () => {
+    setOpen(true);
+    renderToolbar(1, true);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !region.hidden) {
+      setOpen(false);
+      renderToolbar(0, false);
+      replyButton.focus();
+    }
+  });
+</script>
+</body>
+</html>

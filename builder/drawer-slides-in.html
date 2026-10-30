@@ -1,0 +1,81 @@
+<!doctype html>
+<!--
+  builder-made test page for NoMouse. Copyright (c) 2026 javierdejesusda.
+  MIT License (see LICENSE at the repository root).
+  Pattern: navigation drawer (modal dialog), failing variant. The drawer is
+  always rendered, parked off-screen with a transform and made inert. Enter on
+  "Menu" moves it on-screen, but focus stays on the button behind the scrim.
+  Nothing becomes rendered that was not rendered before.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Field guide (builder-made)</title>
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #f7f9f6; }
+  .badge { display: block; padding: 4px 16px; background: #fff3c4; border-bottom: 1px solid #e0c868; font-size: 14px; }
+  header { display: flex; gap: 16px; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #ddd; }
+  button { font: inherit; padding: 6px 12px; }
+  main { padding: 16px; max-width: 720px; }
+  main li { margin-bottom: 8px; }
+  #drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; box-sizing: border-box; padding: 24px; background: #fff; box-shadow: 4px 0 16px rgba(0,0,0,.2); transform: translateX(-110%); z-index: 2; }
+  #drawer.open { transform: none; }
+  #drawer h2 { margin: 0 0 12px; font-size: 20px; }
+  #drawer ul { list-style: none; padding: 0; margin: 0 0 16px; }
+  #drawer li { margin-bottom: 12px; }
+  #scrim { position: fixed; inset: 0; background: rgba(20, 30, 20, .4); opacity: 0; pointer-events: none; z-index: 1; }
+  #scrim.open { opacity: 1; pointer-events: auto; }
+  :focus { outline: 2px solid #1a5fd0; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<span class="badge">builder-made test page (MIT)</span>
+<header>
+  <button id="menu-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="drawer">Menu</button>
+  <strong>Field guide to garden birds</strong>
+</header>
+<main>
+  <h1>Robins</h1>
+  <p>Robins sing through the winter to hold their territory, and both sexes sing.</p>
+  <ul>
+    <li><a href="#song">Listen to the song</a></li>
+    <li><a href="#nest">Nest boxes for robins</a></li>
+    <li><a href="#feed">What to put on the feeder</a></li>
+  </ul>
+</main>
+<div id="scrim"></div>
+<nav id="drawer" role="dialog" aria-modal="true" aria-label="Site menu" inert>
+  <h2>Sections</h2>
+  <ul>
+    <li><a id="drawer-first" href="#songbirds">Songbirds</a></li>
+    <li><a href="#waders">Waders</a></li>
+    <li><a href="#raptors">Birds of prey</a></li>
+  </ul>
+  <button id="drawer-close" type="button">Close</button>
+</nav>
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const drawer = document.getElementById("drawer");
+  const scrim = document.getElementById("scrim");
+  function setOpen(open) {
+    drawer.classList.toggle("open", open);
+    scrim.classList.toggle("open", open);
+    drawer.inert = !open;
+    toggle.setAttribute("aria-expanded", String(open));
+  }
+  // The failure under test: opening the drawer never moves focus into it.
+  toggle.addEventListener("click", () => setOpen(!drawer.classList.contains("open")));
+  document.getElementById("drawer-close").addEventListener("click", () => {
+    setOpen(false);
+    toggle.focus();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && drawer.classList.contains("open")) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+</script>
+</body>
+</html>
