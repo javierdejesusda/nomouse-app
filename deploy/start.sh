@@ -21,7 +21,8 @@ for file in builder/*.html; do
 done
 
 rm -rf "$site"
-nomouse export "$site" --runs-dir "$runs" --audit eval/audit-corrections.json
+nomouse export "$site" --runs-dir "$runs" --runs eval1 eval2 live \
+  --audit eval/audit-corrections.json
 
 set -- --live --host 0.0.0.0 --port "${PORT:-8000}" \
   --state-dir "$data/state" --cache "$cache"
