@@ -161,6 +161,11 @@ def _parser() -> argparse.ArgumentParser:
         default=list(export.DEFAULT_REVIEW_RUNS),
         help="review run labels shown with their packets",
     )
+    export_command.add_argument(
+        "--audit",
+        type=Path,
+        help="audit-corrected counts to show beside the recorded ones",
+    )
     serve_command = commands.add_parser(
         "serve-replay", help="serve an exported replay site on 127.0.0.1"
     )
@@ -377,7 +382,9 @@ def _eval(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
 
 def _export(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
     try:
-        index = export.export_site(args.runs_dir, args.out_dir, review_runs=args.runs)
+        index = export.export_site(
+            args.runs_dir, args.out_dir, review_runs=args.runs, audit=args.audit
+        )
     except (OSError, ValueError, export.ExportError) as error:
         parser.error(str(error))
     pages = index["pages"]

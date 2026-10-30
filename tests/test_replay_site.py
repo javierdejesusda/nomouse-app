@@ -2,6 +2,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
+from conftest import AUDIT_REASON, write_audit
 from playwright.sync_api import Browser, Page, expect
 
 from nomouse.export import W3C_NOTICE, export_site
@@ -16,7 +17,7 @@ def replay(
     fixture_runs: Path, tmp_path: Path, browser: Browser
 ) -> Iterator[tuple[Page, str]]:
     site = tmp_path / "site"
-    export_site(fixture_runs, site)
+    export_site(fixture_runs, site, audit=write_audit(tmp_path / "audit.json"))
     errors: list[str] = []
     with serve_directory(site) as base_url:
         page = browser.new_page(viewport={"width": 1280, "height": 900})
@@ -146,6 +147,9 @@ def test_a_w3c_page_shows_its_url_notice_and_verified_verdicts(
     expect(verdicts).to_contain_text("best practice")
     expect(verdicts).to_contain_text("SHA-256")
     expect(verdicts).to_contain_text("frozen")
+    expect(verdicts).to_contain_text(
+        "time read from the hash file, as this run predates recorded freeze times"
+    )
     expect(page.locator("#reviews")).to_contain_text("No model review")
     page.get_by_role("slider", name="Key").focus()
     page.keyboard.press("End")
@@ -166,6 +170,20 @@ def test_the_eval_page_shows_counts_and_the_reference_point(
     expect(table).to_contain_text("12 of 22")
     expect(page.get_by_role("main")).to_contain_text(
         "Reference point only: arXiv 2609.09379 reports 56% precision"
+    )
+    header = table.get_by_role(
+        "columnheader", name="False flags (strict), audit-corrected"
+    )
+    expect(header).to_be_visible()
+    w1 = table.get_by_role("row", name="W1")
+    expect(w1.get_by_role("cell").nth(5)).to_have_text("8")
+    expect(w1.get_by_role("cell").nth(6)).to_have_text("5")
+    nomouse = table.get_by_role("row", name="NoMouse eval1")
+    expect(nomouse.get_by_role("cell").nth(6)).to_have_text("8 (no correction)")
+    expect(page.locator("#audit")).to_have_text(
+        "Audit-corrected strict false flags (2026-10-30, eval/results.md, Audit):"
+        f" {AUDIT_REASON} The recorded counts are kept; the corrected ones are"
+        " shown beside them."
     )
 
 

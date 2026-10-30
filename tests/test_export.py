@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from conftest import AUDIT_REASON, write_audit
 
 from nomouse.cli import main
 from nomouse.export import W3C_NOTICE, ExportError, export_site
@@ -94,6 +95,7 @@ def test_walker_verdicts_are_verified_with_their_hash_and_freeze_time(
     assert verdicts["frozen_at"] == datetime.datetime.fromtimestamp(
         1_793_375_810, datetime.UTC
     ).strftime("%Y-%m-%d %H:%M:%S UTC")
+    assert verdicts["frozen_at_source"] == "file time"
     assert verdicts["thresholds"] == {"order_threshold_px": 24}
     walkers = {w["walker"]: w for w in verdicts["walkers"]}
     assert walkers["W0"]["findings"] == []
@@ -104,6 +106,20 @@ def test_walker_verdicts_are_verified_with_their_hash_and_freeze_time(
     assert finding["rule"] == "order"
     assert finding["step"] == 1
     assert finding["detail"] == "jumps up 100 px from INPUT#n"
+
+
+def test_a_recorded_freeze_time_is_used_over_the_file_time(
+    fixture_runs: Path, tmp_path: Path
+) -> None:
+    source = fixture_runs / "eval" / "w3c-before-survey"
+    (source / "verdicts.json.frozen_at").write_text("2026-10-30T16:09:27Z\n")
+    os.utime(source / "verdicts.json.sha256", (1_793_375_810, 1_793_375_810))
+
+    export_site(fixture_runs, tmp_path / "site")
+
+    page = load(tmp_path / "site" / "data" / "pages" / "w3c-before-survey.json")
+    assert page["verdicts"]["frozen_at"] == "2026-10-30 16:09:27 UTC"
+    assert page["verdicts"]["frozen_at_source"] == "recorded"
 
 
 def test_reviews_of_both_runs_are_shown_with_their_disagreements(
@@ -169,6 +185,47 @@ def test_the_eval_page_data_holds_counts_only(
     assert data["arms"]["NoMouse eval1"]["found"] == 12
     assert data["bar"]["met"] is True
     assert "W3C annotation text" not in (out / "data" / "eval.json").read_text()
+
+
+def test_audit_corrected_counts_are_exported_beside_the_recorded_ones(
+    fixture_runs: Path, tmp_path: Path
+) -> None:
+    audit = write_audit(tmp_path / "audit.json")
+
+    export_site(fixture_runs, tmp_path / "site", audit=audit)
+
+    data = load(tmp_path / "site" / "data" / "eval.json")
+    assert data["arms"]["W1"]["false_flags_strict"] == 8
+    assert data["audit"] == {
+        "date": "2026-10-30",
+        "source": "eval/results.md, Audit",
+        "reason": AUDIT_REASON,
+        "false_flags_strict": {"W1": 5},
+    }
+
+
+def test_export_refuses_an_audit_of_an_arm_the_report_lacks(
+    fixture_runs: Path, tmp_path: Path
+) -> None:
+    audit = write_audit(tmp_path / "audit.json")
+    data = load(audit)
+    data["false_flags_strict"]["W0"] = 0
+    audit.write_text(json.dumps(data))
+
+    with pytest.raises(ExportError, match="W0"):
+        export_site(fixture_runs, tmp_path / "site", audit=audit)
+
+
+def test_cli_export_takes_an_audit_file(fixture_runs: Path, tmp_path: Path) -> None:
+    audit = write_audit(tmp_path / "audit.json")
+    out = tmp_path / "site"
+
+    code = main(
+        ["export", str(out), "--runs-dir", str(fixture_runs), "--audit", str(audit)]
+    )
+
+    assert code == 0
+    assert load(out / "data" / "eval.json")["audit"]["false_flags_strict"] == {"W1": 5}
 
 
 def test_an_export_without_an_eval_report_says_so(

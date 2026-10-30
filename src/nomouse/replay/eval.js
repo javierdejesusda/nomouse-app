@@ -20,6 +20,11 @@ function of(count, total) {
   return `${count} of ${total}`;
 }
 
+function corrected(audit, arm, counts) {
+  const value = audit.false_flags_strict[arm];
+  return value === undefined ? `${counts.false_flags_strict} (no correction)` : value;
+}
+
 async function main() {
   const index = await loadJson("data/index.json");
   const box = document.getElementById("eval");
@@ -29,6 +34,7 @@ async function main() {
   }
   const report = await loadJson("data/eval.json");
   const arms = Object.entries(report.arms);
+  const audit = report.audit || null;
   box.append(
     table(
       "Labelled barriers found and false flags, all pages",
@@ -40,6 +46,7 @@ async function main() {
         "Found (loose)",
         "False flags on clean controls (loose)",
         "False flags (strict)",
+        ...(audit ? ["False flags (strict), audit-corrected"] : []),
         "Clean pages with any finding",
       ],
       arms.map(([arm, c]) => [
@@ -50,6 +57,7 @@ async function main() {
         c.found_loose,
         of(c.false_flags, c.clean),
         c.false_flags_strict,
+        ...(audit ? [corrected(audit, arm, c)] : []),
         of(c.clean_pages_any_finding, c.clean_pages),
       ]),
     ),
@@ -65,6 +73,16 @@ async function main() {
       ]),
     ),
   );
+  if (audit) {
+    box.append(
+      el(
+        "p",
+        { id: "audit", class: "audit" },
+        `Audit-corrected strict false flags (${audit.date}, ${audit.source}): ${audit.reason}`,
+        " The recorded counts are kept; the corrected ones are shown beside them.",
+      ),
+    );
+  }
   const facts = [
     `Reporting bar (form (i), pre-registered): ${report.bar.met ? "met" : "not met"} over runs ${report.runs.join(" and ")}.`,
     ...Object.entries(report.model_only).map(

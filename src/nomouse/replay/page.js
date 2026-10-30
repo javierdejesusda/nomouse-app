@@ -156,6 +156,12 @@ function findingItem(finding) {
   );
 }
 
+function frozenAtNote(frozen) {
+  return frozen.frozen_at_source === "file time"
+    ? " (time read from the hash file, as this run predates recorded freeze times)"
+    : "";
+}
+
 function verdicts() {
   const section = document.getElementById("verdicts");
   const frozen = page.verdicts;
@@ -164,7 +170,7 @@ function verdicts() {
       "p",
       {},
       badge("VERIFIED", "verified"),
-      ` Walker verdicts frozen ${frozen.frozen_at}, before any model call. SHA-256 `,
+      ` Walker verdicts frozen ${frozen.frozen_at}${frozenAtNote(frozen)}, before any model call. SHA-256 `,
       el("code", { class: "hash" }, frozen.sha256),
     ),
   );

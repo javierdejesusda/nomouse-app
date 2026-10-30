@@ -1,0 +1,6 @@
+{
+  "date": "2026-10-30",
+  "source": "eval/results.md, Audit",
+  "reason": "The carrier tag A on the three W3C Template Note 08 rows was meant for the unreachable menu links, which the walker records with no id and no name. It also matched the After pages' second skip link, a named link that is none of the rows' carrier names, which made a real walker false positive (focus not visible, drawn in the same box as the first skip link) count as strict. Requiring a named walker finding to match a carrier name, as bare Spark's must, gives these counts. The rule worked against the walker arms and NoMouse, not for them; found counts, loose counts, bare Spark and the reporting bar are unchanged.",
+  "false_flags_strict": {"W0": 0, "W1": 5, "NoMouse eval1": 5, "NoMouse eval2": 5}
+}

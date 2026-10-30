@@ -193,6 +193,21 @@ def write_fixture_runs(root: Path) -> Path:
     return root
 
 
+AUDIT_REASON = "A carrier tag matched a named link that is no carrier."
+
+
+def write_audit(path: Path) -> Path:
+    """Writes an audit correction of the fixture report's W1 strict false flags."""
+    audit = {
+        "date": "2026-10-30",
+        "source": "eval/results.md, Audit",
+        "reason": AUDIT_REASON,
+        "false_flags_strict": {"W1": 5},
+    }
+    path.write_text(json.dumps(audit))
+    return path
+
+
 @pytest.fixture
 def fixture_runs(tmp_path: Path) -> Path:
     return write_fixture_runs(tmp_path / "runs")

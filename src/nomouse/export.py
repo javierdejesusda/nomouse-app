@@ -16,7 +16,7 @@ from typing import Any
 from nomouse import reviewer
 from nomouse.driver import RECORD_NAME
 from nomouse.mirror import WALK_PAGES
-from nomouse.walkers import VERDICTS_NAME
+from nomouse.walkers import FROZEN_AT_NAME, VERDICTS_NAME
 
 W3C_NOTICE = "Copyright © 2012 W3C (MIT, ERCIM, Keio), All Rights Reserved"
 W3C_BASE_URL = "https://www.w3.org/WAI/demos/bad/"
@@ -39,6 +39,7 @@ def export_site(
     out: Path,
     *,
     review_runs: Sequence[str] = DEFAULT_REVIEW_RUNS,
+    audit: Path | None = None,
 ) -> dict[str, Any]:
     """Builds the replay site from the frozen runs under a runs directory.
 
@@ -50,14 +51,17 @@ def export_site(
         runs_dir: The runs directory.
         out: Directory to write the site into; created, and must be empty.
         review_runs: Review run labels whose reviews and packets are shown.
+        audit: Optional JSON file of audit-corrected strict false-flag
+            counts per arm (`false_flags_strict`) with their `date`,
+            `source` and `reason`, shown beside the recorded counts.
 
     Returns:
         The index written to `data/index.json`.
 
     Raises:
         ExportError: The output directory is not empty, two runs share a
-            name, verdicts do not match their hash, or a review was made on
-            other verdicts.
+            name, verdicts do not match their hash, a review was made on
+            other verdicts, or the audit names an arm the report lacks.
     """
     if out.exists() and any(out.iterdir()):
         raise ExportError(f"{out} is not empty; choose a new directory")
@@ -81,6 +85,9 @@ def export_site(
         ),
     )
 
+    report_path = runs_dir / "eval" / EVAL_REPORT_NAME
+    eval_data = _eval_data(report_path, audit) if report_path.is_file() else None
+
     shutil.copytree(_FRONTEND, out, dirs_exist_ok=True)
     (out / ".gitignore").write_text("*\n", encoding="utf-8")
     (out / "data" / "pages").mkdir(parents=True)
@@ -91,18 +98,30 @@ def export_site(
             shutil.copyfile(source, out / frame["screenshot"])
         _write_json(out / "data" / "pages" / f"{page['id']}.json", page)
 
-    report_path = runs_dir / "eval" / EVAL_REPORT_NAME
-    if report_path.is_file():
-        report = json.loads(report_path.read_text(encoding="utf-8"))
-        _write_json(
-            out / "data" / "eval.json", {key: report[key] for key in _EVAL_KEYS}
-        )
+    if eval_data is not None:
+        _write_json(out / "data" / "eval.json", eval_data)
     index = {
         "pages": [_summary(page) for page in pages],
-        "eval": report_path.is_file(),
+        "eval": eval_data is not None,
     }
     _write_json(out / "data" / "index.json", index)
     return index
+
+
+def _eval_data(report_path: Path, audit: Path | None) -> dict[str, Any]:
+    """Returns the counts the eval page shows, with any audit correction."""
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    data = {key: report[key] for key in _EVAL_KEYS}
+    if audit is not None:
+        corrections = json.loads(audit.read_text(encoding="utf-8"))
+        unknown = sorted(set(corrections["false_flags_strict"]) - set(report["arms"]))
+        if unknown:
+            raise ExportError(f"the audit names arms not in the report: {unknown}")
+        data["audit"] = {
+            key: corrections[key]
+            for key in ("date", "source", "reason", "false_flags_strict")
+        }
+    return data
 
 
 def _page(run_dir: Path, names: set[str], review_runs: Sequence[str]) -> dict[str, Any]:
@@ -115,9 +134,7 @@ def _page(run_dir: Path, names: set[str], review_runs: Sequence[str]) -> dict[st
     verdicts = json.loads((run_dir / VERDICTS_NAME).read_text(encoding="utf-8"))
     page_path = verdicts["page"].lstrip("/")
     w3c = page_path in WALK_PAGES
-    frozen_at = datetime.datetime.fromtimestamp(
-        (run_dir / f"{VERDICTS_NAME}.sha256").stat().st_mtime, datetime.UTC
-    )
+    frozen_at, frozen_at_source = _frozen_at(run_dir)
     reviews = [
         _review(run_dir, run, digest)
         for run in review_runs
@@ -137,6 +154,7 @@ def _page(run_dir: Path, names: set[str], review_runs: Sequence[str]) -> dict[st
         "verdicts": {
             "sha256": digest,
             "frozen_at": frozen_at.strftime("%Y-%m-%d %H:%M:%S UTC"),
+            "frozen_at_source": frozen_at_source,
             "thresholds": verdicts["thresholds"],
             "walkers": [_walker(v) for v in verdicts["verdicts"]],
         },
@@ -154,6 +172,20 @@ def _page(run_dir: Path, names: set[str], review_runs: Sequence[str]) -> dict[st
             if (run_dir / f"packets-{run}.json").is_file()
         ],
     }
+
+
+def _frozen_at(run_dir: Path) -> tuple[datetime.datetime, str]:
+    """Returns the freeze time and where it came from.
+
+    Runs frozen before the freeze time was recorded fall back to the
+    modification time of the hash file, which a copy may not keep.
+    """
+    sidecar = run_dir / FROZEN_AT_NAME
+    if sidecar.is_file():
+        stamp = sidecar.read_text(encoding="utf-8").strip()
+        return datetime.datetime.fromisoformat(stamp), "recorded"
+    mtime = (run_dir / f"{VERDICTS_NAME}.sha256").stat().st_mtime
+    return datetime.datetime.fromtimestamp(mtime, datetime.UTC), "file time"
 
 
 def _title(run_dir: Path, page_path: str, w3c: bool) -> str:
