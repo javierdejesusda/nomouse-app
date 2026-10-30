@@ -458,6 +458,13 @@ def test_evaluate_refuses_inputs_it_cannot_trust(tmp_path: Path, damage: str) ->
         evaluate(builder, w3c, runs, runs_labels=RUNS)
 
 
+def test_evaluate_refuses_a_run_label_given_twice(tmp_path: Path) -> None:
+    builder, w3c = labels(tmp_path)
+
+    with pytest.raises(EvalError, match="r1"):
+        evaluate(builder, w3c, all_runs(tmp_path), runs_labels=["r1", "r1"])
+
+
 @pytest.mark.parametrize(
     ("said", "carrier", "expected"),
     [
@@ -468,6 +475,9 @@ def test_evaluate_refuses_inputs_it_cannot_trust(tmp_path: Path, damage: str) ->
         ("button", "Button", False),
         ("", "Name", False),
         ("Names list", "Name", False),
+        ("ספרים חדשים links", "ספרים חדשים", True),
+        ("לפרטים", "צור קשר", False),
+        ("Café Noir", "Caf", False),
     ],
 )
 def test_names_match_whole_words_either_way(

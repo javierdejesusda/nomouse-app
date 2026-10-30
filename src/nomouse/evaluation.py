@@ -109,7 +109,7 @@ def names_match(said: str, carrier: str) -> bool:
 
 
 def _words(text: str) -> list[str]:
-    words = re.split(r"[^0-9a-z]+", text.casefold())
+    words = re.split(r"[\W_]+", text.casefold())
     return [word for word in words if word and word not in _ROLE_WORDS]
 
 
@@ -144,8 +144,10 @@ def evaluate(
     Raises:
         EvalError: A label file or verdicts do not match their hash, an
             answer was made on other verdicts or is missing, a page has no
-            label or is given twice.
+            label or is given twice, or a run label is given twice.
     """
+    if repeated := sorted({r for r in runs_labels if runs_labels.count(r) > 1}):
+        raise EvalError(f"run label {', '.join(repeated)} is given twice")
     hashes = {"builder": _checked(builder_labels), "w3c": _checked(w3c_labels)}
     builder = json.loads(builder_labels.read_text(encoding="utf-8"))["pages"]
     w3c = json.loads(w3c_labels.read_text(encoding="utf-8"))["rows"]
