@@ -46,7 +46,7 @@
   <h2>What this server keeps</h2>
   <ul>
     <li>Each live run (at most 200 in all): its screenshots, focus record, frozen verdicts, model answers and packets, and the typed task, shown in the replay viewer at the run's link.</li>
-    <li>A credit ledger with, per model call, the time, the run id, the token counts and the cost. No prompts, images or request headers.</li>
+    <li>A credit ledger with, per model call, the time and run id of a cost reservation written before the call is sent, then the token counts and the cost once it is answered. No prompts, images or request headers.</li>
     <li>Start times per network address, in memory only, to limit how many runs one address can start; an address's times are dropped at the first run start more than an hour later, and all of them when the server restarts. Nothing is written about visitors, and there are no cookies or analytics.</li>
   </ul>
   <h2>Contact</h2>

@@ -7,6 +7,7 @@ import pytest
 from nomouse import live
 from nomouse.credits import (
     CACHED_INPUT_PRICE,
+    CALL_RESERVE_USD,
     INPUT_PRICE,
     OUTPUT_PRICE,
     TRUNCATED_LINE_USD,
@@ -81,7 +82,7 @@ def test_the_ledger_refuses_a_cap_outside_zero_to_twenty_dollars(
         CreditLedger(tmp_path / "ledger.jsonl", cap_usd=cap)
 
 
-def test_the_metered_transport_records_usage_of_answered_calls_only(
+def test_the_metered_transport_settles_answered_calls_and_keeps_the_rest_reserved(
     tmp_path: Path,
 ) -> None:
     ledger = CreditLedger(tmp_path / "ledger.jsonl", cap_usd=20.0)
@@ -99,11 +100,57 @@ def test_the_metered_transport_records_usage_of_answered_calls_only(
 
     assert [status for status, _ in results] == [200, 502, 200]
     assert seen[0] == ("https://api.meta.ai/v1/responses", b"{}", headers)
+    assert ledger.calls("live-7") == 1
+    assert ledger.spent_usd("live-7") == pytest.approx(
+        call_cost(USAGE) + 2 * CALL_RESERVE_USD
+    )
     text = (tmp_path / "ledger.jsonl").read_text()
-    assert len(text.splitlines()) == 1
-    assert json.loads(text)["run"] == "live-7"
+    assert {json.loads(line)["run"] for line in text.splitlines()} == {"live-7"}
     assert "LLM_secret" not in text
     assert "Authorization" not in text
+
+
+def test_each_call_is_reserved_in_the_ledger_before_it_is_sent(
+    tmp_path: Path,
+) -> None:
+    ledger = CreditLedger(tmp_path / "ledger.jsonl", cap_usd=20.0)
+    spent_while_sending: list[float] = []
+
+    def inner(url: str, body: bytes, headers: Mapping[str, str]) -> tuple[int, bytes]:
+        spent_while_sending.append(CreditLedger(ledger.path).spent_usd())
+        return 200, reply(USAGE)
+
+    ledger.metered(inner, "live-1")("u", b"{}", {})
+
+    assert spent_while_sending == [pytest.approx(CALL_RESERVE_USD)]
+    assert ledger.spent_usd() == pytest.approx(call_cost(USAGE))
+
+
+@pytest.mark.parametrize(
+    "error", [TimeoutError(), ConnectionResetError(), RuntimeError("crash")]
+)
+def test_a_call_lost_to_a_timeout_or_crash_stays_counted_at_its_reserve(
+    tmp_path: Path, error: Exception
+) -> None:
+    ledger = CreditLedger(tmp_path / "ledger.jsonl", cap_usd=20.0)
+
+    def inner(url: str, body: bytes, headers: Mapping[str, str]) -> tuple[int, bytes]:
+        raise error
+
+    with pytest.raises(type(error)):
+        ledger.metered(inner, "live-1")("u", b"{}", {})
+
+    again = CreditLedger(ledger.path, cap_usd=20.0)
+    assert again.spent_usd() == pytest.approx(CALL_RESERVE_USD)
+    assert again.spent_usd("live-1") == pytest.approx(CALL_RESERVE_USD)
+    assert again.calls("live-1") == 0
+
+
+def test_the_call_reserve_is_ten_times_a_mean_navigator_call() -> None:
+    # W3C Tickets, 2026-10-30: 41 navigator calls, 205,657 input and 10,982
+    # output tokens.
+    mean = call_cost({"input_tokens": 205_657, "output_tokens": 10_982}) / 41
+    assert 10 * mean <= CALL_RESERVE_USD
 
 
 def test_the_metered_transport_sends_nothing_once_the_cap_is_reached(
