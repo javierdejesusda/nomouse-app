@@ -1,9 +1,10 @@
-"""Command line interface: `nomouse mirror`, `walk`, `g1` and `review`."""
+"""Command line interface: `nomouse mirror`, `walk`, `g1`, `review` and `score`."""
 
 import argparse
 import contextlib
 import datetime
 import ipaddress
+import json
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -11,7 +12,7 @@ from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright
 
-from nomouse import g1, reviewer, spark
+from nomouse import g1, reviewer, scorer, spark
 from nomouse.driver import DEFAULT_MAX_KEYS, RECORD_NAME, new_walk_context, walk
 from nomouse.mirror import WALK_PAGES, fetch_mirror, mirror_root
 from nomouse.server import serve_directory
@@ -21,6 +22,7 @@ _DEFAULT_CACHE = Path(".cache")
 _DEFAULT_RUNS = Path("runs")
 _BUILDER_PREFIX = "builder/"
 BUILDER_ROOT = Path(__file__).resolve().parents[2] / "builder"
+_DEFAULT_LABELS = BUILDER_ROOT / "labels.json"
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -40,6 +42,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _g1(parser, args)
     if args.command == "review":
         return _review(parser, args)
+    if args.command == "score":
+        return _score(parser, args)
     return _walk(parser, args)
 
 
@@ -85,6 +89,17 @@ def _parser() -> argparse.ArgumentParser:
         "--run",
         help="run label: writes review-<run>.json instead of review.json",
     )
+    score_command = commands.add_parser(
+        "score", help="score reviews against the hashed builder labels (no model)"
+    )
+    score_command.add_argument(
+        "run_dirs", type=Path, nargs="+", help="reviewed walk run directories"
+    )
+    score_command.add_argument(
+        "--run", help="run label of the reviews (review-<run>.json)"
+    )
+    score_command.add_argument("--labels", type=Path, default=_DEFAULT_LABELS)
+    score_command.add_argument("--out", type=Path, help="write the report as JSON")
     return parser
 
 
@@ -178,6 +193,30 @@ def _review(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
         f" {usage['output_tokens']} output tokens"
     )
     print(f"review: {reviewer.review_path(args.run_dir, args.run)}")
+    return 0
+
+
+def _score(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
+    out: Path | None = args.out
+    if out is not None and out.exists():
+        parser.error(f"{out} already exists; choose another --out")
+    try:
+        report = scorer.score(args.labels, args.run_dirs, run=args.run)
+    except (OSError, scorer.ScoreError) as error:
+        parser.error(str(error))
+    if out is not None:
+        with out.open("x", encoding="utf-8") as file:
+            file.write(json.dumps(report, indent=2) + "\n")
+    print(f"labels sha256 {report['labels_sha256']}")
+    for digest in report["prompt_sha256"]:
+        print(f"prompt sha256 {digest}")
+    for name, gate in report["gates"].items():
+        failures, clean = len(gate["failures"]), len(gate["clean"])
+        print(
+            f"{name}: strict {len(gate['caught_strict'])} of {failures},"
+            f" loose {len(gate['caught_loose'])} of {failures};"
+            f" false flags {len(gate['false_flags'])} of {clean}: {gate['verdict']}"
+        )
     return 0
 
 
