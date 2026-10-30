@@ -12,7 +12,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import Browser, sync_playwright
 
 from nomouse import (
     bare,
@@ -21,6 +21,7 @@ from nomouse import (
     export,
     g1,
     live,
+    navigator,
     packets,
     reviewer,
     scorer,
@@ -68,6 +69,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _export(parser, args)
     if args.command == "serve-replay":
         return _serve_replay(parser, args)
+    if args.command == "navigate":
+        return _navigate(parser, args)
     return _walk(parser, args)
 
 
@@ -83,18 +86,31 @@ def _parser() -> argparse.ArgumentParser:
     walk_command = commands.add_parser(
         "walk", help="walk one page with the keyboard and freeze walker verdicts"
     )
-    walk_command.add_argument(
-        "target",
-        help=(
-            "a loopback URL, a builder page (builder/<file>.html), or a mirror"
-            f" page: {', '.join(WALK_PAGES)}"
-        ),
+    target_help = (
+        "a loopback URL, a builder page (builder/<file>.html), or a mirror"
+        f" page: {', '.join(WALK_PAGES)}"
     )
+    walk_command.add_argument("target", help=target_help)
     walk_command.add_argument("--cache", type=Path, default=_DEFAULT_CACHE)
     walk_command.add_argument(
         "--out", type=Path, help="run directory (default: runs/<UTC time>)"
     )
     walk_command.add_argument("--max-keys", type=int, default=DEFAULT_MAX_KEYS)
+    navigate_command = commands.add_parser(
+        "navigate",
+        help="keyboard navigator: Muse Spark presses keys for a typed task, then"
+        " walker verdicts are frozen (live calls)",
+    )
+    navigate_command.add_argument("target", help=target_help)
+    navigate_command.add_argument(
+        "--task",
+        required=True,
+        help=f"what to do on the page, at most {navigator.MAX_TASK_CHARS} characters",
+    )
+    navigate_command.add_argument("--cache", type=Path, default=_DEFAULT_CACHE)
+    navigate_command.add_argument(
+        "--out", type=Path, help="run directory (default: runs/<UTC time>)"
+    )
     gate = commands.add_parser(
         "g1", help="gate G1: Muse Spark token usage over one walk (live calls)"
     )
@@ -485,35 +501,86 @@ def _live_service(
 def _walk(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
     if args.max_keys < 1:
         parser.error("--max-keys must be at least 1")
-    target: str = args.target
     with contextlib.ExitStack() as stack:
-        if target in WALK_PAGES:
-            root = mirror_root(args.cache)
-            if not root.is_dir():
-                parser.error(f"no mirror in {args.cache}; run `nomouse mirror` first")
-            url = stack.enter_context(serve_directory(root)) + target
-        elif target.startswith(_BUILDER_PREFIX):
-            page = _builder_page(target.removeprefix(_BUILDER_PREFIX))
-            if page is None:
-                parser.error(f"no builder page {target} in {BUILDER_ROOT}")
-            url = stack.enter_context(serve_directory(BUILDER_ROOT)) + page
-        elif _is_loopback_url(target):
-            url = target
-        else:
-            parser.error(
-                "target must be a loopback URL, builder/<file>.html or one of: "
-                + ", ".join(WALK_PAGES)
-            )
-        out: Path = args.out or _DEFAULT_RUNS / _timestamp()
-        if (out / VERDICTS_NAME).exists():
-            parser.error(f"{out} already holds frozen verdicts; choose another --out")
-        playwright = stack.enter_context(sync_playwright())
-        browser = playwright.chromium.launch()
-        stack.callback(browser.close)
+        url, out = _open_target(parser, args, stack)
+        browser = _browser(stack)
         record = walk(new_walk_context(browser), url, out, max_keys=args.max_keys)
     print(f"{len(record.keys)} keys, ended by {record.end_reason}: {out / RECORD_NAME}")
     print(f"verdicts frozen: sha256 {freeze(record, out)}")
     return 0
+
+
+def _navigate(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
+    try:
+        task = navigator.clean_task(args.task)
+    except ValueError as error:
+        parser.error(str(error))
+    with contextlib.ExitStack() as stack:
+        url, out = _open_target(parser, args, stack)
+        browser = _browser(stack)
+        try:
+            record = navigator.navigate(
+                new_walk_context(browser),
+                url,
+                out,
+                task,
+                transport=spark.urllib_transport,
+            )
+        except spark.SparkError as error:
+            print(f"nomouse navigate: call failed: {error}", file=sys.stderr)
+            return 1
+    assert record.navigator is not None
+    usage = record.navigator["usage"]
+    ended = (
+        f"navigator answered {record.end_reason}"
+        if record.end_reason in ("done", "stuck")
+        else f"ended by {record.end_reason}"
+    )
+    print(f"{len(record.keys)} keys, {ended}: {out / RECORD_NAME}")
+    print(
+        f"{usage['calls']} calls, {usage['input_tokens']} input and"
+        f" {usage['output_tokens']} output tokens"
+    )
+    print(f"verdicts frozen: sha256 {freeze(record, out)}")
+    return 0
+
+
+def _open_target(
+    parser: argparse.ArgumentParser,
+    args: argparse.Namespace,
+    stack: contextlib.ExitStack,
+) -> tuple[str, Path]:
+    """Serves a walk target if needed and returns its URL and run directory."""
+    target: str = args.target
+    if target in WALK_PAGES:
+        root = mirror_root(args.cache)
+        if not root.is_dir():
+            parser.error(f"no mirror in {args.cache}; run `nomouse mirror` first")
+        url = stack.enter_context(serve_directory(root)) + target
+    elif target.startswith(_BUILDER_PREFIX):
+        page = _builder_page(target.removeprefix(_BUILDER_PREFIX))
+        if page is None:
+            parser.error(f"no builder page {target} in {BUILDER_ROOT}")
+        url = stack.enter_context(serve_directory(BUILDER_ROOT)) + page
+    elif _is_loopback_url(target):
+        url = target
+    else:
+        parser.error(
+            "target must be a loopback URL, builder/<file>.html or one of: "
+            + ", ".join(WALK_PAGES)
+        )
+    out: Path = args.out or _DEFAULT_RUNS / _timestamp()
+    if (out / VERDICTS_NAME).exists():
+        parser.error(f"{out} already holds frozen verdicts; choose another --out")
+    return url, out
+
+
+def _browser(stack: contextlib.ExitStack) -> Browser:
+    """Launches Chromium, closed with the stack."""
+    playwright = stack.enter_context(sync_playwright())
+    browser = playwright.chromium.launch()
+    stack.callback(browser.close)
+    return browser
 
 
 def _builder_page(name: str) -> str | None:
