@@ -7,7 +7,10 @@ from playwright.sync_api import Browser, BrowserContext
 
 from nomouse.driver import WalkRecord, new_walk_context, walk
 from nomouse.guard import BlockedRequest
+from nomouse.server import serve_directory
 from nomouse.witness import Box
+
+PAGES_DIR = Path(__file__).parent / "pages"
 
 
 @pytest.fixture
@@ -109,7 +112,7 @@ def test_walk_writes_one_record_entry_per_key(
 
     written = json.loads((tmp_path / "walk.json").read_text(encoding="utf-8"))
     assert written == record.to_dict()
-    assert written["url"] == site + "focus.html"
+    assert written["url"] == "/focus.html"
     assert written["viewport"] == {"width": 1024, "height": 768}
     assert [step["key"] for step in written["steps"]] == written["keys"]
     assert [step["index"] for step in written["steps"]] == list(
@@ -174,11 +177,11 @@ def test_walk_stays_on_the_page_and_records_blocked_requests(
     record = walk(context, start, tmp_path)
 
     assert record.end_reason == "cycle"
-    assert {step.url for step in record.steps} == {start}
+    assert {step.url for step in record.steps} == {"/requests.html"}
     assert record.blocked_requests == [
-        BlockedRequest(method="POST", url=site + "landing.html", reason="non-GET"),
+        BlockedRequest(method="POST", url="/landing.html", reason="non-GET"),
         BlockedRequest(
-            method="GET", url=site + "landing.html?", reason="off-page navigation"
+            method="GET", url="/landing.html?", reason="off-page navigation"
         ),
     ]
 
@@ -222,3 +225,78 @@ def test_walk_continues_past_links_that_blur_on_focus(
         True,
     ]
     assert record.end_reason == "cycle"
+
+
+def test_walk_records_accessible_names_with_whitespace_collapsed(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "names.html", tmp_path)
+
+    names = {step.focus.dom_id: step.focus.name for step in record.steps}
+    assert names["spaced"] == "Save draft"
+    assert names["nbsp"] == "Save\u00a0draft"
+
+
+def test_walk_records_the_same_urls_whatever_the_server_port(
+    browser: Browser, site: str, tmp_path: Path
+) -> None:
+    def urls(base_url: str, run_dir: Path) -> list[str]:
+        context = new_walk_context(browser)
+        try:
+            record = walk(context, base_url + "requests.html", run_dir)
+        finally:
+            context.close()
+        return (
+            [record.url, record.initial.url]
+            + [step.url for step in record.steps]
+            + [blocked.url for blocked in record.blocked_requests]
+        )
+
+    with serve_directory(PAGES_DIR) as other_site:
+        assert other_site != site
+        assert urls(other_site, tmp_path / "other") == urls(site, tmp_path / "site")
+
+
+def test_walk_keeps_off_origin_urls_absolute(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "offsite.html", tmp_path)
+
+    assert record.blocked_requests == [
+        BlockedRequest(
+            method="GET", url="http://localhost:9/pixel.png", reason="off-origin"
+        )
+    ]
+
+
+def test_walk_follows_focus_into_a_same_origin_frame(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "frame.html", tmp_path)
+
+    first_tab = record.steps[0].focus
+    assert (first_tab.tag, first_tab.dom_id, first_tab.role, first_tab.name) == (
+        "BUTTON",
+        "framed",
+        "button",
+        "Framed",
+    )
+    assert first_tab.box == Box(x=310, y=320, width=100, height=30)
+
+
+def test_walk_records_a_scrollable_frame_without_focusable_content_as_the_frame(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "blankframe.html", tmp_path)
+
+    first_tab = record.steps[0].focus
+    assert (first_tab.tag, first_tab.dom_id) == ("IFRAME", "scroller")
+    assert not first_tab.is_document
+
+
+def test_walk_records_the_canonical_page_url(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    record = walk(context, site + "./focus.html", tmp_path)
+
+    assert record.url == "/focus.html"

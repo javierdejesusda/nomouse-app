@@ -91,7 +91,7 @@ def test_walk_writes_a_record_for_a_loopback_url(site: str, tmp_path: Path) -> N
 
     assert result.returncode == 0, result.stderr
     record = json.loads((out / "walk.json").read_text(encoding="utf-8"))
-    assert record["url"] == site + "focus.html"
+    assert record["url"] == "/focus.html"
     assert record["end_reason"] == "cycle"
     assert str(out / "walk.json") in result.stdout
 
@@ -111,6 +111,5 @@ def test_walk_serves_and_walks_a_mirror_page(tmp_path: Path) -> None:
 
     assert result.returncode == 0, result.stderr
     record = json.loads((out / "walk.json").read_text(encoding="utf-8"))
-    assert record["url"].startswith("http://127.0.0.1:")
-    assert record["url"].endswith("/before/survey.html")
+    assert record["url"] == "/before/survey.html"
     assert record["keys"][:3] == ["Tab", "Enter", "Escape"]

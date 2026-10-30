@@ -2,9 +2,10 @@
 
 import collections
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Any, Literal
+from urllib.parse import urlsplit
 
 from playwright.sync_api import Browser, BrowserContext, Page, ViewportSize
 
@@ -35,7 +36,7 @@ class Observation:
     """Page state captured after a key press, or before the first one.
 
     Attributes:
-        url: The page URL.
+        url: The page URL, relative to the walked origin when on it.
         scroll_x: Horizontal scroll offset in CSS pixels.
         scroll_y: Vertical scroll offset in CSS pixels.
         focus: The focused element.
@@ -65,6 +66,9 @@ class Step(Observation):
 @dataclass(frozen=True, kw_only=True)
 class WalkRecord:
     """Everything a walk observed, one step per key pressed.
+
+    URLs on the walked origin are stored relative to it, so that walks of the
+    same page served on different ports give the same record.
 
     Attributes:
         url: The walked page.
@@ -178,15 +182,16 @@ def walk(
     page.goto(url)
     guard.pin(page.url)
     witness = FocusWitness(context.new_cdp_session(page))
+    origin = _origin_prefix(page.url)
 
-    initial = _observe(page, witness, run_dir, "initial.png")
+    initial = _observe(page, witness, run_dir, "initial.png", origin)
     steps: list[Step] = []
 
     def press(key: str) -> Step:
         page.keyboard.press(key)
         page.evaluate(_TWO_FRAMES)
         index = len(steps)
-        state = _observe(page, witness, run_dir, f"step-{index:03d}.png")
+        state = _observe(page, witness, run_dir, f"step-{index:03d}.png", origin)
         step = Step(index=index, key=key, **vars(state))
         steps.append(step)
         return step
@@ -207,13 +212,16 @@ def walk(
                     press(key)
 
     record = WalkRecord(
-        url=url,
+        url=initial.url,
         viewport=VIEWPORT,
         end_reason=end_reason,
         keys=[step.key for step in steps],
         initial=initial,
         steps=steps,
-        blocked_requests=list(guard.blocked),
+        blocked_requests=[
+            replace(blocked, url=_relative(blocked.url, origin))
+            for blocked in guard.blocked
+        ],
     )
     (run_dir / RECORD_NAME).write_text(
         json.dumps(record.to_dict(), indent=2), encoding="utf-8"
@@ -222,16 +230,29 @@ def walk(
 
 
 def _observe(
-    page: Page, witness: FocusWitness, run_dir: Path, screenshot: str
+    page: Page, witness: FocusWitness, run_dir: Path, screenshot: str, origin: str
 ) -> Observation:
     page.screenshot(
         path=run_dir / screenshot, animations="disabled", caret="hide", scale="css"
     )
     scroll_x, scroll_y = witness.scroll()
     return Observation(
-        url=page.url,
+        url=_relative(page.url, origin),
         scroll_x=scroll_x,
         scroll_y=scroll_y,
         focus=witness.focus(),
         screenshot=screenshot,
     )
+
+
+def _origin_prefix(url: str) -> str:
+    parts = urlsplit(url)
+    return f"{parts.scheme}://{parts.netloc}"
+
+
+def _relative(url: str, origin: str) -> str:
+    """Strips the origin from a URL on it, keeping the rest verbatim."""
+    rest = url.removeprefix(origin)
+    if rest == url or rest[:1] not in ("", "/", "?", "#"):
+        return url
+    return rest or "/"

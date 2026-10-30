@@ -1,19 +1,32 @@
 """Focus witness that reads the browser's focus through the DevTools Protocol."""
 
+import re
 from dataclasses import dataclass
 from typing import Any
 
 from playwright.sync_api import CDPSession, Error
 
-# Follows focus into open shadow roots so the witness reports the element the
-# user sees focused, not its shadow host.
+# Follows focus into open shadow roots and same-origin frames so the witness
+# reports the element the user sees focused, not its shadow host or <iframe>.
+# A frame whose own document has nothing focused (a scrollable frame is a Tab
+# stop) is reported as the <iframe>. Cross-origin frames never load: the
+# request guard aborts them.
 _DEEP_ACTIVE_ELEMENT = """(() => {
   let element = document.activeElement;
-  while (element && element.shadowRoot && element.shadowRoot.activeElement) {
-    element = element.shadowRoot.activeElement;
+  while (element) {
+    const frameDocument = element.contentDocument;
+    const inner = element.shadowRoot?.activeElement
+      ?? (frameDocument?.activeElement === frameDocument?.body
+        ? null : frameDocument?.activeElement);
+    if (!inner) {
+      break;
+    }
+    element = inner;
   }
   return element;
 })()"""
+
+_ASCII_WHITESPACE = re.compile(r"[ \t\n\f\r]+")
 
 _DOCUMENT_TAGS = frozenset({"BODY", "HTML"})
 
@@ -126,7 +139,13 @@ class FocusWitness:
         )["nodes"]
         if not nodes:
             return None, None
-        return _ax_value(nodes[0], "role"), _ax_value(nodes[0], "name")
+        role = _ax_value(nodes[0], "role")
+        name = _ax_value(nodes[0], "name")
+        if name is not None:
+            # Chromium builds differ in trimming names (accname trims and
+            # collapses whitespace); normalizing keeps records comparable.
+            name = _ASCII_WHITESPACE.sub(" ", name).strip(" ")
+        return role, name
 
     def _box(self, backend_node_id: int) -> Box | None:
         try:
