@@ -103,6 +103,22 @@ def test_ask_posts_one_responses_request_with_minimal_reasoning() -> None:
     assert MODEL == "muse-spark-1.3"
 
 
+def test_ask_asks_for_structured_output_when_given_a_schema() -> None:
+    transport = FakeTransport()
+    schema = {"type": "object", "properties": {}, "additionalProperties": False}
+
+    ask("q", transport=transport, env={}, schema=("Answer", schema))
+
+    assert transport.calls[0][1]["text"] == {
+        "format": {
+            "type": "json_schema",
+            "name": "Answer",
+            "schema": schema,
+            "strict": True,
+        }
+    }
+
+
 def test_ask_sends_a_bearer_header_when_the_key_is_in_the_environment() -> None:
     transport = FakeTransport()
 

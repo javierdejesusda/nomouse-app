@@ -99,6 +99,7 @@ def ask(
     prompt: str,
     images: Sequence[bytes] = (),
     *,
+    schema: tuple[str, Mapping[str, Any]] | None = None,
     transport: Transport = urllib_transport,
     log_path: Path | None = None,
     env: Mapping[str, str] = os.environ,
@@ -114,6 +115,8 @@ def ask(
     Args:
         prompt: The text part of the message.
         images: PNG files, sent inline as base64 data URLs in this order.
+        schema: When given, a name and a JSON Schema that the reply text must
+            follow; the API constrains decoding to it (`text.format`, strict).
         transport: Sends the HTTP request.
         log_path: When given, one JSON line (time, model, image count, usage,
             latency) is appended per successful call. Prompts, images and
@@ -140,11 +143,21 @@ def ask(
         }
         for png in images
     ]
-    body = {
+    body: dict[str, Any] = {
         "model": MODEL,
         "reasoning": {"effort": REASONING_EFFORT},
         "input": [{"type": "message", "role": "user", "content": content}],
     }
+    if schema is not None:
+        name, json_schema = schema
+        body["text"] = {
+            "format": {
+                "type": "json_schema",
+                "name": name,
+                "schema": json_schema,
+                "strict": True,
+            }
+        }
     headers = {"Content-Type": "application/json"}
     if key := env.get(KEY_VARIABLE, "").strip():
         # http.client quotes an invalid header value in its exception.
