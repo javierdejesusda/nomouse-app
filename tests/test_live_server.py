@@ -1,6 +1,9 @@
 import http.client
 import json
+import logging
+import socket
 import threading
+import time
 import urllib.error
 import urllib.request
 from collections.abc import Iterator
@@ -31,9 +34,14 @@ Served = tuple[str, FakeLive]
 
 
 def serve(
-    site: Path, live: FakeLive | None, trust_proxy: bool = False
+    site: Path,
+    live: FakeLive | None,
+    trust_proxy: bool = False,
+    timeout_s: float = 30.0,
 ) -> Iterator[str]:
-    server = make_server(site, 0, live=live, trust_proxy=trust_proxy)
+    server = make_server(
+        site, 0, live=live, trust_proxy=trust_proxy, timeout_s=timeout_s
+    )
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     try:
@@ -184,3 +192,66 @@ def test_a_bad_content_length_is_refused(served: Served, length: str) -> None:
     assert connection.getresponse().status == 400
     assert live.starts == []
     connection.close()
+
+
+@pytest.mark.parametrize(
+    "sent",
+    [
+        b"GET / HTTP/1.1\r\nHost: x\r\n",
+        b"POST /api/live/runs HTTP/1.1\r\nHost: x\r\n"
+        b"Content-Type: application/json\r\nContent-Length: 1000\r\n\r\n{",
+    ],
+)
+def test_a_stalled_client_is_disconnected_after_the_timeout(
+    site: Path, sent: bytes
+) -> None:
+    live = FakeLive()
+    for base in serve(site, live, timeout_s=0.5):
+        host, port = base.removeprefix("http://").split(":")
+        with socket.create_connection((host, int(port)), timeout=5) as client:
+            client.sendall(sent)
+            started = time.monotonic()
+            while client.recv(4096):
+                pass
+            assert time.monotonic() - started < 3
+    assert live.starts == []
+
+
+class BrokenLive(FakeLive):
+    def status(self) -> dict[str, Any]:
+        raise RuntimeError("boom")
+
+
+def test_a_failed_request_is_logged_without_the_client_address(
+    site: Path, capsys: pytest.CaptureFixture[str], caplog: pytest.LogCaptureFixture
+) -> None:
+    caplog.set_level(logging.WARNING)
+    for base in serve(site, BrokenLive()):
+        with pytest.raises((urllib.error.URLError, http.client.HTTPException)):
+            urllib.request.urlopen(base + "/api/live/status")
+
+    logged = capsys.readouterr().err + caplog.text
+    assert "127.0.0.1" not in logged
+    assert "RuntimeError" in caplog.text
+
+
+def test_directories_are_not_listed(site: Path, served: Served) -> None:
+    base, _ = served
+    (site / "data").mkdir()
+    (site / "data" / "a.json").write_text("{}")
+
+    assert request(base + "/")[0] == 200
+    status, _, body = request(base + "/data/")
+    assert status == 404
+    assert b"a.json" not in body
+
+
+def test_pages_may_not_be_framed_by_other_sites_and_the_server_is_unnamed(
+    served: Served,
+) -> None:
+    base, _ = served
+
+    _, headers, _ = request(base + "/index.html")
+
+    assert headers["X-Frame-Options"] == "SAMEORIGIN"
+    assert "Python" not in headers["Server"]

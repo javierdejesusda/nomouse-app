@@ -2,7 +2,10 @@
 
 import functools
 import json
+import logging
+import os
 import re
+import sys
 import threading
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -15,6 +18,7 @@ _LOOPBACK_HOST = "127.0.0.1"
 _RUNS_PATH = "/api/live/runs"
 _RUN_PATH = re.compile(r"/api/live/runs/([A-Za-z0-9-]+)")
 _MAX_BODY = 1024
+_log = logging.getLogger(__name__)
 
 
 class LiveApi(Protocol):
@@ -33,20 +37,42 @@ class LiveApi(Protocol):
 class _Server(ThreadingHTTPServer):
     live: LiveApi | None = None
     trust_proxy = False
+    timeout_s = 30.0
+
+    def handle_error(self, request: Any, client_address: Any) -> None:
+        """Logs a failed request by error type only, never the client address."""
+        error = sys.exc_info()[1]
+        _log.warning("request failed (%s)", type(error).__name__)
 
 
 class _Handler(SimpleHTTPRequestHandler):
     """Serves files; with live mode, also the live run API under /api/live/."""
 
     server: _Server
+    server_version = "nomouse"
+    sys_version = ""
+
+    def setup(self) -> None:
+        """Closes a connection whose client stalls longer than the timeout."""
+        super().setup()
+        self.connection.settimeout(self.server.timeout_s)
+
+    def list_directory(self, path: str | os.PathLike[str]) -> None:
+        """Answers HTTP 404 for a directory with no index.html."""
+        self.send_error(404, "File not found")
 
     def log_message(self, format: str, *args: Any) -> None:
         """Discards the per-request access log line."""
 
     def end_headers(self) -> None:
-        """Adds headers that stop content sniffing and referrer leaks."""
+        """Adds headers that stop content sniffing, referrer leaks and framing.
+
+        Same-origin frames stay allowed: walked pages may frame their own
+        origin, and the guard aborts every other origin anyway.
+        """
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("X-Frame-Options", "SAMEORIGIN")
         super().end_headers()
 
     def do_GET(self) -> None:
@@ -135,15 +161,17 @@ def make_server(
     host: str = _LOOPBACK_HOST,
     live: LiveApi | None = None,
     trust_proxy: bool = False,
+    timeout_s: float = 30.0,
 ) -> ThreadingHTTPServer:
     """Returns an HTTP server for a directory, bound to 127.0.0.1 by default.
 
-    Files are answered to GET and HEAD. With `live`, GET
+    Files are answered to GET and HEAD; a directory without index.html is
+    not listed (HTTP 404). With `live`, GET
     `/api/live/status` and `/api/live/runs/<id>` and a same-origin JSON POST
     to `/api/live/runs` reach the live run service, and any other POST
     gets HTTP 404. Without it, and for other methods, the answer is HTTP
-    501. The caller runs `serve_forever`
-    and closes the server.
+    501. A failed request is logged by error type, without the client
+    address. The caller runs `serve_forever` and closes the server.
 
     Args:
         root: Directory whose files are served.
@@ -153,6 +181,8 @@ def make_server(
         trust_proxy: Take the client address for the rate limit from the
             last `X-Forwarded-For` entry, as added by a reverse proxy in
             front of the server.
+        timeout_s: Seconds a connection may stall (slow headers or body)
+            before it is closed.
 
     Returns:
         The bound server, not yet serving.
@@ -161,6 +191,7 @@ def make_server(
     server = _Server((host, port), handler)
     server.live = live
     server.trust_proxy = trust_proxy
+    server.timeout_s = timeout_s
     return server
 
 
