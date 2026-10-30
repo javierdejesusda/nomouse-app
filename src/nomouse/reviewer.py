@@ -117,8 +117,6 @@ FORM_II_SCHEMA = _answer_list(
     },
 )
 
-# 16 instances of 3 screenshots stay under the API's 50 images per request.
-_ENTER_BATCH = MAX_IMAGES // 3
 # Keeps one reply's reasons short enough to stay reliable.
 _TAB_BATCH = 40
 
@@ -204,7 +202,7 @@ def review(
     instances: list[dict[str, Any]] = []
     calls: list[dict[str, Any]] = []
     batches = [
-        *(("i", b) for b in _batches(_enter_instances(observations), _ENTER_BATCH)),
+        *(("i", b) for b in _batches(_enter_instances(observations))),
         *(("ii", b) for b in _batches(_tab_instances(observations), _TAB_BATCH)),
     ]
     for form, batch in batches:
@@ -330,8 +328,13 @@ def _focus(focus: Mapping[str, Any]) -> dict[str, Any] | None:
     return {"role": focus["role"], "name": focus["name"], "box": focus["box"]}
 
 
-def _batches(instances: Iterator[_Instance], size: int) -> Iterator[list[_Instance]]:
-    """Groups instances in order, each group within `size` and the image limit."""
+def _batches(
+    instances: Iterator[_Instance], size: int = MAX_IMAGES
+) -> Iterator[list[_Instance]]:
+    """Groups instances in order, each group within `size` and the image limit.
+
+    Form (i) is bounded by images alone: 16 instances of 3 screenshots.
+    """
     batch: list[_Instance] = []
     for instance in instances:
         if batch and (
