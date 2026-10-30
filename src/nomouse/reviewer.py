@@ -183,7 +183,7 @@ def review(
     for existing in (path, partial):
         if existing.exists():
             raise FileExistsError(f"{existing} already exists")
-    digest = _frozen_digest(run_dir)
+    digest = frozen_digest(run_dir)
     record_path = run_dir / RECORD_NAME
     if not record_path.is_file():
         raise ReviewError(f"no {RECORD_NAME} in {run_dir}")
@@ -256,7 +256,19 @@ def _log_line(log: TextIO, line: Mapping[str, Any]) -> None:
     log.flush()
 
 
-def _frozen_digest(run_dir: Path) -> str:
+def frozen_digest(run_dir: Path) -> str:
+    """Returns the hash of a run's frozen walker verdicts, after checking it.
+
+    Args:
+        run_dir: The walk's run directory.
+
+    Returns:
+        The hex SHA-256 of `verdicts.json`.
+
+    Raises:
+        ReviewError: The verdicts or their `.sha256` are missing, or the
+            verdicts do not match the recorded hash.
+    """
     verdicts = run_dir / VERDICTS_NAME
     hash_file = run_dir / f"{VERDICTS_NAME}.sha256"
     if not verdicts.is_file() or not hash_file.is_file():
