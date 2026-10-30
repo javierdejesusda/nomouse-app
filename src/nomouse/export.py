@@ -92,11 +92,7 @@ def export_site(
     (out / ".gitignore").write_text("*\n", encoding="utf-8")
     (out / "data" / "pages").mkdir(parents=True)
     for page in pages:
-        (out / "captures" / page["id"]).mkdir(parents=True)
-        for frame in page["frames"]:
-            source = sources[page["id"]] / Path(frame["screenshot"]).name
-            shutil.copyfile(source, out / frame["screenshot"])
-        _write_json(out / "data" / "pages" / f"{page['id']}.json", page)
+        _write_page(out, page, sources[page["id"]])
 
     if eval_data is not None:
         _write_json(out / "data" / "eval.json", eval_data)
@@ -106,6 +102,48 @@ def export_site(
     }
     _write_json(out / "data" / "index.json", index)
     return index
+
+
+def export_run(
+    run_dir: Path,
+    site: Path,
+    *,
+    review_runs: Sequence[str],
+    live: dict[str, Any],
+) -> dict[str, Any]:
+    """Adds one live run to an exported site, viewable at `page.html?id=<name>`.
+
+    The site index is left unchanged.
+
+    Args:
+        run_dir: The live run directory, named after the run.
+        site: A site written by `export_site`.
+        review_runs: Review run labels whose reviews and packets are shown.
+        live: Facts about the live run, shown with it.
+
+    Returns:
+        The page's index entry.
+
+    Raises:
+        ExportError: The site already holds a page of that name, the
+            verdicts do not match their hash, or a review was made on other
+            verdicts.
+    """
+    if (site / "data" / "pages" / f"{run_dir.name}.json").exists():
+        raise ExportError(f"the site already holds a page named {run_dir.name}")
+    page = {**_page(run_dir, set(), review_runs), "live": live}
+    _write_page(site, page, run_dir)
+    return _summary(page)
+
+
+def _write_page(out: Path, page: dict[str, Any], source: Path) -> None:
+    """Writes a page's JSON and copies its captures byte for byte."""
+    (out / "captures" / page["id"]).mkdir(parents=True)
+    for frame in page["frames"]:
+        shutil.copyfile(
+            source / Path(frame["screenshot"]).name, out / frame["screenshot"]
+        )
+    _write_json(out / "data" / "pages" / f"{page['id']}.json", page)
 
 
 def _eval_data(report_path: Path, audit: Path | None) -> dict[str, Any]:

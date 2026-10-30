@@ -13,7 +13,7 @@ import pytest
 from conftest import AUDIT_REASON, write_audit
 
 from nomouse.cli import main
-from nomouse.export import W3C_NOTICE, ExportError, export_site
+from nomouse.export import W3C_NOTICE, ExportError, export_run, export_site
 from nomouse.packets import DISCLAIMER
 from nomouse.server import make_server
 
@@ -344,3 +344,26 @@ def test_export_refuses_two_runs_with_one_name(
         export_site(fixture_runs, tmp_path / "site")
 
     assert not (tmp_path / "site").exists()
+
+
+def test_export_run_adds_one_live_run_to_an_existing_site(
+    fixture_runs: Path, tmp_path: Path
+) -> None:
+    site = tmp_path / "site"
+    export_site(fixture_runs, site)
+    live_dir = tmp_path / "state" / "live-20261030T170000Z"
+    shutil.copytree(fixture_runs / "builder" / "menu", live_dir)
+    (live_dir / "review-eval1.json").rename(live_dir / "review-live.json")
+    info = {"started_at": "2026-10-30 17:00:00 UTC", "cost_usd": 0.01}
+
+    summary = export_run(live_dir, site, review_runs=("live",), live=info)
+
+    page = load(site / "data" / "pages" / "live-20261030T170000Z.json")
+    assert summary["id"] == page["id"] == "live-20261030T170000Z"
+    assert page["live"] == info
+    assert page["label"] == "builder-made"
+    assert [review["run"] for review in page["reviews"]] == ["live"]
+    assert (site / "captures" / "live-20261030T170000Z" / "step-002.png").is_file()
+    assert "live-20261030T170000Z" not in (site / "data" / "index.json").read_text()
+    with pytest.raises(ExportError, match="already"):
+        export_run(live_dir, site, review_runs=("live",), live=info)
