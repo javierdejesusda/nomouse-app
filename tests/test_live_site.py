@@ -3,7 +3,7 @@ from collections.abc import Callable, Iterator
 from pathlib import Path
 
 import pytest
-from playwright.sync_api import Browser, Page, expect
+from playwright.sync_api import Browser, Page, Route, expect
 from test_live import BUILDER, api_reply, copy_menu
 
 from nomouse.credits import CreditLedger
@@ -121,6 +121,56 @@ def test_a_typed_task_is_sent_with_the_page_for_the_navigator(
         timeout=10_000
     )
     assert tasks == ["<b>open the menu</b> and close it"]
+
+
+def test_failed_polls_are_retried_until_the_run_answers(
+    open_site: Callable[..., tuple[Page, str]],
+) -> None:
+    page, base_url = open_site()
+    failures = iter(["abort", "502", "abort"])
+
+    def flaky(route: Route) -> None:
+        failure = next(failures, None)
+        if failure == "abort":
+            route.abort("connectionreset")
+        elif failure == "502":
+            route.fulfill(status=502, body="Bad Gateway")
+        else:
+            route.continue_()
+
+    page.route("**/api/live/runs/*", flaky)
+    page.goto(base_url + "live.html")
+    page.get_by_label("Page to walk").select_option("builder/menu-focus-stays.html")
+    page.get_by_role("button", name="Start a live run").click()
+
+    expect(page.get_by_role("link", name="Open the live run")).to_be_focused(
+        timeout=30_000
+    )
+    expect(page.get_by_role("alert")).to_have_count(0)
+
+
+def test_polling_gives_up_with_a_message_after_repeated_failures(
+    open_site: Callable[..., tuple[Page, str]],
+) -> None:
+    page, base_url = open_site()
+    page.clock.install()
+    polls: list[str] = []
+
+    def down(route: Route) -> None:
+        polls.append(route.request.url)
+        route.abort("connectionrefused")
+
+    page.route("**/api/live/runs/*", down)
+    page.goto(base_url + "live.html")
+    page.get_by_label("Page to walk").select_option("builder/menu-focus-stays.html")
+    page.get_by_role("button", name="Start a live run").click()
+    expect(page.locator("#live-status")).to_contain_text("trying again")
+    for _ in range(8):
+        page.clock.run_for(60_000)
+
+    expect(page.get_by_role("alert")).to_contain_text("Lost contact with the server")
+    expect(page.get_by_role("button", name="Start a live run")).to_be_enabled()
+    assert len(polls) == 6
 
 
 def test_without_a_key_live_mode_points_to_the_replay(

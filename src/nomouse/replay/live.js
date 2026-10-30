@@ -1,6 +1,7 @@
 "use strict";
 
 const POLL_MS = 1500;
+const POLL_RETRIES = 5;
 const STAGES = {
   queued: "waiting to start",
   walking: "walking the page with the keyboard",
@@ -52,8 +53,18 @@ function caps(status) {
   );
 }
 
-async function poll(runId) {
-  const { ok, data } = await api(`api/live/runs/${encodeURIComponent(runId)}`);
+async function poll(runId, failures = 0) {
+  let reply;
+  try {
+    reply = await api(`api/live/runs/${encodeURIComponent(runId)}`);
+  } catch (error) {
+    reply = null;
+  }
+  if (!reply || reply.status >= 500) {
+    retryPoll(runId, failures + 1);
+    return;
+  }
+  const { ok, data } = reply;
   if (!ok) throw new Error(data.message || "the run is unknown");
   if (data.state === "done") {
     setStatus(`Live run ${runId} finished, about USD ${data.cost_usd.toFixed(4)}.`);
@@ -72,6 +83,22 @@ async function poll(runId) {
   }
   setStatus(`Live run ${runId}: ${STAGES[data.state] || data.state}.`);
   setTimeout(() => poll(runId).catch(showError), POLL_MS);
+}
+
+// A proxy restart or a dropped connection should not stop the page
+// following a run that is still going on the server.
+function retryPoll(runId, failures) {
+  if (failures > POLL_RETRIES) {
+    setStatus(`Live run ${runId}: no answer from the server.`);
+    alertMessage(
+      "Lost contact with the server while the run was going. It may still finish: reload this page later, or open the replay.",
+    );
+    showReplayLink();
+    document.getElementById("start").disabled = false;
+    return;
+  }
+  setStatus(`Live run ${runId}: no answer from the server, trying again.`);
+  setTimeout(() => poll(runId, failures).catch(showError), POLL_MS * 2 ** (failures - 1));
 }
 
 async function start(event) {
