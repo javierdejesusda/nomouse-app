@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from typing import Literal
 from urllib.parse import urlsplit
 
-from playwright.sync_api import BrowserContext, Request, Route
+from playwright.sync_api import BrowserContext, Error, Request, Route
 
-BlockReason = Literal["non-GET", "off-origin", "off-page navigation"]
+BlockReason = Literal["non-GET", "off-origin", "off-page navigation", "reload"]
 
 _DEFAULT_PORTS = {"http": 80, "https": 443}
 
@@ -30,8 +30,9 @@ class RequestGuard:
     """Aborts every non-GET request and every request to another origin.
 
     Once pinned, it also aborts top-level navigations away from the pinned
-    document, so pressing Enter on a submit button cannot leave the walked
-    page. Requests are aborted with `net::ERR_ABORTED`, which leaves the
+    document and reloads of it, in the page or in a new page it opens, so
+    pressing Enter on a submit button or a link cannot leave or reset the
+    walked page. Requests are aborted with `net::ERR_ABORTED`, which leaves the
     current document in place instead of committing an error page.
 
     Attributes:
@@ -60,10 +61,11 @@ class RequestGuard:
         context.route("**/*", self._handle)
 
     def pin(self, url: str) -> None:
-        """Aborts later top-level navigations to any other document.
+        """Aborts later top-level navigations, including reloads of the page.
 
         Args:
-            url: The document to stay on; its fragment is ignored.
+            url: The document to stay on; a navigation to it, fragment
+                aside, is recorded as a reload.
         """
         self._pinned = _without_fragment(url)
 
@@ -85,11 +87,24 @@ class RequestGuard:
         if (
             self._pinned is not None
             and request.is_navigation_request()
-            and request.frame.parent_frame is None
-            and _without_fragment(request.url) != self._pinned
+            and _top_level(request)
         ):
+            # A fragment link is no request; any other load of the page
+            # itself would reset its state and the focus witness.
+            if _without_fragment(request.url) == self._pinned:
+                return "reload"
             return "off-page navigation"
         return None
+
+
+def _top_level(request: Request) -> bool:
+    """Returns whether a navigation request loads a page's main frame."""
+    try:
+        return request.frame.parent_frame is None
+    except Error:
+        # The first navigation of a new page (a target=_blank link or
+        # window.open) comes before its frame exists.
+        return True
 
 
 def _origin(url: str) -> tuple[str, str, int | None]:

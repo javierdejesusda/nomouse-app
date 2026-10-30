@@ -413,3 +413,32 @@ def test_a_finished_run_writes_no_incomplete_record(
     assert record.navigator is not None
     assert "incomplete" not in record.navigator
     assert not (tmp_path / INCOMPLETE_RECORD_NAME).exists()
+
+
+def test_new_pages_and_reloads_are_aborted_and_the_run_goes_on(
+    context: BrowserContext, site: str, tmp_path: Path
+) -> None:
+    transport = Navigator(["Tab", "Enter"] * 3 + ["stuck"])
+
+    record = navigate(
+        context, site + "leave.html", tmp_path, "open the docs", transport=transport
+    )
+
+    assert record.end_reason == "stuck"
+    assert record.keys == ["Tab", "Enter"] * 3
+    assert {step.url for step in record.steps} == {"/leave.html"}
+    assert [step.focus.dom_id for step in record.steps] == [
+        "new-tab",
+        "new-tab",
+        "self",
+        "self",
+        "open",
+        "open",
+    ]
+    assert record.blocked_requests == [
+        BlockedRequest(method="GET", url="/landing.html", reason="off-page navigation"),
+        BlockedRequest(method="GET", url="/leave.html", reason="reload"),
+        BlockedRequest(
+            method="GET", url="/landing.html?from=button", reason="off-page navigation"
+        ),
+    ]
