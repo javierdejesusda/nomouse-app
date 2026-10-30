@@ -3,13 +3,18 @@ import hashlib
 import json
 import os
 import shutil
+import threading
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any
 
 import pytest
 
+from nomouse.cli import main
 from nomouse.export import W3C_NOTICE, ExportError, export_site
 from nomouse.packets import DISCLAIMER
+from nomouse.server import make_server
 
 
 def load(path: Path) -> Any:
@@ -210,6 +215,67 @@ def test_export_refuses_a_directory_that_is_not_empty(
         export_site(fixture_runs, out)
 
     assert (out / "keep.txt").read_text() == "mine"
+
+
+def test_cli_export_reports_the_pages_written(
+    fixture_runs: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    out = tmp_path / "site"
+
+    code = main(["export", str(out), "--runs-dir", str(fixture_runs)])
+
+    assert code == 0
+    assert capsys.readouterr().out == (
+        f"4 pages (1 W3C, 3 builder-made), eval table included: {out}\n"
+    )
+    assert (out / "data" / "index.json").is_file()
+
+
+def test_cli_export_refuses_a_directory_that_is_not_empty(
+    fixture_runs: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    (tmp_path / "site").mkdir()
+    (tmp_path / "site" / "x").write_text("x")
+
+    with pytest.raises(SystemExit) as caught:
+        main(["export", str(tmp_path / "site"), "--runs-dir", str(fixture_runs)])
+
+    assert caught.value.code == 2
+    assert "not empty" in capsys.readouterr().err
+
+
+def test_the_replay_server_serves_an_export_on_loopback_only(
+    fixture_runs: Path, tmp_path: Path
+) -> None:
+    out = tmp_path / "site"
+    export_site(fixture_runs, out)
+    server = make_server(out, port=0)
+    host, port = server.server_address[:2]
+    try:
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        with urllib.request.urlopen(f"http://{host}:{port}/data/index.json") as reply:
+            served = json.loads(reply.read())
+        post = urllib.request.Request(f"http://{host}:{port}/", method="POST")
+        with pytest.raises(urllib.error.HTTPError) as caught:
+            urllib.request.urlopen(post)
+    finally:
+        server.shutdown()
+        server.server_close()
+
+    assert host == "127.0.0.1"
+    assert served == load(out / "data" / "index.json")
+    assert caught.value.code == 501
+
+
+def test_cli_serve_replay_refuses_a_directory_without_an_export(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit) as caught:
+        main(["serve-replay", str(tmp_path)])
+
+    assert caught.value.code == 2
+    assert "no exported replay" in capsys.readouterr().err
 
 
 def test_export_refuses_two_runs_with_one_name(

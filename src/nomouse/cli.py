@@ -12,10 +12,10 @@ from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright
 
-from nomouse import bare, evaluation, g1, packets, reviewer, scorer, spark
+from nomouse import bare, evaluation, export, g1, packets, reviewer, scorer, spark
 from nomouse.driver import DEFAULT_MAX_KEYS, RECORD_NAME, new_walk_context, walk
 from nomouse.mirror import WALK_PAGES, fetch_mirror, mirror_root
-from nomouse.server import serve_directory
+from nomouse.server import make_server, serve_directory
 from nomouse.walkers import VERDICTS_NAME, freeze
 
 _DEFAULT_CACHE = Path(".cache")
@@ -51,6 +51,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _score(parser, args)
     if args.command == "eval":
         return _eval(parser, args)
+    if args.command == "export":
+        return _export(parser, args)
+    if args.command == "serve-replay":
+        return _serve_replay(parser, args)
     return _walk(parser, args)
 
 
@@ -144,6 +148,24 @@ def _parser() -> argparse.ArgumentParser:
         "--own-row", action="append", default=[], help="row id shown on its own"
     )
     eval_command.add_argument("--out", type=Path, help="write the report as JSON")
+    export_command = commands.add_parser(
+        "export", help="build the static replay site from frozen runs (no model)"
+    )
+    export_command.add_argument(
+        "out_dir", type=Path, help="new or empty directory for the site"
+    )
+    export_command.add_argument("--runs-dir", type=Path, default=_DEFAULT_RUNS)
+    export_command.add_argument(
+        "--runs",
+        nargs="+",
+        default=list(export.DEFAULT_REVIEW_RUNS),
+        help="review run labels shown with their packets",
+    )
+    serve_command = commands.add_parser(
+        "serve-replay", help="serve an exported replay site on 127.0.0.1"
+    )
+    serve_command.add_argument("site_dir", type=Path, help="an exported site")
+    serve_command.add_argument("--port", type=int, default=8000)
     return parser
 
 
@@ -350,6 +372,35 @@ def _eval(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
         print(f"INCOMPLETE: no run for {', '.join(report['missing'])}")
     print()
     print(table, end="")
+    return 0
+
+
+def _export(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
+    try:
+        index = export.export_site(args.runs_dir, args.out_dir, review_runs=args.runs)
+    except (OSError, ValueError, export.ExportError) as error:
+        parser.error(str(error))
+    pages = index["pages"]
+    w3c = sum(page["set"] == "w3c" for page in pages)
+    table = "eval table included" if index["eval"] else "no eval report"
+    print(
+        f"{len(pages)} pages ({w3c} W3C, {len(pages) - w3c} builder-made),"
+        f" {table}: {args.out_dir}"
+    )
+    return 0
+
+
+def _serve_replay(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
+    if not (args.site_dir / "data" / "index.json").is_file():
+        parser.error(f"no exported replay in {args.site_dir}; run `nomouse export`")
+    server = make_server(args.site_dir, args.port)
+    print(f"replay at http://127.0.0.1:{server.server_address[1]}/ (Ctrl+C stops)")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()
     return 0
 
 
