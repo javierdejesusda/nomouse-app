@@ -3,8 +3,10 @@
 import argparse
 import contextlib
 import datetime
+import functools
 import ipaddress
 import json
+import os
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -12,7 +14,18 @@ from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright
 
-from nomouse import bare, evaluation, export, g1, packets, reviewer, scorer, spark
+from nomouse import (
+    bare,
+    credits,
+    evaluation,
+    export,
+    g1,
+    live,
+    packets,
+    reviewer,
+    scorer,
+    spark,
+)
 from nomouse.driver import DEFAULT_MAX_KEYS, RECORD_NAME, new_walk_context, walk
 from nomouse.mirror import WALK_PAGES, fetch_mirror, mirror_root
 from nomouse.server import make_server, serve_directory
@@ -171,6 +184,30 @@ def _parser() -> argparse.ArgumentParser:
     )
     serve_command.add_argument("site_dir", type=Path, help="an exported site")
     serve_command.add_argument("--port", type=int, default=8000)
+    serve_command.add_argument("--host", default="127.0.0.1")
+    serve_command.add_argument(
+        "--live",
+        action="store_true",
+        help="also take live runs on the allowlisted pages (model calls)",
+    )
+    serve_command.add_argument(
+        "--state-dir",
+        type=Path,
+        default=Path("live-state"),
+        help="live runs and the lifetime credit ledger (keep it across restarts)",
+    )
+    serve_command.add_argument("--cache", type=Path, default=_DEFAULT_CACHE)
+    serve_command.add_argument(
+        "--cap-usd",
+        type=float,
+        default=credits.MAX_CAP_USD,
+        help="lifetime live credit cap, at most USD 20",
+    )
+    serve_command.add_argument(
+        "--trust-proxy",
+        action="store_true",
+        help="rate-limit by the last X-Forwarded-For address (behind a proxy)",
+    )
     return parser
 
 
@@ -400,8 +437,18 @@ def _export(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
 def _serve_replay(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
     if not (args.site_dir / "data" / "index.json").is_file():
         parser.error(f"no exported replay in {args.site_dir}; run `nomouse export`")
-    server = make_server(args.site_dir, args.port)
-    print(f"replay at http://127.0.0.1:{server.server_address[1]}/ (Ctrl+C stops)")
+    service = _live_service(parser, args) if args.live else None
+    server = make_server(
+        args.site_dir,
+        args.port,
+        host=args.host,
+        live=service,
+        trust_proxy=args.trust_proxy,
+    )
+    if service is not None:
+        message = service.status()["message"]
+        print(message or "live mode on")
+    print(f"replay at http://{args.host}:{server.server_address[1]}/ (Ctrl+C stops)")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
@@ -409,6 +456,30 @@ def _serve_replay(parser: argparse.ArgumentParser, args: argparse.Namespace) -> 
     finally:
         server.server_close()
     return 0
+
+
+def _live_service(
+    parser: argparse.ArgumentParser, args: argparse.Namespace
+) -> live.LiveService:
+    root = mirror_root(args.cache)
+    if not root.is_dir():
+        parser.error(f"no mirror in {args.cache}; run `nomouse mirror` first")
+    try:
+        ledger = credits.CreditLedger(args.state_dir / "live-usage.jsonl", args.cap_usd)
+    except ValueError as error:
+        parser.error(str(error))
+    return live.LiveService(
+        site=args.site_dir,
+        state=args.state_dir,
+        pages=live.live_pages(BUILDER_ROOT),
+        pipeline=functools.partial(
+            live.walk_and_review, roots={"w3c": root, "builder": BUILDER_ROOT}
+        ),
+        ledger=ledger,
+        limiter=live.RateLimiter(max_runs=3, window_s=3600),
+        transport=spark.urllib_transport,
+        key_available=bool(os.environ.get(spark.KEY_VARIABLE, "").strip()),
+    )
 
 
 def _walk(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
