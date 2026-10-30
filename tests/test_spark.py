@@ -80,6 +80,7 @@ def test_ask_posts_one_responses_request_with_minimal_reasoning() -> None:
     assert body == {
         "model": MODEL,
         "reasoning": {"effort": "minimal"},
+        "store": False,
         "input": [
             {
                 "type": "message",

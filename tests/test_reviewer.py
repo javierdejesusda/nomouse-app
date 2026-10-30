@@ -244,7 +244,7 @@ def test_review_never_shows_the_model_verdicts_or_dom_ids(tmp_path: Path) -> Non
         assert "verdict" not in text.lower()
         assert "p.html" not in text
         assert "backend" not in text
-        assert set(request) == {"model", "reasoning", "input", "text"}
+        assert set(request) == {"model", "reasoning", "store", "input", "text"}
 
 
 def test_review_writes_answers_statuses_hash_and_usage(tmp_path: Path) -> None:

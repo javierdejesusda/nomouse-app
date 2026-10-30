@@ -108,7 +108,8 @@ def ask(
 ) -> SparkReply:
     """Sends one user message (text, then PNG images or a video) to Muse Spark.
 
-    Reasoning effort is pinned at `minimal`. The API key, with surrounding
+    Reasoning effort is pinned at `minimal` and the response is not stored
+    for later retrieval (`store: false`). The API key, with surrounding
     whitespace stripped, is sent as a Bearer token only when `META_API_KEY`
     is set and non-blank; otherwise no Authorization header is sent and the
     egress proxy adds it.
@@ -160,6 +161,9 @@ def ask(
     body: dict[str, Any] = {
         "model": MODEL,
         "reasoning": {"effort": REASONING_EFFORT},
+        # The API stores responses for later retrieval unless told not to;
+        # no call here chains on a stored response.
+        "store": False,
         "input": [{"type": "message", "role": "user", "content": content}],
     }
     if schema is not None:
