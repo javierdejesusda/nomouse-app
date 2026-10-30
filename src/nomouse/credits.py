@@ -64,17 +64,35 @@ class CreditLedger:
         self.cap_usd = cap_usd
         self._lock = threading.Lock()
 
-    def spent_usd(self) -> float:
+    def spent_usd(self, run: str | None = None) -> float:
         """Returns the USD spent so far, summed from the ledger.
+
+        Args:
+            run: When given, only that live run's calls are summed.
 
         Raises:
             ValueError: A ledger line is not valid JSON.
         """
+        return sum(float(line["cost_usd"]) for line in self._lines(run))
+
+    def calls(self, run: str) -> int:
+        """Returns how many answered calls a live run made.
+
+        Args:
+            run: The live run.
+
+        Raises:
+            ValueError: A ledger line is not valid JSON.
+        """
+        return len(self._lines(run))
+
+    def _lines(self, run: str | None) -> list[dict[str, Any]]:
         with self._lock:
             if not self.path.is_file():
-                return 0.0
-            lines = self.path.read_text(encoding="utf-8").splitlines()
-        return sum(float(json.loads(line)["cost_usd"]) for line in lines)
+                return []
+            text = self.path.read_text(encoding="utf-8")
+        lines = [json.loads(line) for line in text.splitlines()]
+        return [line for line in lines if run is None or line["run"] == run]
 
     def can_afford(self, reserve_usd: float) -> bool:
         """Returns whether a run that may cost `reserve_usd` stays within the cap.

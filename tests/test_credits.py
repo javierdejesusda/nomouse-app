@@ -65,6 +65,9 @@ def test_the_ledger_persists_spend_on_disk_across_instances(tmp_path: Path) -> N
     assert lines[0]["usage"] == USAGE
     assert lines[0]["cost_usd"] == pytest.approx(call_cost(USAGE))
     assert lines[0]["time"].endswith("Z")
+    ledger.record("live-2", {"input_tokens": 1000, "output_tokens": 0})
+    assert again.spent_usd("live-2") == pytest.approx(call_cost(USAGE) + 0.00125)
+    assert again.calls("live-2") == 2
 
 
 def test_the_ledger_refuses_a_cap_above_twenty_dollars(tmp_path: Path) -> None:
