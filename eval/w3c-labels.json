@@ -1,0 +1,453 @@
+{
+  "about": "Ground truth for the W3C BAD demo pages (Before and After: home, tickets, survey; News excluded), written in our own short wording from W3C's annotated pages, citing W3C note numbers. Only keyboard and focus barriers are labelled. Template notes say errors on the template propagate to every page, so template keyboard notes are labelled on each of the three pages. status 'failure' is a documented barrier on a Before page; 'clean' is the same row on the After page, which W3C documents as repaired. types are the failure types that match the row (vocabulary below). carrier_ids are DOM ids of the elements that carry it, carrier_tags a tag a walker finding may carry when the elements have no id or name, carrier_names visible names a model answer may use; empty lists mean the row is matched by type alone. walk_exercised says whether a Tab, Enter and Escape walk can show the barrier at all.",
+  "types": {
+    "focus-order": "Tab order does not follow the visual order",
+    "focus-not-moved": "after something opens, focus is not moved into it",
+    "focus-not-returned": "after something closes, focus does not return to its trigger",
+    "keyboard-trap": "focus cannot leave a part of the page with the keyboard",
+    "not-focusable": "an interactive element cannot be reached with Tab",
+    "focus-not-visible": "the focused element shows no visible focus indicator",
+    "focus-obscured": "the focused element is hidden by other content",
+    "no-bypass": "no skip link or other way to bypass repeated blocks",
+    "keyboard-operation": "a control is hard to operate with the keyboard or acts on its own while the keyboard moves through it",
+    "other": "any other keyboard or focus failure"
+  },
+  "rows": [
+    {
+      "id": "before-home-template-08",
+      "page": "before/home.html",
+      "status": "failure",
+      "source": "W3C Template Note 08 (Before: page components not focusable)",
+      "barrier": "The menu links blur themselves on focus with a script, so keyboard users cannot reach or see the menu items.",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "walk_exercised": true
+    },
+    {
+      "id": "before-home-template-05",
+      "page": "before/home.html",
+      "status": "failure",
+      "source": "W3C Template Note 05 (Before)",
+      "barrier": "No skip link lets keyboard users bypass the repeated header and menu.",
+      "types": [
+        "no-bypass"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "walk_exercised": true
+    },
+    {
+      "id": "before-home-template-03",
+      "page": "before/home.html",
+      "status": "failure",
+      "source": "W3C Template Note 03 (Before: automatic redirect on change)",
+      "barrier": "The quick menu drop-down loads another page as soon as its value changes, so moving through the options with the keyboard leaves the page.",
+      "types": [
+        "keyboard-operation"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "walk_exercised": false
+    },
+    {
+      "id": "before-tickets-template-08",
+      "page": "before/tickets.html",
+      "status": "failure",
+      "source": "W3C Template Note 08 (Before: page components not focusable)",
+      "barrier": "The menu links blur themselves on focus with a script, so keyboard users cannot reach or see the menu items.",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "walk_exercised": true
+    },
+    {
+      "id": "before-tickets-template-05",
+      "page": "before/tickets.html",
+      "status": "failure",
+      "source": "W3C Template Note 05 (Before)",
+      "barrier": "No skip link lets keyboard users bypass the repeated header and menu.",
+      "types": [
+        "no-bypass"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "walk_exercised": true
+    },
+    {
+      "id": "before-tickets-template-03",
+      "page": "before/tickets.html",
+      "status": "failure",
+      "source": "W3C Template Note 03 (Before: automatic redirect on change)",
+      "barrier": "The quick menu drop-down loads another page as soon as its value changes, so moving through the options with the keyboard leaves the page.",
+      "types": [
+        "keyboard-operation"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "walk_exercised": false
+    },
+    {
+      "id": "before-survey-template-08",
+      "page": "before/survey.html",
+      "status": "failure",
+      "source": "W3C Template Note 08 (Before: page components not focusable)",
+      "barrier": "The menu links blur themselves on focus with a script, so keyboard users cannot reach or see the menu items.",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "walk_exercised": true
+    },
+    {
+      "id": "before-survey-template-05",
+      "page": "before/survey.html",
+      "status": "failure",
+      "source": "W3C Template Note 05 (Before)",
+      "barrier": "No skip link lets keyboard users bypass the repeated header and menu.",
+      "types": [
+        "no-bypass"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "walk_exercised": true
+    },
+    {
+      "id": "before-survey-template-03",
+      "page": "before/survey.html",
+      "status": "failure",
+      "source": "W3C Template Note 03 (Before: automatic redirect on change)",
+      "barrier": "The quick menu drop-down loads another page as soon as its value changes, so moving through the options with the keyboard leaves the page.",
+      "types": [
+        "keyboard-operation"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "walk_exercised": false
+    },
+    {
+      "id": "before-survey-06",
+      "page": "before/survey.html",
+      "status": "failure",
+      "source": "W3C Survey Note 06 (Before: reading sequence not meaningful)",
+      "barrier": "The name and e-mail fields are not in visual order for keyboard users: the eMail Address field is reached before the Name field.",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "em",
+        "n",
+        "ev"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Name",
+        "eMail Address",
+        "Retype eMail"
+      ],
+      "walk_exercised": true
+    },
+    {
+      "id": "before-survey-05",
+      "page": "before/survey.html",
+      "status": "failure",
+      "source": "W3C Survey Note 05 (Before: select box not easily usable by keyboard)",
+      "barrier": "The long city list is sorted by country and not grouped, so choosing a city with the keyboard is hard.",
+      "types": [
+        "keyboard-operation"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [
+        "select a city",
+        "city"
+      ],
+      "walk_exercised": false
+    },
+    {
+      "id": "after-home-template-08",
+      "page": "after/home.html",
+      "status": "clean",
+      "source": "W3C Template Note 08 (After: menu items are plain CSS-styled links)",
+      "barrier": "Repaired: the menu items are ordinary links that take and keep focus.",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "walk_exercised": true
+    },
+    {
+      "id": "after-home-template-05",
+      "page": "after/home.html",
+      "status": "clean",
+      "source": "W3C After Template Note 02",
+      "barrier": "Repaired: skip links bypass the header and menu.",
+      "types": [
+        "no-bypass"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "walk_exercised": true
+    },
+    {
+      "id": "after-home-template-03",
+      "page": "after/home.html",
+      "status": "clean",
+      "source": "W3C Template Note 03 (After: redirect started by the user)",
+      "barrier": "Repaired: the quick menu changes page only when the user presses its Go button.",
+      "types": [
+        "keyboard-operation"
+      ],
+      "carrier_ids": [
+        "qkmenu"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "walk_exercised": false
+    },
+    {
+      "id": "after-tickets-template-08",
+      "page": "after/tickets.html",
+      "status": "clean",
+      "source": "W3C Template Note 08 (After: menu items are plain CSS-styled links)",
+      "barrier": "Repaired: the menu items are ordinary links that take and keep focus.",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "walk_exercised": true
+    },
+    {
+      "id": "after-tickets-template-05",
+      "page": "after/tickets.html",
+      "status": "clean",
+      "source": "W3C After Template Note 02",
+      "barrier": "Repaired: skip links bypass the header and menu.",
+      "types": [
+        "no-bypass"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "walk_exercised": true
+    },
+    {
+      "id": "after-tickets-template-03",
+      "page": "after/tickets.html",
+      "status": "clean",
+      "source": "W3C Template Note 03 (After: redirect started by the user)",
+      "barrier": "Repaired: the quick menu changes page only when the user presses its Go button.",
+      "types": [
+        "keyboard-operation"
+      ],
+      "carrier_ids": [
+        "qkmenu"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "walk_exercised": false
+    },
+    {
+      "id": "after-survey-template-08",
+      "page": "after/survey.html",
+      "status": "clean",
+      "source": "W3C Template Note 08 (After: menu items are plain CSS-styled links)",
+      "barrier": "Repaired: the menu items are ordinary links that take and keep focus.",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "walk_exercised": true
+    },
+    {
+      "id": "after-survey-template-05",
+      "page": "after/survey.html",
+      "status": "clean",
+      "source": "W3C After Template Note 02",
+      "barrier": "Repaired: skip links bypass the header and menu.",
+      "types": [
+        "no-bypass"
+      ],
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "walk_exercised": true
+    },
+    {
+      "id": "after-survey-template-03",
+      "page": "after/survey.html",
+      "status": "clean",
+      "source": "W3C Template Note 03 (After: redirect started by the user)",
+      "barrier": "Repaired: the quick menu changes page only when the user presses its Go button.",
+      "types": [
+        "keyboard-operation"
+      ],
+      "carrier_ids": [
+        "qkmenu"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "walk_exercised": false
+    },
+    {
+      "id": "after-survey-06",
+      "page": "after/survey.html",
+      "status": "clean",
+      "source": "W3C Survey Note 06 (After: meaningful reading sequence)",
+      "barrier": "Repaired: Name, eMail Address and Retype eMail are reached in visual order.",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "em",
+        "n",
+        "ev"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Name",
+        "eMail Address",
+        "Retype eMail"
+      ],
+      "walk_exercised": true
+    },
+    {
+      "id": "after-survey-05",
+      "page": "after/survey.html",
+      "status": "clean",
+      "source": "W3C Survey Note 05 (After: select box with improved keyboard usability)",
+      "barrier": "Repaired: the city list is grouped and sorted by city.",
+      "types": [
+        "keyboard-operation"
+      ],
+      "carrier_ids": [
+        "cc"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "select a city",
+        "city"
+      ],
+      "walk_exercised": false
+    }
+  ],
+  "excluded": [
+    {
+      "source": "W3C Home Note 06 (reading sequence not meaningful)",
+      "reason": "about the reading order of three text columns (1.3.2), no focusable element involved"
+    },
+    {
+      "source": "W3C Home Note 03 (link not visually distinct)",
+      "reason": "the Before note is about visual distinctness, not keyboard focus"
+    },
+    {
+      "source": "W3C Survey Note 07 (reading sequence not meaningful)",
+      "reason": "about table data structure for reading, not keyboard focus"
+    },
+    {
+      "source": "W3C Survey Notes 01 to 04, Tickets Notes 01 to 08, Home Notes 01, 02, 04, 05, 07 to 10",
+      "reason": "text alternatives, labels, structure, contrast, wording: not keyboard or focus"
+    },
+    {
+      "source": "W3C Template Notes 01, 02, 04, 06, 07, 09, 10",
+      "reason": "title, images, scripting compatibility, headings, link wording and colour, contrast: not keyboard or focus"
+    },
+    {
+      "source": "Home links other than the menu that also blur on focus (headlines, more arrows, Click here)",
+      "reason": "same scripted-blur technique, but W3C's notes name only the menu items; not a separate row"
+    }
+  ]
+}
