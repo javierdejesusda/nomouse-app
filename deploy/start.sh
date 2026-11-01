@@ -5,6 +5,16 @@
 set -eu
 
 data="${NOMOUSE_DATA:-/data}"
+
+# Started as root (the image has no USER): hosts such as Fly.io mount volumes
+# owned by root, and files uploaded over ssh are root-owned too. Hand the data
+# directory to the unprivileged user, then re-run this script as that user.
+if [ "$(id -u)" = "0" ]; then
+  chown -R nomouse:nomouse "$data"
+  exec setpriv --reuid=nomouse --regid=nomouse --init-groups \
+    env HOME=/home/nomouse "$0" "$@"
+fi
+
 runs="${NOMOUSE_RUNS:-$data/runs}"
 cache="$data/cache"
 site="$data/site"

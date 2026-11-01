@@ -22,7 +22,7 @@ COPY deploy/start.sh ./deploy/
 RUN uv sync --frozen --no-dev
 
 RUN useradd --create-home nomouse && mkdir /data && chown nomouse /data
-USER nomouse
+# No USER: start.sh fixes /data ownership as root, then drops to nomouse.
 ENV NOMOUSE_DATA=/data PORT=8000
 VOLUME /data
 EXPOSE 8000

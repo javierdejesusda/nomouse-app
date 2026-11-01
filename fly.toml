@@ -1,0 +1,37 @@
+# Fly.io deployment for the hosted replay and live mode. See README.md,
+# "Deploy on Fly.io". Change `app` to a free name before `fly launch`.
+app = "nomouse"
+primary_region = "cdg"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8000"
+  # Fly's edge proxy appends the client address to X-Forwarded-For, and no
+  # other proxy sits in front, so the last entry is the real client.
+  NOMOUSE_TRUST_PROXY = "1"
+
+[mounts]
+  source = "nomouse_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  # One always-on machine: live runs keep state in memory (one run at a
+  # time) and the ledger on the volume, so do not scale past one.
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "180s"
+    interval = "30s"
+    timeout = "5s"
+    method = "GET"
+    path = "/"
+
+[[vm]]
+  size = "shared-cpu-2x"
+  memory = "2gb"

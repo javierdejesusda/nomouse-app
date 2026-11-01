@@ -124,6 +124,23 @@ Then open http://localhost:8000/. On first start the container downloads the W3C
 - Behind a reverse proxy, add `-e NOMOUSE_TRUST_PROXY=1` so each client is rate-limited by the proxy's `X-Forwarded-For` address (3 live runs per address per hour). Do not set it without a proxy.
 - To show recorded runs (reviews, packets and the counts page), mount a runs directory read-only: `-e NOMOUSE_RUNS=/runs -v "$PWD/runs:/runs:ro"`.
 
+## Deploy on Fly.io
+
+`fly.toml` runs the same image on one always-on machine (2 GB, for Chromium) with a `/data` volume, and sets `NOMOUSE_TRUST_PROXY=1`: Fly's edge proxy appends the client address to `X-Forwarded-For` and nothing else sits in front, so the last entry is the client. On any host without a proxy, leave it unset.
+
+```sh
+fly launch --no-deploy --copy-config      # pick a free app name; keep fly.toml
+fly volumes create nomouse_data --size 1 --region cdg
+fly secrets set META_API_KEY=...          # never in fly.toml or the image
+tar czf runs.tgz runs/builder runs/eval runs/navigator
+fly deploy
+fly ssh sftp shell                        # put runs.tgz /data/runs.tgz
+fly ssh console -C "sh -c 'mkdir -p /data/runs && tar xzf /data/runs.tgz -C /data && rm /data/runs.tgz'"
+fly machine restart
+```
+
+The upload carries the frozen walks, reviews, packets and bare-Spark results into `/data/runs`, so the hosted replay shows the recorded eval (the start script skips any page that already has `verdicts.json`). Without it the host re-walks every page and the replay has no model findings. To carry over the local live spend instead of starting the USD 20 cap from zero, also put `live-state/live-usage.jsonl` at `/data/state/live-usage.jsonl`.
+
 Live runs added after a start are listed by link only and are not kept in the replay across restarts; their run directories stay in `/data/state/runs`.
 
 ## Privacy and acceptable use
