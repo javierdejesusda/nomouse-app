@@ -11,72 +11,80 @@ No model call; reads walk.json, verdicts.json and review-<run>.json.
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 LABELS = Path(__file__).with_name("labels.json")
 RUNS = ("outside1", "outside2")
+HEADER = (
+    "Page",
+    "Labelled triggers opened",
+    "W1 false flags",
+    "Reviewer false flags, run 1",
+    "Reviewer false flags, run 2",
+    "Other controls opened",
+    "W1 findings on them",
+    "Reviewer findings on them (run 1, run 2)",
+)
 
 
-def _names(walk: dict) -> dict[int, str]:
-    steps = [walk["initial"], *walk["steps"]] if "initial" in walk else walk["steps"]
+def _load(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _names(walk: dict[str, Any]) -> dict[int, str]:
+    """Maps each step index to the accessible name focus had there."""
     names = {}
-    for position, step in enumerate(steps):
+    for position, step in enumerate([walk["initial"], *walk["steps"]]):
         focus = step.get("focus") or {}
         names[step.get("index", position)] = (focus.get("name") or "").strip()
     return names
 
 
+def score_page(label: dict[str, Any], run_dir: Path) -> list[str]:
+    """Returns the table cells for one page."""
+    names = _names(_load(run_dir / "walk.json"))
+    triggers = set(label["triggers"])
+    verdicts = _load(run_dir / "verdicts.json")["verdicts"]
+    w1 = next(v for v in verdicts if v["walker"] == "W1")["findings"]
+    w1_on = [f for f in w1 if f["element"]["name"].strip() in triggers]
+    w1_other = [
+        f
+        for f in w1
+        if f["element"]["name"].strip() not in triggers
+        and f["rule"] == "focus-management"
+    ]
+    opened: dict[bool, set[int]] = {True: set(), False: set()}
+    flags: dict[bool, list[int]] = {True: [], False: []}
+    for run in RUNS:
+        counts = {True: 0, False: 0}
+        for instance in _load(run_dir / f"review-{run}.json")["instances"]:
+            step = instance["steps"]["trigger"]
+            labelled = names.get(step, "") in triggers
+            opened[labelled].add(step)
+            counts[labelled] += bool(instance["finding"])
+        for labelled, count in counts.items():
+            flags[labelled].append(count)
+    return [
+        label["pattern"],
+        f"{len(opened[True])} of {len(triggers)}",
+        str(len(w1_on)),
+        str(flags[True][0]),
+        str(flags[True][1]),
+        str(len(opened[False])),
+        str(len(w1_other)),
+        f"{flags[False][0]}, {flags[False][1]}",
+    ]
+
+
 def main(run_dirs: list[str]) -> None:
-    labels = json.loads(LABELS.read_text(encoding="utf-8"))["pages"]
+    """Prints the outside-pass table for the run dirs, in labels order."""
+    labels = _load(LABELS)["pages"]
     if len(run_dirs) != len(labels):
         sys.exit(f"give {len(labels)} run dirs, in labels order")
-    print("| Page | Labelled triggers opened | W1 false flags | Reviewer false flags, run 1 | Reviewer false flags, run 2 | Other controls opened | W1 findings on them | Reviewer findings on them (run 1, run 2) |")
-    print("|---|---|---|---|---|---|---|---|")
-    totals = [0] * 7
-    for label, run_dir in zip(labels, map(Path, run_dirs), strict=True):
-        walk = json.loads((run_dir / "walk.json").read_text(encoding="utf-8"))
-        verdicts = json.loads((run_dir / "verdicts.json").read_text(encoding="utf-8"))
-        names = _names(walk)
-        triggers = set(label["triggers"])
-        w1 = next(v for v in verdicts["verdicts"] if v["walker"] == "W1")
-        w1_on = [f for f in w1["findings"] if f["element"]["name"].strip() in triggers]
-        w1_other = [
-            f
-            for f in w1["findings"]
-            if f["element"]["name"].strip() not in triggers and f["rule"] == "focus-management"
-        ]
-        opened_on, opened_other, flags_on, flags_other = set(), set(), [], []
-        for run in RUNS:
-            review = json.loads((run_dir / f"review-{run}.json").read_text(encoding="utf-8"))
-            on = other = 0
-            for instance in review["instances"]:
-                name = names.get(instance["steps"]["trigger"], "")
-                bucket = opened_on if name in triggers else opened_other
-                bucket.add(instance["steps"]["trigger"])
-                if instance["finding"]:
-                    if name in triggers:
-                        on += 1
-                    else:
-                        other += 1
-            flags_on.append(on)
-            flags_other.append(other)
-        row = [
-            len(opened_on),
-            len(w1_on),
-            flags_on[0],
-            flags_on[1],
-            len(opened_other),
-            len(w1_other),
-        ]
-        for i, value in enumerate(row):
-            totals[i] += value
-        totals[6] += sum(flags_other)
-        print(
-            f"| {label['pattern']} | {len(opened_on)} of {len(triggers)} | {len(w1_on)} | {flags_on[0]} | {flags_on[1]} |"
-            f" {len(opened_other)} | {len(w1_other)} | {flags_other[0]}, {flags_other[1]} |"
-        )
-        for f in w1_on:
-            print(f"<!-- W1 on label: {f['rule']} step {f['step']} {f['element']['name']!r}: {f['detail']} -->")
-    print(f"<!-- totals: {totals} -->")
+    print("| " + " | ".join(HEADER) + " |")
+    print("|---" * len(HEADER) + "|")
+    for label, run_dir in zip(labels, run_dirs, strict=True):
+        print("| " + " | ".join(score_page(label, Path(run_dir))) + " |")
 
 
 if __name__ == "__main__":
