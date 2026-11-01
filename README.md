@@ -1,8 +1,20 @@
 # NoMouse
 
-A walker-baselined measurement of WCAG 2.4.3 Focus Order, narrowed to focus management: when a menu, dialog or panel opens, does keyboard focus land inside it, and does it come back to the trigger on close? Every model verdict sits beside a frozen deterministic baseline.
+[![ci](https://github.com/javierdejesusda/nomouse-app/actions/workflows/ci.yml/badge.svg)](https://github.com/javierdejesusda/nomouse-app/actions/workflows/ci.yml)
 
-Status as of 2026-10-30. Built for the Meta Global AI Developer Hackathon 2026 (Indie track).
+**A menu opens, but keyboard focus stays behind it. NoMouse catches that.** It walks a page with the keyboard only, lets deterministic walkers judge what the DOM can settle, then has Muse Spark 1.3 look at the screenshots: did focus land inside what visibly opened, and did it come back on close?
+
+![Replay of drawer-slides-in: Enter on Menu opens a Sections drawer while the focus box stays on Menu behind it; the walker has no finding and Muse Spark 1.3 flags it NEEDS REVIEW](docs/drawer-slides-in.gif)
+
+*Above: Enter opens a drawer, focus stays on the Menu button behind it. The DOM walker (W1) passes it; the model flags it for a person.*
+
+- **Live replay and live runs:** _URL added at deploy_ · **Video (3 min):** _link added at upload_
+- **3 catches the walker misses**, in both model runs (builder pages, labelled before any model call).
+- **No false flag added** over the walker on 20 clean controls; a plain Spark video prompt flags 16 and 15 of 20 (two runs).
+- **On W3C's own reference widgets** (APG dialog, menu buttons, disclosures; [outside pass](eval/outside/results.md)): the walker flags 7 of 10 correct triggers, the model 0 of 10 in both runs.
+- **CI-ready:** `nomouse walk <url> --fail-on barriers` exits 1 on a keyboard barrier, with no key and no model call.
+
+Built for the Meta Global AI Developer Hackathon 2026 (Indie track). Status as of 2026-11-01. WCAG 2.4.3 Focus Order, narrowed to focus management; every model verdict sits beside a frozen deterministic baseline.
 
 **What it is:** observed keyboard-only test evidence. A driver presses keys, the browser reports where focus is after every key, two deterministic walkers judge what the DOM can settle, and only then does Muse Spark 1.3 look at the screenshots.
 
@@ -67,6 +79,8 @@ From `eval/results.md`, runs of 2026-10-30 16:09-16:30 UTC with the code at `88c
 - **Cost:** about USD 0.88 for the whole eval (90 eval calls plus 40 packet-writer calls).
 
 **Navigator runs** (2026-10-30, live, CLI): 4 typed tasks. "open the Edit address dialog and close it" (builder) done correctly in 6 keys; "show the answer to the first delivery question" (builder) done in 4; "use the Sort menu to sort the photos by name" (builder, not achievable: there is no such item) ended stuck, correctly; "choose two tickets and continue" on W3C Tickets Before **failed**: no ticket chosen, stuck at the 40-key cap. USD 0.43 in all.
+
+**Outside pass** (2026-11-01, separate from the counts above): five W3C APG example pages, labelled as clean controls and committed before any model call. W1 flags 7 of the 10 correct triggers (all disclosures, where focus rightly stays on the toggle); the reviewer flags 0 of 10 in both runs, and 1 site control (W3C's SkipTo menu) in one run. No outside page has a focus-management failure, so this pass measures false flags, not catches. Details: `eval/outside/results.md`.
 
 ## Prior art
 
