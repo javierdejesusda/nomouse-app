@@ -1,0 +1,41 @@
+{
+  "about": "Ground truth for the outside pass: W3C WAI-ARIA Authoring Practices (APG) example pages, fetched from https://www.w3.org/WAI/ARIA/apg/ at run time and never committed. Every labelled trigger is a W3C reference implementation, so every row is a clean control: a finding on it from W1 or the focus reviewer is a false flag. Written on 2026-11-01 before any model call on these pages (one walk of the dialog page had already run, to check that the pages can be walked; walks make no model call). Triggers are matched by accessible name; findings on the site's own header, footer and code-sample controls are reported separately and are not scored.",
+  "source": "https://www.w3.org/WAI/ARIA/apg/patterns/",
+  "pages": [
+    {
+      "page": "dialog-modal/examples/dialog/index.html",
+      "pattern": "modal dialog",
+      "expected": "Enter on a trigger moves focus inside the dialog that opened; Escape closes it and focus returns to the trigger.",
+      "triggers": ["Add Delivery Address"]
+    },
+    {
+      "page": "menu-button/examples/menu-button-actions/index.html",
+      "pattern": "menu button (actions)",
+      "expected": "Enter opens the menu and moves focus to its first item; Escape closes it and focus returns to the button.",
+      "triggers": ["Actions"]
+    },
+    {
+      "page": "menu-button/examples/menu-button-links/index.html",
+      "pattern": "menu button (links)",
+      "expected": "Enter opens the menu and moves focus to its first item; Escape closes it and focus returns to the button.",
+      "triggers": ["WAI-ARIA Quick Links"]
+    },
+    {
+      "page": "disclosure/examples/disclosure-faq/index.html",
+      "pattern": "disclosure (FAQ)",
+      "expected": "Enter shows the answer and focus correctly stays on the toggle button.",
+      "triggers": [
+        "What do I do if I have a permit for an assigned lot, but can't find a space there?",
+        "What do I do if I lose my permit or if my permit is stolen?",
+        "Is there free parking on holidays?",
+        "Do all parking facilities have the same enforcement rules?"
+      ]
+    },
+    {
+      "page": "disclosure/examples/disclosure-navigation/index.html",
+      "pattern": "disclosure navigation menu",
+      "expected": "Enter toggles the link list and focus correctly stays on the toggle button.",
+      "triggers": ["About", "Admissions", "Academics"]
+    }
+  ]
+}
