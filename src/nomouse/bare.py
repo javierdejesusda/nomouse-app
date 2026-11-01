@@ -1,6 +1,6 @@
 """Bare-Spark eval arm: one video call per frozen walk with the bare prompt.
 
-This arm answers RT7's question: what does Muse Spark find on its own, asked
+This arm asks what Muse Spark find on its own, asked
 only to "list the keyboard and focus failures"? It sees a video made from the
 walk's frozen screenshots (one frame per key, one second each), with no focus
 boxes, walker verdicts, labels or DOM ids. The answer is structured (element,

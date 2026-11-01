@@ -42,7 +42,7 @@ LIVE_MAX_KEYS = 40
 REVIEW_RUN = "live"
 RUN_RESERVE_USD = 0.25
 """The most one 40-key run is expected to cost; a run starts only while the
-spend plus this reserve stays within the cap. The T10 eval reviews cost
+spend plus this reserve stays within the cap. The eval reviews cost
 under USD 0.03 a page."""
 TASK_RESERVE_USD = 0.75
 """The most one run with a typed task is expected to cost: up to 41
