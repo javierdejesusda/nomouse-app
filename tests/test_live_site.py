@@ -165,10 +165,20 @@ def test_polling_gives_up_with_a_message_after_repeated_failures(
     page.get_by_label("Page to walk").select_option("builder/menu-focus-stays.html")
     page.get_by_role("button", name="Start a live run").click()
     expect(page.locator("#live-status")).to_contain_text("trying again")
+    alert = page.get_by_role("alert")
     for _ in range(8):
+        seen = len(polls)
         page.clock.run_for(60_000)
+        # Each aborted poll is handled in real time; wait for it before the
+        # fake clock moves again, or a slow machine skips a retry timer.
+        for _ in range(200):
+            if len(polls) > seen or alert.count():
+                break
+            page.wait_for_timeout(25)
+        if alert.count():
+            break
 
-    expect(page.get_by_role("alert")).to_contain_text("Lost contact with the server")
+    expect(alert).to_contain_text("Lost contact with the server")
     expect(page.get_by_role("button", name="Start a live run")).to_be_enabled()
     assert len(polls) == 6
 
