@@ -1,0 +1,2523 @@
+{
+  "labels_sha256": {
+    "builder": "90158dfd9de08d1f4c5ec0b44929e25c06ec218d0e8ea4beffc0e2fed23b1d61",
+    "w3c": "c6f38f15923d10b47e0861799cf1a4344742a0e32ec7ef4ba118f10b84d27266"
+  },
+  "runs": [
+    "eval1",
+    "eval2"
+  ],
+  "prompt_sha256": {
+    "reviewer": [
+      "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+    ],
+    "bare": [
+      "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3"
+    ]
+  },
+  "usage": {
+    "reviewer eval1": {
+      "calls": 19,
+      "input_tokens": 95834,
+      "output_tokens": 7190
+    },
+    "bare eval1": {
+      "calls": 26,
+      "input_tokens": 82160,
+      "output_tokens": 28480
+    },
+    "reviewer eval2": {
+      "calls": 19,
+      "input_tokens": 95834,
+      "output_tokens": 7504
+    },
+    "bare eval2": {
+      "calls": 26,
+      "input_tokens": 82160,
+      "output_tokens": 28042
+    },
+    "total": {
+      "calls": 90,
+      "input_tokens": 355988,
+      "output_tokens": 71216,
+      "cost_usd": 0.747653
+    }
+  },
+  "rows": [
+    {
+      "id": "after-home-template-08",
+      "page": "after/home.html",
+      "status": "clean",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 08 (After: menu items are plain CSS-styled links)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "arms": {
+        "W0": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "after-home-template-05",
+      "page": "after/home.html",
+      "status": "clean",
+      "types": [
+        "no-bypass"
+      ],
+      "set": "w3c",
+      "note": "W3C After Template Note 02",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "after-home-template-03",
+      "page": "after/home.html",
+      "status": "clean",
+      "types": [
+        "keyboard-operation"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 03 (After: redirect started by the user)",
+      "form": null,
+      "carrier_ids": [
+        "qkmenu"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "after-survey-template-08",
+      "page": "after/survey.html",
+      "status": "clean",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 08 (After: menu items are plain CSS-styled links)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "arms": {
+        "W0": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "after-survey-template-05",
+      "page": "after/survey.html",
+      "status": "clean",
+      "types": [
+        "no-bypass"
+      ],
+      "set": "w3c",
+      "note": "W3C After Template Note 02",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "after-survey-template-03",
+      "page": "after/survey.html",
+      "status": "clean",
+      "types": [
+        "keyboard-operation"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 03 (After: redirect started by the user)",
+      "form": null,
+      "carrier_ids": [
+        "qkmenu"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "after-survey-06",
+      "page": "after/survey.html",
+      "status": "clean",
+      "types": [
+        "focus-order"
+      ],
+      "set": "w3c",
+      "note": "W3C Survey Note 06 (After: meaningful reading sequence)",
+      "form": null,
+      "carrier_ids": [
+        "em",
+        "n",
+        "ev"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Name",
+        "eMail Address",
+        "Retype eMail"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "after-survey-05",
+      "page": "after/survey.html",
+      "status": "clean",
+      "types": [
+        "keyboard-operation"
+      ],
+      "set": "w3c",
+      "note": "W3C Survey Note 05 (After: select box with improved keyboard usability)",
+      "form": null,
+      "carrier_ids": [
+        "cc"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "select a city",
+        "city"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "after-tickets-template-08",
+      "page": "after/tickets.html",
+      "status": "clean",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 08 (After: menu items are plain CSS-styled links)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "arms": {
+        "W0": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "after-tickets-template-05",
+      "page": "after/tickets.html",
+      "status": "clean",
+      "types": [
+        "no-bypass"
+      ],
+      "set": "w3c",
+      "note": "W3C After Template Note 02",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "after-tickets-template-03",
+      "page": "after/tickets.html",
+      "status": "clean",
+      "types": [
+        "keyboard-operation"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 03 (After: redirect started by the user)",
+      "form": null,
+      "carrier_ids": [
+        "qkmenu"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "before-home-template-08",
+      "page": "before/home.html",
+      "status": "failure",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 08 (Before: page components not focusable)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "arms": {
+        "W0": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "before-home-template-05",
+      "page": "before/home.html",
+      "status": "failure",
+      "types": [
+        "no-bypass"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 05 (Before)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "before-home-template-03",
+      "page": "before/home.html",
+      "status": "failure",
+      "types": [
+        "keyboard-operation"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 03 (Before: automatic redirect on change)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "before-survey-template-08",
+      "page": "before/survey.html",
+      "status": "failure",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 08 (Before: page components not focusable)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "arms": {
+        "W0": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "before-survey-template-05",
+      "page": "before/survey.html",
+      "status": "failure",
+      "types": [
+        "no-bypass"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 05 (Before)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "before-survey-template-03",
+      "page": "before/survey.html",
+      "status": "failure",
+      "types": [
+        "keyboard-operation"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 03 (Before: automatic redirect on change)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "before-survey-06",
+      "page": "before/survey.html",
+      "status": "failure",
+      "types": [
+        "focus-order"
+      ],
+      "set": "w3c",
+      "note": "W3C Survey Note 06 (Before: reading sequence not meaningful)",
+      "form": null,
+      "carrier_ids": [
+        "em",
+        "n",
+        "ev"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Name",
+        "eMail Address",
+        "Retype eMail"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "before-survey-05",
+      "page": "before/survey.html",
+      "status": "failure",
+      "types": [
+        "keyboard-operation"
+      ],
+      "set": "w3c",
+      "note": "W3C Survey Note 05 (Before: select box not easily usable by keyboard)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [
+        "select a city",
+        "city"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "before-tickets-template-08",
+      "page": "before/tickets.html",
+      "status": "failure",
+      "types": [
+        "not-focusable",
+        "focus-not-visible"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 08 (Before: page components not focusable)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [
+        "A"
+      ],
+      "carrier_names": [
+        "Home",
+        "News",
+        "Tickets",
+        "Survey"
+      ],
+      "arms": {
+        "W0": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "before-tickets-template-05",
+      "page": "before/tickets.html",
+      "status": "failure",
+      "types": [
+        "no-bypass"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 05 (Before)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "before-tickets-template-03",
+      "page": "before/tickets.html",
+      "status": "failure",
+      "types": [
+        "keyboard-operation"
+      ],
+      "set": "w3c",
+      "note": "W3C Template Note 03 (Before: automatic redirect on change)",
+      "form": null,
+      "carrier_ids": [],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Quick menu",
+        "Quickmenu",
+        "Explore Site by Topic"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "dialog-fades-in",
+      "page": "dialog-fades-in.html",
+      "set": "builder",
+      "note": "Enter makes the already-rendered sign-in dialog opaque (opacity 0 to 1) but focus stays on the Sign in button behind the scrim.",
+      "status": "failure",
+      "form": "focus-management",
+      "types": [
+        "focus-not-moved"
+      ],
+      "carrier_ids": [
+        "sign-in",
+        "sign-in-dialog"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Sign in"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "dialog-focus-returns",
+      "page": "dialog-focus-returns.html",
+      "set": "builder",
+      "note": "Correct: Enter opens the modal dialog with focus on its first field; Escape closes it and returns focus to Edit address.",
+      "status": "clean",
+      "form": "focus-management",
+      "types": [
+        "focus-not-moved",
+        "focus-not-returned"
+      ],
+      "carrier_ids": [
+        "edit-address",
+        "address-dialog",
+        "address-street"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Edit address",
+        "Street"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "dialog-focus-stays",
+      "page": "dialog-focus-stays.html",
+      "set": "builder",
+      "note": "Enter shows the Invite people modal dialog but focus stays on the button behind it.",
+      "status": "failure",
+      "form": "focus-management",
+      "types": [
+        "focus-not-moved"
+      ],
+      "carrier_ids": [
+        "invite",
+        "invite-dialog"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Invite people"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "disclosure-stays-on-toggle",
+      "page": "disclosure-stays-on-toggle.html",
+      "set": "builder",
+      "note": "Correct: Enter shows each answer below its question and focus stays on the question button, as a disclosure should.",
+      "status": "clean",
+      "form": "focus-management",
+      "types": [
+        "focus-not-moved",
+        "focus-not-returned"
+      ],
+      "carrier_ids": [
+        "faq-1",
+        "faq-2",
+        "faq-3"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "+ Can I skip a week?",
+        "+ What if I am not home?",
+        "+ When does my box arrive?",
+        "- Can I skip a week?",
+        "- What if I am not home?",
+        "- When does my box arrive?"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "drawer-slides-in",
+      "page": "drawer-slides-in.html",
+      "set": "builder",
+      "note": "Enter slides the already-rendered, off-screen menu drawer in with a transform but focus stays on the Menu button behind the scrim.",
+      "status": "failure",
+      "form": "focus-management",
+      "types": [
+        "focus-not-moved"
+      ],
+      "carrier_ids": [
+        "menu-toggle",
+        "drawer"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Menu"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "menu-focus-moves",
+      "page": "menu-focus-moves.html",
+      "set": "builder",
+      "note": "Correct: Enter opens the Sort menu with focus on its first item; Escape closes it and returns focus to Sort.",
+      "status": "clean",
+      "form": "focus-management",
+      "types": [
+        "focus-not-moved",
+        "focus-not-returned"
+      ],
+      "carrier_ids": [
+        "sort",
+        "sort-menu",
+        "sort-newest"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Newest first",
+        "Sort"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "menu-focus-stays",
+      "page": "menu-focus-stays.html",
+      "set": "builder",
+      "note": "Enter opens the Actions menu but focus stays on the button instead of moving to the first item.",
+      "status": "failure",
+      "form": "focus-management",
+      "types": [
+        "focus-not-moved"
+      ],
+      "carrier_ids": [
+        "actions",
+        "actions-menu"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Actions"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "order-address-rowwise",
+      "page": "order-address-rowwise.html",
+      "set": "builder",
+      "note": "Shipping and billing addresses are drawn as two columns but Tab alternates between them row by row, never up.",
+      "status": "failure",
+      "form": "order",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "ship-name",
+        "bill-name",
+        "ship-street",
+        "bill-street",
+        "ship-city",
+        "bill-city",
+        "ship-postcode",
+        "bill-postcode"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "City",
+        "Full name",
+        "Postcode",
+        "Street and number"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "order-filters-dialog",
+      "page": "order-filters-dialog.html",
+      "set": "builder",
+      "note": "Correct: a modal filter panel open on load keeps Tab inside it (Close filters, the brand checkboxes, capacity, Reset, Apply), skipping the visible but inert shop behind; Escape or Close filters closes it, removes inert and returns focus to Filters, which reopens it with focus on the first checkbox.",
+      "status": "clean",
+      "form": "order",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "filters",
+        "page",
+        "brand-ridge",
+        "filters-close",
+        "filters-open"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Filters",
+        "Ridgeline"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "order-footer-rowwise",
+      "page": "order-footer-rowwise.html",
+      "set": "builder",
+      "note": "Footer links sit in three headed columns but Tab reads across the columns row by row, never up.",
+      "status": "failure",
+      "form": "order",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "tour",
+        "about",
+        "help-center",
+        "integrations",
+        "careers",
+        "contact",
+        "changelog",
+        "press",
+        "status"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "About us",
+        "Careers",
+        "Changelog",
+        "Contact",
+        "Help center",
+        "Integrations",
+        "Press",
+        "System status",
+        "Tour"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "order-glossary-columns",
+      "page": "order-glossary-columns.html",
+      "set": "builder",
+      "note": "Correct: an A to Z glossary flows down three newspaper columns and Tab moves up to the top of each next column.",
+      "status": "clean",
+      "form": "order",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "term-first",
+        "term-col2",
+        "term-col3"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Abeam",
+        "Downhaul",
+        "Mainsheet"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "order-login-reversed",
+      "page": "order-login-reversed.html",
+      "set": "builder",
+      "note": "Password is in the Tab order before Email although Email is drawn above it, so Tab moves up from Password to Email.",
+      "status": "failure",
+      "form": "order",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "password",
+        "email"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Email",
+        "Password"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "order-pricing-rowwise",
+      "page": "order-pricing-rowwise.html",
+      "set": "builder",
+      "note": "Three plan cards, each with a seats field and a Choose button, are drawn side by side but Tab goes from Basic seats to Pro seats and Team seats before Choose Basic, breaking the task inside each card, never up.",
+      "status": "failure",
+      "form": "order",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "seats-basic",
+        "seats-pro",
+        "seats-team",
+        "choose-basic",
+        "choose-pro",
+        "choose-team"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Choose Basic",
+        "Choose Pro",
+        "Choose Team",
+        "Seats for Basic",
+        "Seats for Pro",
+        "Seats for Team"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "order-rtl-nav",
+      "page": "order-rtl-nav.html",
+      "set": "builder",
+      "note": "Correct: a right-to-left Hebrew page, so Tab moves leftwards along each row.",
+      "status": "clean",
+      "form": "order",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "nav-home",
+        "nav-new",
+        "nav-sale",
+        "nav-contact"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "\u05de\u05d1\u05e6\u05e2\u05d9\u05dd",
+        "\u05e1\u05e4\u05e8\u05d9\u05dd \u05d7\u05d3\u05e9\u05d9\u05dd",
+        "\u05e6\u05d5\u05e8 \u05e7\u05e9\u05e8",
+        "\u05e8\u05d0\u05e9\u05d9"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "order-settings-columns",
+      "page": "order-settings-columns.html",
+      "set": "builder",
+      "note": "Correct: Tab finishes the Account column, then moves up to the top of the Notifications column.",
+      "status": "clean",
+      "form": "order",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "timezone",
+        "notify-digest"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Time zone",
+        "Weekly digest"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "order-sidebar-after-main",
+      "page": "order-sidebar-after-main.html",
+      "set": "builder",
+      "note": "Correct: the article is read before the right sidebar, so Tab moves up from the article's last link to the sidebar's first field.",
+      "status": "clean",
+      "form": "order",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "article-last",
+        "newsletter-email"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Email address",
+        "Read the 14 comments"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        }
+      }
+    },
+    {
+      "id": "order-toolbar-reversed",
+      "page": "order-toolbar-reversed.html",
+      "set": "builder",
+      "note": "The toolbar reads Bold, Italic, Underline, Link left to right but Tab visits it right to left (row-reverse).",
+      "status": "failure",
+      "form": "order",
+      "types": [
+        "focus-order"
+      ],
+      "carrier_ids": [
+        "btn-link",
+        "btn-underline",
+        "btn-italic",
+        "btn-bold"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Bold",
+        "Italic",
+        "Link",
+        "Underline"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": true,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "reply-focus-search",
+      "page": "reply-focus-search.html",
+      "set": "builder",
+      "note": "Enter opens the reply box (no dialog semantics) but a toolbar re-render moves focus to the search field at the top, outside the box; the field looks unchanged but is a new node.",
+      "status": "failure",
+      "form": "focus-management",
+      "types": [
+        "focus-not-moved"
+      ],
+      "carrier_ids": [
+        "reply-1",
+        "reply-region",
+        "search"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Reply",
+        "Search this topic"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "bare eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "trap-card-fields",
+      "page": "trap-card-fields.html",
+      "set": "builder",
+      "note": "The card widget wraps Tab among card number, expiry and security code; Escape does nothing, so Pay and the footer are unreachable.",
+      "status": "failure",
+      "form": "trap",
+      "types": [
+        "keyboard-trap"
+      ],
+      "carrier_ids": [
+        "card-widget",
+        "card-number",
+        "card-expiry",
+        "card-cvc"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Card number",
+        "Expiry (MM/YY)",
+        "Security code"
+      ],
+      "arms": {
+        "W0": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "W1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "NoMouse eval1": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "VERIFIED"
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    },
+    {
+      "id": "trap-editor-escape",
+      "page": "trap-editor-escape.html",
+      "set": "builder",
+      "note": "Correct: Tab inserts spaces in the code editor, but Escape then Tab leaves it, as the visible hint says.",
+      "status": "clean",
+      "form": "trap",
+      "types": [
+        "keyboard-trap"
+      ],
+      "carrier_ids": [
+        "code",
+        "code-hint",
+        "save-snippet"
+      ],
+      "carrier_tags": [],
+      "carrier_names": [
+        "Code",
+        "Save snippet"
+      ],
+      "arms": {
+        "W0": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "W1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval1": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "NoMouse eval2": {
+          "strict": false,
+          "loose": false,
+          "status": null
+        },
+        "bare eval2": {
+          "strict": true,
+          "loose": true,
+          "status": "NEEDS REVIEW"
+        }
+      }
+    }
+  ],
+  "arms": {
+    "W0": {
+      "failures": 22,
+      "found": 4,
+      "verified": 4,
+      "needs_review": 0,
+      "found_loose": 4,
+      "clean": 20,
+      "false_flags": 3,
+      "false_flags_strict": 3,
+      "clean_pages": 12,
+      "clean_pages_any_finding": 3,
+      "builder": {
+        "failures": 11,
+        "found": 1,
+        "verified": 1,
+        "needs_review": 0,
+        "found_loose": 1,
+        "clean": 9,
+        "false_flags": 0,
+        "false_flags_strict": 0,
+        "clean_pages": 9,
+        "clean_pages_any_finding": 0
+      },
+      "w3c": {
+        "failures": 11,
+        "found": 3,
+        "verified": 3,
+        "needs_review": 0,
+        "found_loose": 3,
+        "clean": 11,
+        "false_flags": 3,
+        "false_flags_strict": 3,
+        "clean_pages": 3,
+        "clean_pages_any_finding": 3
+      }
+    },
+    "W1": {
+      "failures": 22,
+      "found": 9,
+      "verified": 9,
+      "needs_review": 0,
+      "found_loose": 9,
+      "clean": 20,
+      "false_flags": 9,
+      "false_flags_strict": 8,
+      "clean_pages": 12,
+      "clean_pages_any_finding": 8,
+      "builder": {
+        "failures": 11,
+        "found": 5,
+        "verified": 5,
+        "needs_review": 0,
+        "found_loose": 5,
+        "clean": 9,
+        "false_flags": 5,
+        "false_flags_strict": 5,
+        "clean_pages": 9,
+        "clean_pages_any_finding": 5
+      },
+      "w3c": {
+        "failures": 11,
+        "found": 4,
+        "verified": 4,
+        "needs_review": 0,
+        "found_loose": 4,
+        "clean": 11,
+        "false_flags": 4,
+        "false_flags_strict": 3,
+        "clean_pages": 3,
+        "clean_pages_any_finding": 3
+      }
+    },
+    "NoMouse eval1": {
+      "failures": 22,
+      "found": 12,
+      "verified": 9,
+      "needs_review": 3,
+      "found_loose": 12,
+      "clean": 20,
+      "false_flags": 9,
+      "false_flags_strict": 8,
+      "clean_pages": 12,
+      "clean_pages_any_finding": 9,
+      "builder": {
+        "failures": 11,
+        "found": 8,
+        "verified": 5,
+        "needs_review": 3,
+        "found_loose": 8,
+        "clean": 9,
+        "false_flags": 5,
+        "false_flags_strict": 5,
+        "clean_pages": 9,
+        "clean_pages_any_finding": 6
+      },
+      "w3c": {
+        "failures": 11,
+        "found": 4,
+        "verified": 4,
+        "needs_review": 0,
+        "found_loose": 4,
+        "clean": 11,
+        "false_flags": 4,
+        "false_flags_strict": 3,
+        "clean_pages": 3,
+        "clean_pages_any_finding": 3
+      }
+    },
+    "NoMouse eval2": {
+      "failures": 22,
+      "found": 12,
+      "verified": 9,
+      "needs_review": 3,
+      "found_loose": 12,
+      "clean": 20,
+      "false_flags": 9,
+      "false_flags_strict": 8,
+      "clean_pages": 12,
+      "clean_pages_any_finding": 9,
+      "builder": {
+        "failures": 11,
+        "found": 8,
+        "verified": 5,
+        "needs_review": 3,
+        "found_loose": 8,
+        "clean": 9,
+        "false_flags": 5,
+        "false_flags_strict": 5,
+        "clean_pages": 9,
+        "clean_pages_any_finding": 6
+      },
+      "w3c": {
+        "failures": 11,
+        "found": 4,
+        "verified": 4,
+        "needs_review": 0,
+        "found_loose": 4,
+        "clean": 11,
+        "false_flags": 4,
+        "false_flags_strict": 3,
+        "clean_pages": 3,
+        "clean_pages_any_finding": 3
+      }
+    },
+    "bare eval1": {
+      "failures": 22,
+      "found": 15,
+      "verified": 0,
+      "needs_review": 15,
+      "found_loose": 18,
+      "clean": 20,
+      "false_flags": 16,
+      "false_flags_strict": 8,
+      "clean_pages": 12,
+      "clean_pages_any_finding": 11,
+      "builder": {
+        "failures": 11,
+        "found": 7,
+        "verified": 0,
+        "needs_review": 7,
+        "found_loose": 8,
+        "clean": 9,
+        "false_flags": 5,
+        "false_flags_strict": 1,
+        "clean_pages": 9,
+        "clean_pages_any_finding": 8
+      },
+      "w3c": {
+        "failures": 11,
+        "found": 8,
+        "verified": 0,
+        "needs_review": 8,
+        "found_loose": 10,
+        "clean": 11,
+        "false_flags": 11,
+        "false_flags_strict": 7,
+        "clean_pages": 3,
+        "clean_pages_any_finding": 3
+      }
+    },
+    "bare eval2": {
+      "failures": 22,
+      "found": 15,
+      "verified": 0,
+      "needs_review": 15,
+      "found_loose": 20,
+      "clean": 20,
+      "false_flags": 15,
+      "false_flags_strict": 9,
+      "clean_pages": 12,
+      "clean_pages_any_finding": 12,
+      "builder": {
+        "failures": 11,
+        "found": 9,
+        "verified": 0,
+        "needs_review": 9,
+        "found_loose": 10,
+        "clean": 9,
+        "false_flags": 5,
+        "false_flags_strict": 2,
+        "clean_pages": 9,
+        "clean_pages_any_finding": 9
+      },
+      "w3c": {
+        "failures": 11,
+        "found": 6,
+        "verified": 0,
+        "needs_review": 6,
+        "found_loose": 10,
+        "clean": 11,
+        "false_flags": 10,
+        "false_flags_strict": 7,
+        "clean_pages": 3,
+        "clean_pages_any_finding": 3
+      }
+    }
+  },
+  "model_only": {
+    "eval1": [
+      "dialog-fades-in",
+      "drawer-slides-in",
+      "reply-focus-search"
+    ],
+    "eval2": [
+      "dialog-fades-in",
+      "drawer-slides-in",
+      "reply-focus-search"
+    ]
+  },
+  "bar": {
+    "runs": {
+      "eval1": {
+        "model_only_catches": 3,
+        "control_flags": 0,
+        "met": true
+      },
+      "eval2": {
+        "model_only_catches": 3,
+        "control_flags": 0,
+        "met": true
+      }
+    },
+    "met": true
+  },
+  "disagreements": {
+    "NoMouse": [],
+    "bare": [
+      "after-survey-06",
+      "before-home-template-08",
+      "before-survey-template-08",
+      "before-survey-06",
+      "before-tickets-template-08",
+      "drawer-slides-in",
+      "order-footer-rowwise",
+      "order-glossary-columns",
+      "order-login-reversed",
+      "order-pricing-rowwise",
+      "order-rtl-nav",
+      "order-settings-columns",
+      "order-toolbar-reversed",
+      "trap-card-fields",
+      "trap-editor-escape"
+    ]
+  },
+  "missing": [],
+  "complete": true
+}

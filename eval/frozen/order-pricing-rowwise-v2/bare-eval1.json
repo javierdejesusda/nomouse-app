@@ -1,0 +1,46 @@
+{
+  "page": "/order-pricing-rowwise.html",
+  "run": "eval1",
+  "verdicts_sha256": "f64965b945da9543d1b8681c9c75bb566393e95c671c192505cfaf828eab544d",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 18,
+    "seconds_per_frame": 1,
+    "video_sha256": "9dd54f5e19efb228da976e24dccc82db21200e22ea14c6515dd901e461439ce7"
+  },
+  "failures": [
+    {
+      "description": "Tab moved from Product at second 0 directly to Basic Seats, skipping the Customers link entirely.",
+      "element": "Customers",
+      "second": 1,
+      "type": "not-focusable"
+    },
+    {
+      "description": "Pressing Tab after Compare all plans at second 14 leaves no visible focus indicator anywhere on the page at second 16.",
+      "element": "Compare all plans",
+      "second": 16,
+      "type": "focus-not-visible"
+    },
+    {
+      "description": "No skip link or other bypass is offered before the header links and three plan cards.",
+      "element": "Pick a plan page",
+      "second": 0,
+      "type": "no-bypass"
+    }
+  ],
+  "usage": {
+    "input_tokens": 2400,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 1167,
+    "output_tokens_details": {
+      "reasoning_tokens": 1015
+    },
+    "total_tokens": 3567
+  },
+  "latency_s": 12.264305755999885
+}

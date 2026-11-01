@@ -1,0 +1,40 @@
+{
+  "page": "/order-address-rowwise.html",
+  "run": "eval1",
+  "verdicts_sha256": "d3285df23e99a4105df4080c239c9174c8c869328e59fb02dd5dc20d0c5e5ce1",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 14,
+    "seconds_per_frame": 1,
+    "video_sha256": "8d37696f3769b47bb80cb293a2cdd001b37cad6c674447b5cac29d7cdabfae13"
+  },
+  "failures": [
+    {
+      "description": "Tab moves from Shipping Full name to Billing Full name instead of completing all Shipping address fields first.",
+      "element": "Billing Full name",
+      "second": 4,
+      "type": "focus-order"
+    },
+    {
+      "description": "The Account link in the header never receives keyboard focus when tabbing past Cart.",
+      "element": "Account",
+      "second": 12,
+      "type": "not-focusable"
+    }
+  ],
+  "usage": {
+    "input_tokens": 1880,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 1307,
+    "output_tokens_details": {
+      "reasoning_tokens": 1209
+    },
+    "total_tokens": 3187
+  },
+  "latency_s": 11.891684251000243
+}

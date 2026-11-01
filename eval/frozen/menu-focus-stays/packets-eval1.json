@@ -1,0 +1,46 @@
+{
+  "page": "/menu-focus-stays.html",
+  "verdicts_sha256": "c07a45265f22e6164cd7f324248df54182a93715eea8d55dc8b5c15e0561d6fb",
+  "review": {
+    "file": "review-eval1.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "spark",
+    "model": "muse-spark-1.3",
+    "reasoning_effort": "minimal",
+    "error": null,
+    "usage": {
+      "input_tokens": 272,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 242,
+      "output_tokens_details": {
+        "reasoning_tokens": 192
+      },
+      "total_tokens": 514
+    }
+  },
+  "packets": [
+    {
+      "id": "P1",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "focus-management",
+      "step": 4,
+      "element": {
+        "tag": "BUTTON",
+        "dom_id": "actions",
+        "role": "button",
+        "name": "Actions"
+      },
+      "observed": "after Enter, focus is outside the 7 elements that appeared",
+      "sentence": "In step 4, after Enter on the \"Actions\" button, keyboard focus was outside the 7 elements that appeared.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    }
+  ]
+}

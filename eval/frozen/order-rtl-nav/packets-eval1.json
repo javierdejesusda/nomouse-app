@@ -1,0 +1,142 @@
+{
+  "page": "/order-rtl-nav.html",
+  "verdicts_sha256": "ecb248e22dacb84ba7fca54275b9b3c6c0ae07c5764fff43e5e51409b3bc339f",
+  "review": {
+    "file": "review-eval1.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "spark",
+    "model": "muse-spark-1.3",
+    "reasoning_effort": "minimal",
+    "error": null,
+    "usage": {
+      "input_tokens": 872,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 1133,
+      "output_tokens_details": {
+        "reasoning_tokens": 475
+      },
+      "total_tokens": 2005
+    }
+  },
+  "packets": [
+    {
+      "id": "P1",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 1,
+      "element": {
+        "tag": "A",
+        "dom_id": "nav-new",
+        "role": "link",
+        "name": "\u05e1\u05e4\u05e8\u05d9\u05dd \u05d7\u05d3\u05e9\u05d9\u05dd"
+      },
+      "observed": "jumps left 126 px on the same row from A#nav-home",
+      "sentence": "Order (best practice) at step 1 on the link \"\u05e1\u05e4\u05e8\u05d9\u05dd \u05d7\u05d3\u05e9\u05d9\u05dd\": jumps left 126 px on the same row from A#nav-home; the Tab order differs from the visual layout, and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "template",
+      "rejected": "At step 1 focus moved to link \"\u05e1\u05e4\u05e8\u05d9\u05dd \u05d7\u05d3\u05e9\u05d9\u05dd\" which jumps left 126 px on the same row from link \"\u05e8\u05d0\u05e9\u05d9\", and this is a best practice finding where the Tab order differs from the visual layout and W3C allows other meaningful orders so a person should review it",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P2",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 2,
+      "element": {
+        "tag": "A",
+        "dom_id": "nav-sale",
+        "role": "link",
+        "name": "\u05de\u05d1\u05e6\u05e2\u05d9\u05dd"
+      },
+      "observed": "jumps left 85 px on the same row from A#nav-new",
+      "sentence": "Order (best practice) at step 2 on the link \"\u05de\u05d1\u05e6\u05e2\u05d9\u05dd\": jumps left 85 px on the same row from A#nav-new; the Tab order differs from the visual layout, and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "template",
+      "rejected": "At step 2 focus moved to link \"\u05de\u05d1\u05e6\u05e2\u05d9\u05dd\" which jumps left 85 px on the same row from link \"\u05e1\u05e4\u05e8\u05d9\u05dd \u05d7\u05d3\u05e9\u05d9\u05dd\", and this is a best practice finding where the Tab order differs from the visual layout and W3C allows other meaningful orders so a person should review it",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P3",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 3,
+      "element": {
+        "tag": "A",
+        "dom_id": "nav-contact",
+        "role": "link",
+        "name": "\u05e6\u05d5\u05e8 \u05e7\u05e9\u05e8"
+      },
+      "observed": "jumps left 88 px on the same row from A#nav-sale",
+      "sentence": "Order (best practice) at step 3 on the link \"\u05e6\u05d5\u05e8 \u05e7\u05e9\u05e8\": jumps left 88 px on the same row from A#nav-sale; the Tab order differs from the visual layout, and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "template",
+      "rejected": "At step 3 focus moved to link \"\u05e6\u05d5\u05e8 \u05e7\u05e9\u05e8\" which jumps left 88 px on the same row from link \"\u05de\u05d1\u05e6\u05e2\u05d9\u05dd\", and this is a best practice finding where the Tab order differs from the visual layout and W3C allows other meaningful orders so a person should review it",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P4",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 5,
+      "element": {
+        "tag": "BUTTON",
+        "dom_id": "search-go",
+        "role": "button",
+        "name": "\u05d7\u05e4\u05e9"
+      },
+      "observed": "jumps left 72 px on the same row from INPUT#query",
+      "sentence": "Order (best practice) at step 5 on the button \"\u05d7\u05e4\u05e9\": jumps left 72 px on the same row from INPUT#query; the Tab order differs from the visual layout, and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "template",
+      "rejected": "At step 5 focus moved to button \"\u05d7\u05e4\u05e9\" which jumps left 72 px on the same row from searchbox \"\u05d7\u05d9\u05e4\u05d5\u05e9\", and this is a best practice finding where the Tab order differs from the visual layout and W3C allows other meaningful orders so a person should review it",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P5",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 9,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "\u05dc\u05e4\u05e8\u05d8\u05d9\u05dd"
+      },
+      "observed": "jumps left 305 px on the same row from A",
+      "sentence": "Order (best practice) at step 9 on the link \"\u05dc\u05e4\u05e8\u05d8\u05d9\u05dd\": jumps left 305 px on the same row from A; the Tab order differs from the visual layout, and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "template",
+      "rejected": "At step 9 focus moved to link \"\u05dc\u05e4\u05e8\u05d8\u05d9\u05dd\" which jumps left 305 px on the same row from A, and this is a best practice finding where the Tab order differs from the visual layout and W3C allows other meaningful orders so a person should review it",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P6",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 10,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "\u05dc\u05e4\u05e8\u05d8\u05d9\u05dd"
+      },
+      "observed": "jumps left 305 px on the same row from A",
+      "sentence": "Order (best practice) at step 10 on the link \"\u05dc\u05e4\u05e8\u05d8\u05d9\u05dd\": jumps left 305 px on the same row from A; the Tab order differs from the visual layout, and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "template",
+      "rejected": "At step 10 focus moved to link \"\u05dc\u05e4\u05e8\u05d8\u05d9\u05dd\" which jumps left 305 px on the same row from A, and this is a best practice finding where the Tab order differs from the visual layout and W3C allows other meaningful orders so a person should review it",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    }
+  ]
+}

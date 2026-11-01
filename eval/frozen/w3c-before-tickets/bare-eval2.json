@@ -1,0 +1,46 @@
+{
+  "page": "/before/tickets.html",
+  "run": "eval2",
+  "verdicts_sha256": "0f39c4ad67df4545211e3310a0195a30fea99ef16a544b484825bf5f8cd85b5b",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 49,
+    "seconds_per_frame": 1,
+    "video_sha256": "d507ce822d47ed072c2189180e0dcbd9d3b819830af79464e37510790ec16350"
+  },
+  "failures": [
+    {
+      "description": "The QUICKMENU dropdown can be opened with a mouse but cannot be opened or used with keyboard alone.",
+      "element": "QUICKMENU -->",
+      "second": 13,
+      "type": "keyboard-operation"
+    },
+    {
+      "description": "The scrollable Citylights Terms and Conditions region cannot receive keyboard focus so keyboard users cannot scroll to read the full text.",
+      "element": "Citylights Terms and Conditions",
+      "second": 20,
+      "type": "not-focusable"
+    },
+    {
+      "description": "The page has no skip link or other bypass, forcing keyboard users to tab through the entire top navigation on every page.",
+      "element": "Overview Home News Tickets Survey Template navigation",
+      "second": 5,
+      "type": "no-bypass"
+    }
+  ],
+  "usage": {
+    "input_tokens": 6300,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 725,
+    "output_tokens_details": {
+      "reasoning_tokens": 558
+    },
+    "total_tokens": 7025
+  },
+  "latency_s": 5.578524324999762
+}

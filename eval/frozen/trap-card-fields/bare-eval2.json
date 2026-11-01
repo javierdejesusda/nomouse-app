@@ -1,0 +1,58 @@
+{
+  "page": "/trap-card-fields.html",
+  "run": "eval2",
+  "verdicts_sha256": "e4df1675ba4f7ae629bb4d978cf183a00cc36c5fbf0f6a520173907a6232cc02",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 12,
+    "seconds_per_frame": 1,
+    "video_sha256": "545591557c0a484760cbf65f9a216192c9079f29e2b7643b8e86c5c557c910a7"
+  },
+  "failures": [
+    {
+      "description": "Tabbing cycles only between Card number, Expiry and Security code and never leaves the card group to reach the page actions.",
+      "element": "Card number",
+      "second": 10,
+      "type": "keyboard-trap"
+    },
+    {
+      "description": "The Pay button never receives keyboard focus during the whole tab sequence through the payment form.",
+      "element": "Pay 84.00 EUR",
+      "second": 10,
+      "type": "not-focusable"
+    },
+    {
+      "description": "The Terms of carriage link never receives keyboard focus in the tab sequence.",
+      "element": "Terms of carriage",
+      "second": 10,
+      "type": "not-focusable"
+    },
+    {
+      "description": "The My trips link in the header is skipped and never receives keyboard focus.",
+      "element": "My trips",
+      "second": 0,
+      "type": "not-focusable"
+    },
+    {
+      "description": "The right end of the focused Security code field extends outside the white card box and is cut off.",
+      "element": "Security code",
+      "second": 8,
+      "type": "focus-obscured"
+    }
+  ],
+  "usage": {
+    "input_tokens": 1620,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 1106,
+    "output_tokens_details": {
+      "reasoning_tokens": 870
+    },
+    "total_tokens": 2726
+  },
+  "latency_s": 6.3051028140007475
+}

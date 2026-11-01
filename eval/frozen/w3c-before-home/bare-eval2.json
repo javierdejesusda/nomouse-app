@@ -1,0 +1,46 @@
+{
+  "page": "/before/home.html",
+  "run": "eval2",
+  "verdicts_sha256": "ae8edb0b3d6d9cc7a803047da07c24cab709c05e017591d1947b6345d622e5ca",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 59,
+    "seconds_per_frame": 1,
+    "video_sha256": "9fdb15bbec1ad458c506c59423d03d43b3ecb002779993a029f8e693a46a4871"
+  },
+  "failures": [
+    {
+      "description": "The page shows repeated header navigation at the start with no skip link to jump to main content.",
+      "element": "Overview",
+      "second": 0,
+      "type": "no-bypass"
+    },
+    {
+      "description": "The custom QUICKMENU control cannot be opened or selected using keyboard only.",
+      "element": "QUICKMENU --->",
+      "second": 12,
+      "type": "keyboard-operation"
+    },
+    {
+      "description": "The Click here links receive keyboard focus but show no visible focus indicator.",
+      "element": "Killer bees, Click here.",
+      "second": 26,
+      "type": "focus-not-visible"
+    }
+  ],
+  "usage": {
+    "input_tokens": 7600,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 590,
+    "output_tokens_details": {
+      "reasoning_tokens": 449
+    },
+    "total_tokens": 8190
+  },
+  "latency_s": 10.00830469399989
+}

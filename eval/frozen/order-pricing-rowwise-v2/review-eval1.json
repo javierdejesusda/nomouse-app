@@ -1,0 +1,100 @@
+{
+  "page": "/order-pricing-rowwise.html",
+  "run": "eval1",
+  "verdicts_sha256": "f64965b945da9543d1b8681c9c75bb566393e95c671c192505cfaf828eab544d",
+  "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "instances": [
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 5,
+        "enter": 6,
+        "escape": 7
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "Focus stays on Choose Basic while the new confirmation text Basic plan with 1 seats added appears below and needs no interaction."
+        },
+        "opened": "yes",
+        "returned": {
+          "answer": "pass",
+          "reason": "After Escape focus is still on Choose Basic with the same confirmation text visible."
+        }
+      },
+      "finding": false,
+      "status": null
+    },
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 8,
+        "enter": 9,
+        "escape": 10
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "Focus stays on Choose Pro and the only change is the status line switching to Pro plan text."
+        },
+        "opened": "no",
+        "returned": {
+          "answer": "pass",
+          "reason": "After Escape focus is still on Choose Pro with the Pro plan text visible."
+        }
+      },
+      "finding": false,
+      "status": null
+    },
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 11,
+        "enter": 12,
+        "escape": 13
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "Focus stays on Choose Team and the only change is the status line switching to Team plan text."
+        },
+        "opened": "no",
+        "returned": {
+          "answer": "pass",
+          "reason": "After Escape focus is still on Choose Team with the Team plan text visible."
+        }
+      },
+      "finding": false,
+      "status": null
+    }
+  ],
+  "usage": {
+    "calls": 1,
+    "input_tokens": 9622,
+    "cached_tokens": 0,
+    "output_tokens": 1189,
+    "reasoning_tokens": 950,
+    "total_tokens": 10811
+  },
+  "calls": [
+    {
+      "form": "i",
+      "images": 9,
+      "instances": 3,
+      "usage": {
+        "input_tokens": 9622,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 1189,
+        "output_tokens_details": {
+          "reasoning_tokens": 950
+        },
+        "total_tokens": 10811
+      },
+      "latency_s": 7.608874039000057
+    }
+  ]
+}

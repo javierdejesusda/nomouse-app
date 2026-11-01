@@ -1,0 +1,15 @@
+{
+  "page": "/order-pricing-rowwise.html",
+  "verdicts_sha256": "f64965b945da9543d1b8681c9c75bb566393e95c671c192505cfaf828eab544d",
+  "review": {
+    "file": "review-eval2.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "template",
+    "error": null,
+    "usage": null
+  },
+  "packets": []
+}

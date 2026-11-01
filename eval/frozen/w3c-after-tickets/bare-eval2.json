@@ -1,0 +1,52 @@
+{
+  "page": "/after/tickets.html",
+  "run": "eval2",
+  "verdicts_sha256": "147f586cb13223750d3fbae7a9726066d583ce058539d76bf019bf75a86776d3",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 53,
+    "seconds_per_frame": 1,
+    "video_sha256": "84dbce47d5ccd3989a48e4b22e1c2d807d99341ac2d10ebac775c899d72d3bae"
+  },
+  "failures": [
+    {
+      "description": "The Skip link only jumps to the demo toolbar and does not bypass to the main Citylights content.",
+      "element": "Skip to content (within demo page)",
+      "second": 13,
+      "type": "no-bypass"
+    },
+    {
+      "description": "The Quick Menu dropdown and Go control cannot be opened and activated with keyboard alone.",
+      "element": "Quick Menu Go",
+      "second": 18,
+      "type": "keyboard-operation"
+    },
+    {
+      "description": "Keyboard focus on the HOME side navigation has no visible outline or highlight.",
+      "element": "HOME",
+      "second": 20,
+      "type": "focus-not-visible"
+    },
+    {
+      "description": "The Show Annotations control is hover-styled but never receives keyboard focus when tabbing.",
+      "element": "Show Annotations",
+      "second": 10,
+      "type": "not-focusable"
+    }
+  ],
+  "usage": {
+    "input_tokens": 6820,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 1122,
+    "output_tokens_details": {
+      "reasoning_tokens": 935
+    },
+    "total_tokens": 7942
+  },
+  "latency_s": 8.526794213999892
+}

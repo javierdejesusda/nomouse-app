@@ -1,0 +1,777 @@
+{
+  "url": "/menu-focus-stays.html",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "end_reason": "cycle",
+  "repeat_step": null,
+  "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab"
+  ],
+  "initial": {
+    "url": "/menu-focus-stays.html",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "focus": {
+      "backend_node_id": 4,
+      "tag": "BODY",
+      "dom_id": null,
+      "role": "none",
+      "name": null,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 348
+      },
+      "cover": null,
+      "document_has_focus": true
+    },
+    "screenshot": "initial.png",
+    "settled": true,
+    "appeared": []
+  },
+  "steps": [
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 20,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Board",
+        "box": {
+          "x": 815.09375,
+          "y": 42,
+          "width": 44.765625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-000.png",
+      "settled": true,
+      "appeared": [],
+      "index": 0,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 3,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Reports",
+        "box": {
+          "x": 883.859375,
+          "y": 42,
+          "width": 58.578125,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-001.png",
+      "settled": true,
+      "appeared": [],
+      "index": 1,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 21,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Team",
+        "box": {
+          "x": 966.4375,
+          "y": 42,
+          "width": 41.5625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-002.png",
+      "settled": true,
+      "appeared": [],
+      "index": 2,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "BUTTON",
+        "dom_id": "actions",
+        "role": "button",
+        "name": "Actions",
+        "box": {
+          "x": 16,
+          "y": 95,
+          "width": 84.78125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-003.png",
+      "settled": true,
+      "appeared": [],
+      "index": 3,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "BUTTON",
+        "dom_id": "actions",
+        "role": "button",
+        "name": "Actions",
+        "box": {
+          "x": 16,
+          "y": 95,
+          "width": 84.78125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-004.png",
+      "settled": true,
+      "appeared": [
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "index": 4,
+      "key": "Enter"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "BUTTON",
+        "dom_id": "actions",
+        "role": "button",
+        "name": "Actions",
+        "box": {
+          "x": 16,
+          "y": 95,
+          "width": 84.78125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-005.png",
+      "settled": true,
+      "appeared": [],
+      "index": 5,
+      "key": "Escape"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 33,
+        "tag": "INPUT",
+        "dom_id": "filter",
+        "role": "searchbox",
+        "name": "Filter",
+        "box": {
+          "x": 162.640625,
+          "y": 95,
+          "width": 268.0,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-006.png",
+      "settled": true,
+      "appeared": [],
+      "index": 6,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 38,
+        "tag": "BUTTON",
+        "dom_id": "refresh",
+        "role": "button",
+        "name": "Refresh",
+        "box": {
+          "x": 442.640625,
+          "y": 95,
+          "width": 86.3125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-007.png",
+      "settled": true,
+      "appeared": [],
+      "index": 7,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 38,
+        "tag": "BUTTON",
+        "dom_id": "refresh",
+        "role": "button",
+        "name": "Refresh",
+        "box": {
+          "x": 442.640625,
+          "y": 95,
+          "width": 86.3125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-008.png",
+      "settled": true,
+      "appeared": [],
+      "index": 8,
+      "key": "Enter"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 38,
+        "tag": "BUTTON",
+        "dom_id": "refresh",
+        "role": "button",
+        "name": "Refresh",
+        "box": {
+          "x": 442.640625,
+          "y": 95,
+          "width": 86.3125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-009.png",
+      "settled": true,
+      "appeared": [],
+      "index": 9,
+      "key": "Escape"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 41,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Draft the release notes",
+        "box": {
+          "x": 29,
+          "y": 166,
+          "width": 171.796875,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-010.png",
+      "settled": true,
+      "appeared": [],
+      "index": 10,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 43,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Fix the login timeout",
+        "box": {
+          "x": 333,
+          "y": 166,
+          "width": 152.9375,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-011.png",
+      "settled": true,
+      "appeared": [],
+      "index": 11,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 45,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Review the color tokens",
+        "box": {
+          "x": 637,
+          "y": 166,
+          "width": 180.15625,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-012.png",
+      "settled": true,
+      "appeared": [],
+      "index": 12,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 47,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Plan the user interviews",
+        "box": {
+          "x": 29,
+          "y": 228,
+          "width": 180.765625,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-013.png",
+      "settled": true,
+      "appeared": [],
+      "index": 13,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 49,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Update the help center",
+        "box": {
+          "x": 333,
+          "y": 228,
+          "width": 173.234375,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-014.png",
+      "settled": true,
+      "appeared": [],
+      "index": 14,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 51,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Clean up old branches",
+        "box": {
+          "x": 637,
+          "y": 228,
+          "width": 170.140625,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-015.png",
+      "settled": true,
+      "appeared": [],
+      "index": 15,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 53,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Help",
+        "box": {
+          "x": 16,
+          "y": 313,
+          "width": 30.53125,
+          "height": 17
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-016.png",
+      "settled": true,
+      "appeared": [],
+      "index": 16,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 4,
+        "tag": "BODY",
+        "dom_id": null,
+        "role": "none",
+        "name": null,
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 348
+        },
+        "cover": null,
+        "document_has_focus": false
+      },
+      "screenshot": "step-017.png",
+      "settled": true,
+      "appeared": [],
+      "index": 17,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-stays.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 20,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Board",
+        "box": {
+          "x": 815.09375,
+          "y": 42,
+          "width": 44.765625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-018.png",
+      "settled": true,
+      "appeared": [],
+      "index": 18,
+      "key": "Tab"
+    }
+  ],
+  "targets": [
+    {
+      "backend_node_id": 20,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 815.09375,
+        "y": 42,
+        "width": 44.765625,
+        "height": 24
+      },
+      "reached_by": [
+        20
+      ]
+    },
+    {
+      "backend_node_id": 3,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 883.859375,
+        "y": 42,
+        "width": 58.578125,
+        "height": 24
+      },
+      "reached_by": [
+        3
+      ]
+    },
+    {
+      "backend_node_id": 21,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 966.4375,
+        "y": 42,
+        "width": 41.5625,
+        "height": 24
+      },
+      "reached_by": [
+        21
+      ]
+    },
+    {
+      "backend_node_id": 24,
+      "tag": "BUTTON",
+      "dom_id": "actions",
+      "box": {
+        "x": 16,
+        "y": 95,
+        "width": 84.78125,
+        "height": 40
+      },
+      "reached_by": [
+        24
+      ]
+    },
+    {
+      "backend_node_id": 33,
+      "tag": "INPUT",
+      "dom_id": "filter",
+      "box": {
+        "x": 162.640625,
+        "y": 95,
+        "width": 268,
+        "height": 40
+      },
+      "reached_by": [
+        33
+      ]
+    },
+    {
+      "backend_node_id": 38,
+      "tag": "BUTTON",
+      "dom_id": "refresh",
+      "box": {
+        "x": 442.640625,
+        "y": 95,
+        "width": 86.3125,
+        "height": 40
+      },
+      "reached_by": [
+        38
+      ]
+    },
+    {
+      "backend_node_id": 41,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 29,
+        "y": 166,
+        "width": 171.796875,
+        "height": 20
+      },
+      "reached_by": [
+        41
+      ]
+    },
+    {
+      "backend_node_id": 43,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 333,
+        "y": 166,
+        "width": 152.9375,
+        "height": 20
+      },
+      "reached_by": [
+        43
+      ]
+    },
+    {
+      "backend_node_id": 45,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 637,
+        "y": 166,
+        "width": 180.15625,
+        "height": 20
+      },
+      "reached_by": [
+        45
+      ]
+    },
+    {
+      "backend_node_id": 47,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 29,
+        "y": 228,
+        "width": 180.765625,
+        "height": 20
+      },
+      "reached_by": [
+        47
+      ]
+    },
+    {
+      "backend_node_id": 49,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 333,
+        "y": 228,
+        "width": 173.234375,
+        "height": 20
+      },
+      "reached_by": [
+        49
+      ]
+    },
+    {
+      "backend_node_id": 51,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 637,
+        "y": 228,
+        "width": 170.140625,
+        "height": 20
+      },
+      "reached_by": [
+        51
+      ]
+    },
+    {
+      "backend_node_id": 53,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 16,
+        "y": 313,
+        "width": 30.53125,
+        "height": 17
+      },
+      "reached_by": [
+        53
+      ]
+    }
+  ],
+  "blocked_requests": []
+}

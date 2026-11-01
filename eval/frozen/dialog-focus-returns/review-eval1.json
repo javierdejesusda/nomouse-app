@@ -1,0 +1,58 @@
+{
+  "page": "/dialog-focus-returns.html",
+  "run": "eval1",
+  "verdicts_sha256": "41d5668c86ed8f39efdb99f27c3124758a424384ebee0c3734bc350e3e0d9935",
+  "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "instances": [
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 2,
+        "enter": 3,
+        "escape": 4
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "Focus is on the Street textbox inside the Edit delivery address dialog that opened."
+        },
+        "opened": "yes",
+        "returned": {
+          "answer": "pass",
+          "reason": "The dialog closed and focus is back on the Edit address button with visible focus ring."
+        }
+      },
+      "finding": false,
+      "status": null
+    }
+  ],
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3400,
+    "cached_tokens": 0,
+    "output_tokens": 178,
+    "reasoning_tokens": 94,
+    "total_tokens": 3578
+  },
+  "calls": [
+    {
+      "form": "i",
+      "images": 3,
+      "instances": 1,
+      "usage": {
+        "input_tokens": 3400,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 178,
+        "output_tokens_details": {
+          "reasoning_tokens": 94
+        },
+        "total_tokens": 3578
+      },
+      "latency_s": 3.2907932010002696
+    }
+  ]
+}

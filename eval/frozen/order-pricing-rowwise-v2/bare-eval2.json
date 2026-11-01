@@ -1,0 +1,46 @@
+{
+  "page": "/order-pricing-rowwise.html",
+  "run": "eval2",
+  "verdicts_sha256": "f64965b945da9543d1b8681c9c75bb566393e95c671c192505cfaf828eab544d",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 18,
+    "seconds_per_frame": 1,
+    "video_sha256": "9dd54f5e19efb228da976e24dccc82db21200e22ea14c6515dd901e461439ce7"
+  },
+  "failures": [
+    {
+      "description": "No skip link is visible when tabbing from the top of the page starting on Product.",
+      "element": "Product",
+      "second": 0,
+      "type": "no-bypass"
+    },
+    {
+      "description": "Tab moves from Basic Seats to Pro Seats and Team Seats before reaching any Choose button instead of completing each card.",
+      "element": "Seats",
+      "second": 4,
+      "type": "focus-order"
+    },
+    {
+      "description": "The Seats number spinner controls cannot be operated or reached by keyboard alone.",
+      "element": "Seats 1",
+      "second": 2,
+      "type": "keyboard-operation"
+    }
+  ],
+  "usage": {
+    "input_tokens": 2400,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 1346,
+    "output_tokens_details": {
+      "reasoning_tokens": 1206
+    },
+    "total_tokens": 3746
+  },
+  "latency_s": 29.579243663999478
+}

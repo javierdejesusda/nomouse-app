@@ -1,0 +1,46 @@
+{
+  "page": "/after/home.html",
+  "run": "eval2",
+  "verdicts_sha256": "c49cad960368715f462ba8c1137886a2be19ba0eeecd7af18ec933071ef5cc81",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 62,
+    "seconds_per_frame": 1,
+    "video_sha256": "14a644c4317a7d5302d0d7a9657f366c56f716160a26a8578e1af47a675d3a54"
+  },
+  "failures": [
+    {
+      "description": "No skip link is available at the top of the page to bypass the repeated demo navigation.",
+      "element": "Skip to content",
+      "second": 0,
+      "type": "no-bypass"
+    },
+    {
+      "description": "Focus lands on the Overview tab but no visible focus indicator is shown.",
+      "element": "Overview",
+      "second": 4,
+      "type": "focus-not-visible"
+    },
+    {
+      "description": "Focus on the Quick Menu combobox is unclear and the control cannot be operated reliably by keyboard alone.",
+      "element": "Quick Menu",
+      "second": 14,
+      "type": "keyboard-operation"
+    }
+  ],
+  "usage": {
+    "input_tokens": 8120,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 697,
+    "output_tokens_details": {
+      "reasoning_tokens": 557
+    },
+    "total_tokens": 8817
+  },
+  "latency_s": 8.494638000000123
+}

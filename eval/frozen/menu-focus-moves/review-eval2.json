@@ -1,0 +1,58 @@
+{
+  "page": "/menu-focus-moves.html",
+  "run": "eval2",
+  "verdicts_sha256": "5f79f14f640ec16aa390c85f8cc01ca80ea4d6d3c04edb9e135c03d079725826",
+  "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "instances": [
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 2,
+        "enter": 3,
+        "escape": 4
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "Focus is on 'Newest first' inside the dropdown menu that appeared under Sort."
+        },
+        "opened": "yes",
+        "returned": {
+          "answer": "pass",
+          "reason": "After Escape the menu is closed and focus is back on the Sort button."
+        }
+      },
+      "finding": false,
+      "status": null
+    }
+  ],
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3391,
+    "cached_tokens": 0,
+    "output_tokens": 432,
+    "reasoning_tokens": 348,
+    "total_tokens": 3823
+  },
+  "calls": [
+    {
+      "form": "i",
+      "images": 3,
+      "instances": 1,
+      "usage": {
+        "input_tokens": 3391,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 432,
+        "output_tokens_details": {
+          "reasoning_tokens": 348
+        },
+        "total_tokens": 3823
+      },
+      "latency_s": 2.8020843200001764
+    }
+  ]
+}

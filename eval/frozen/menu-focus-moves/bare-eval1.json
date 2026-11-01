@@ -1,0 +1,40 @@
+{
+  "page": "/menu-focus-moves.html",
+  "run": "eval1",
+  "verdicts_sha256": "5f79f14f640ec16aa390c85f8cc01ca80ea4d6d3c04edb9e135c03d079725826",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 13,
+    "seconds_per_frame": 1,
+    "video_sha256": "ebac5acf581543c8209e9ae5ba78fb1b06676ad612066efa1491337c2c02d763"
+  },
+  "failures": [
+    {
+      "description": "Focus moves from Albums directly to Sort, skipping the Shared link entirely.",
+      "element": "Shared",
+      "second": 2,
+      "type": "not-focusable"
+    },
+    {
+      "description": "Sort menu opens showing options but keyboard focus never moves into the menu and options cannot be operated.",
+      "element": "Newest first, Oldest first, By album Sort menu",
+      "second": 4,
+      "type": "keyboard-operation"
+    }
+  ],
+  "usage": {
+    "input_tokens": 1620,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 1385,
+    "output_tokens_details": {
+      "reasoning_tokens": 1280
+    },
+    "total_tokens": 3005
+  },
+  "latency_s": 10.239715973999864
+}

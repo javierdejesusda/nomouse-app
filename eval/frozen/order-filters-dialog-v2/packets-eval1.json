@@ -1,0 +1,47 @@
+{
+  "page": "/order-filters-dialog.html",
+  "verdicts_sha256": "b00cd2c23ac1c53695599c697274bb680475e97587f9081c66d76f7b32764d2d",
+  "review": {
+    "file": "review-eval1.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "spark",
+    "model": "muse-spark-1.3",
+    "reasoning_effort": "minimal",
+    "error": null,
+    "usage": {
+      "input_tokens": 282,
+      "input_tokens_details": {
+        "cached_tokens": 163
+      },
+      "output_tokens": 278,
+      "output_tokens_details": {
+        "reasoning_tokens": 215
+      },
+      "total_tokens": 560
+    }
+  },
+  "packets": [
+    {
+      "id": "P1",
+      "status": "NEEDS REVIEW",
+      "best_practice": false,
+      "source": "reviewer form (i)",
+      "rule": "focus-management",
+      "question": "returned",
+      "step": 5,
+      "element": {
+        "tag": "BUTTON",
+        "dom_id": "filters-reset",
+        "role": "button",
+        "name": "Reset"
+      },
+      "observed": "After Escape focus is on Filters, not on the activated Reset button which is now gone with the closed drawer.",
+      "sentence": "After Escape at step 5, a model saw keyboard focus move to the Filters button instead of the activated Reset button which is now gone with the closed drawer, so a person should confirm.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "page": "/after/survey.html",
+  "run": "eval2",
+  "verdicts_sha256": "d486eae5f0bd3c51c72231746986fcf9a450e174a1efa79d7dcdbdc2fde372ee",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 62,
+    "seconds_per_frame": 1,
+    "video_sha256": "8fb62db2dd9ea6d31dbdd8df6c8d7e800dbbdf5690d2ce924e3a00d171e2d5e3"
+  },
+  "failures": [
+    {
+      "description": "No skip or bypass link is available to jump past repeated header navigation to the survey content.",
+      "element": "Skip to content link",
+      "second": 12,
+      "type": "no-bypass"
+    },
+    {
+      "description": "The Quick Menu dropdown cannot be opened and operated with keyboard alone.",
+      "element": "Quick Menu",
+      "second": 16,
+      "type": "keyboard-operation"
+    },
+    {
+      "description": "Keyboard focus on the Favorite Park radio buttons has no visible indicator.",
+      "element": "Favorite Park radio options",
+      "second": 22,
+      "type": "focus-not-visible"
+    },
+    {
+      "description": "Keyboard focus on the newsletter Name and eMail text inputs has no visible indicator.",
+      "element": "Name and eMail text fields",
+      "second": 27,
+      "type": "focus-not-visible"
+    }
+  ],
+  "usage": {
+    "input_tokens": 8120,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 792,
+    "output_tokens_details": {
+      "reasoning_tokens": 611
+    },
+    "total_tokens": 8912
+  },
+  "latency_s": 11.861886266000056
+}

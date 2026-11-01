@@ -1,0 +1,46 @@
+{
+  "page": "/before/home.html",
+  "run": "eval1",
+  "verdicts_sha256": "ae8edb0b3d6d9cc7a803047da07c24cab709c05e017591d1947b6345d622e5ca",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 59,
+    "seconds_per_frame": 1,
+    "video_sha256": "9fdb15bbec1ad458c506c59423d03d43b3ecb002779993a029f8e693a46a4871"
+  },
+  "failures": [
+    {
+      "description": "Tabbing starts at the top of the page with no skip link to bypass repeated navigation blocks.",
+      "element": "Page top - no skip link",
+      "second": 0,
+      "type": "no-bypass"
+    },
+    {
+      "description": "Focus moves through the top Home News Tickets menu but no visible focus indicator is shown.",
+      "element": "News",
+      "second": 4,
+      "type": "focus-not-visible"
+    },
+    {
+      "description": "QUICKMENU dropdown cannot be opened or operated using keyboard alone.",
+      "element": "QUICKMENU -->",
+      "second": 14,
+      "type": "keyboard-operation"
+    }
+  ],
+  "usage": {
+    "input_tokens": 7600,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 656,
+    "output_tokens_details": {
+      "reasoning_tokens": 514
+    },
+    "total_tokens": 8256
+  },
+  "latency_s": 6.337964166999882
+}

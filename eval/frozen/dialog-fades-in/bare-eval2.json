@@ -1,0 +1,46 @@
+{
+  "page": "/dialog-fades-in.html",
+  "run": "eval2",
+  "verdicts_sha256": "d097544af2caa4b2edbabb0fc2872ed7102fbf538e3efbdd0962f082d8ca7e6b",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 11,
+    "seconds_per_frame": 1,
+    "video_sha256": "6d96064a236f36a425e81f0af48e89cb2b58d01f9711f23cb7e3f868deaa5c61"
+  },
+  "failures": [
+    {
+      "description": "When the Sign in dialog opens focus remains on the background page instead of moving into the dialog.",
+      "element": "Sign in to save recipes dialog",
+      "second": 2,
+      "type": "focus-not-moved"
+    },
+    {
+      "description": "After the dialog closes focus goes to the Red lentil and lemon link instead of returning to the Sign in button that opened it.",
+      "element": "Sign in button in header",
+      "second": 4,
+      "type": "focus-not-returned"
+    },
+    {
+      "description": "Keyboard tab moves from Leek and potato backwards to Miso with greens instead of following the visual left-to-right order.",
+      "element": "Miso with greens link",
+      "second": 6,
+      "type": "focus-order"
+    }
+  ],
+  "usage": {
+    "input_tokens": 1360,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 994,
+    "output_tokens_details": {
+      "reasoning_tokens": 825
+    },
+    "total_tokens": 2354
+  },
+  "latency_s": 7.097686079999676
+}

@@ -1,0 +1,263 @@
+{
+  "page": "/before/survey.html",
+  "verdicts_sha256": "60fab3b9ad53c533f3153c5f7564515231379df52fef5f3254780eed4263fee4",
+  "review": {
+    "file": "review-eval1.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "spark",
+    "model": "muse-spark-1.3",
+    "reasoning_effort": "minimal",
+    "error": null,
+    "usage": {
+      "input_tokens": 1099,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 1028,
+      "output_tokens_details": {
+        "reasoning_tokens": 327
+      },
+      "total_tokens": 2127
+    }
+  },
+  "packets": [
+    {
+      "id": "P1",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P2",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P3",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P4",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P5",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "focus-not-visible",
+      "step": 20,
+      "element": {
+        "tag": "INPUT",
+        "dom_id": null,
+        "role": "radio",
+        "name": ""
+      },
+      "observed": "no pixel changed within 8 px of the focus box",
+      "sentence": "At Tab step 20, focus moved to the radio INPUT but no pixel changed within 8 px of the focus box.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P6",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 8,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Accessible Survey Page"
+      },
+      "observed": "jumps left 125 px on the same row from A",
+      "sentence": "Order (best practice) at step 8 on the link \"Accessible Survey Page\": jumps left 125 px on the same row from A; the Tab order differs from the visual layout, and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "template",
+      "rejected": "As a best practice finding at Tab step 8, focus moved to the link named Accessible Survey Page which jumps left 125 px on the same row from A, so the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P7",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 11,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Template"
+      },
+      "observed": "jumps up 39 px from A",
+      "sentence": "As a best practice finding at Tab step 11, focus moved to the link named Template which jumps up 39 px from A, so the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P8",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 13,
+      "element": {
+        "tag": "SELECT",
+        "dom_id": null,
+        "role": "combobox",
+        "name": ""
+      },
+      "observed": "jumps up 40 px from A",
+      "sentence": "As a best practice finding at Tab step 13, focus moved to the combobox SELECT which jumps up 40 px from A, so the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P9",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 22,
+      "element": {
+        "tag": "INPUT",
+        "dom_id": "n",
+        "role": "textbox",
+        "name": ""
+      },
+      "observed": "jumps up 38 px from INPUT#em",
+      "sentence": "As a best practice finding at Tab step 22, focus moved to the textbox INPUT which jumps up 38 px from textbox, so the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P10",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 33,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Shadi Abou-Zahra"
+      },
+      "observed": "jumps left 150 px on the same row from A",
+      "sentence": "As a best practice finding at Tab step 33, focus moved to the link named Shadi Abou-Zahra which jumps left 150 px on the same row from A, so the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P11",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 35,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "WAI-TIES"
+      },
+      "observed": "jumps left 38 px on the same row from A",
+      "sentence": "As a best practice finding at Tab step 35, focus moved to the link named WAI-TIES which jumps left 38 px on the same row from A, so the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P12",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 42,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "wai-eo-editors@w3.org"
+      },
+      "observed": "jumps left 166 px on the same row from A",
+      "sentence": "As a best practice finding at Tab step 42, focus moved to the link named wai-eo-editors@w3.org which jumps left 166 px on the same row from A, so the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P13",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 53,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "public"
+      },
+      "observed": "jumps left 375 px on the same row from A",
+      "sentence": "As a best practice finding at Tab step 53, focus moved to the link named public which jumps left 375 px on the same row from A, so the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    }
+  ]
+}

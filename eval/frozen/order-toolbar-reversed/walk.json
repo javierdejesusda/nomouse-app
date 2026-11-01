@@ -1,0 +1,756 @@
+{
+  "url": "/order-toolbar-reversed.html",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "end_reason": "cycle",
+  "repeat_step": null,
+  "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab"
+  ],
+  "initial": {
+    "url": "/order-toolbar-reversed.html",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "focus": {
+      "backend_node_id": 3,
+      "tag": "BODY",
+      "dom_id": null,
+      "role": "none",
+      "name": null,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 575
+      },
+      "cover": null,
+      "document_has_focus": true
+    },
+    "screenshot": "initial.png",
+    "settled": true,
+    "appeared": []
+  },
+  "steps": [
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 13,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Drafts",
+        "box": {
+          "x": 864.28125,
+          "y": 42,
+          "width": 45.453125,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-000.png",
+      "settled": true,
+      "appeared": [],
+      "index": 0,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 14,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Published",
+        "box": {
+          "x": 933.734375,
+          "y": 42,
+          "width": 74.265625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-001.png",
+      "settled": true,
+      "appeared": [],
+      "index": 1,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 18,
+        "tag": "INPUT",
+        "dom_id": "title",
+        "role": "textbox",
+        "name": "Title",
+        "box": {
+          "x": 16,
+          "y": 131,
+          "width": 760,
+          "height": 44
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-002.png",
+      "settled": true,
+      "appeared": [],
+      "index": 2,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 21,
+        "tag": "BUTTON",
+        "dom_id": "btn-link",
+        "role": "button",
+        "name": "Link",
+        "box": {
+          "x": 317.296875,
+          "y": 195,
+          "width": 88.0,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-003.png",
+      "settled": true,
+      "appeared": [],
+      "index": 3,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 21,
+        "tag": "BUTTON",
+        "dom_id": "btn-link",
+        "role": "button",
+        "name": "Link",
+        "box": {
+          "x": 317.296875,
+          "y": 195,
+          "width": 88.0,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-004.png",
+      "settled": true,
+      "appeared": [],
+      "index": 4,
+      "key": "Enter"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 21,
+        "tag": "BUTTON",
+        "dom_id": "btn-link",
+        "role": "button",
+        "name": "Link",
+        "box": {
+          "x": 317.296875,
+          "y": 195,
+          "width": 88.0,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-005.png",
+      "settled": true,
+      "appeared": [],
+      "index": 5,
+      "key": "Escape"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 22,
+        "tag": "BUTTON",
+        "dom_id": "btn-underline",
+        "role": "button",
+        "name": "Underline",
+        "box": {
+          "x": 208,
+          "y": 195,
+          "width": 101.296875,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-006.png",
+      "settled": true,
+      "appeared": [],
+      "index": 6,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 22,
+        "tag": "BUTTON",
+        "dom_id": "btn-underline",
+        "role": "button",
+        "name": "Underline",
+        "box": {
+          "x": 208,
+          "y": 195,
+          "width": 101.296875,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-007.png",
+      "settled": true,
+      "appeared": [],
+      "index": 7,
+      "key": "Enter"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 22,
+        "tag": "BUTTON",
+        "dom_id": "btn-underline",
+        "role": "button",
+        "name": "Underline",
+        "box": {
+          "x": 208,
+          "y": 195,
+          "width": 101.296875,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-008.png",
+      "settled": true,
+      "appeared": [],
+      "index": 8,
+      "key": "Escape"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 23,
+        "tag": "BUTTON",
+        "dom_id": "btn-italic",
+        "role": "button",
+        "name": "Italic",
+        "box": {
+          "x": 112,
+          "y": 195,
+          "width": 88,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-009.png",
+      "settled": true,
+      "appeared": [],
+      "index": 9,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 23,
+        "tag": "BUTTON",
+        "dom_id": "btn-italic",
+        "role": "button",
+        "name": "Italic",
+        "box": {
+          "x": 112,
+          "y": 195,
+          "width": 88,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-010.png",
+      "settled": true,
+      "appeared": [],
+      "index": 10,
+      "key": "Enter"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 23,
+        "tag": "BUTTON",
+        "dom_id": "btn-italic",
+        "role": "button",
+        "name": "Italic",
+        "box": {
+          "x": 112,
+          "y": 195,
+          "width": 88,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-011.png",
+      "settled": true,
+      "appeared": [],
+      "index": 11,
+      "key": "Escape"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "BUTTON",
+        "dom_id": "btn-bold",
+        "role": "button",
+        "name": "Bold",
+        "box": {
+          "x": 16,
+          "y": 195,
+          "width": 88,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-012.png",
+      "settled": true,
+      "appeared": [],
+      "index": 12,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "BUTTON",
+        "dom_id": "btn-bold",
+        "role": "button",
+        "name": "Bold",
+        "box": {
+          "x": 16,
+          "y": 195,
+          "width": 88,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-013.png",
+      "settled": true,
+      "appeared": [],
+      "index": 13,
+      "key": "Enter"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "BUTTON",
+        "dom_id": "btn-bold",
+        "role": "button",
+        "name": "Bold",
+        "box": {
+          "x": 16,
+          "y": 195,
+          "width": 88,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-014.png",
+      "settled": true,
+      "appeared": [],
+      "index": 14,
+      "key": "Escape"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 26,
+        "tag": "TEXTAREA",
+        "dom_id": "body",
+        "role": "textbox",
+        "name": "Body",
+        "box": {
+          "x": 16,
+          "y": 287,
+          "width": 239,
+          "height": 218
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-015.png",
+      "settled": true,
+      "appeared": [],
+      "index": 15,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 30,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Preview",
+        "box": {
+          "x": 16,
+          "y": 527,
+          "width": 60,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-016.png",
+      "settled": true,
+      "appeared": [],
+      "index": 16,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 31,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Publish",
+        "box": {
+          "x": 88,
+          "y": 527,
+          "width": 55.140625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-017.png",
+      "settled": true,
+      "appeared": [],
+      "index": 17,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 3,
+        "tag": "BODY",
+        "dom_id": null,
+        "role": "none",
+        "name": null,
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 575
+        },
+        "cover": null,
+        "document_has_focus": false
+      },
+      "screenshot": "step-018.png",
+      "settled": true,
+      "appeared": [],
+      "index": 18,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-toolbar-reversed.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 13,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Drafts",
+        "box": {
+          "x": 864.28125,
+          "y": 42,
+          "width": 45.453125,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-019.png",
+      "settled": true,
+      "appeared": [],
+      "index": 19,
+      "key": "Tab"
+    }
+  ],
+  "targets": [
+    {
+      "backend_node_id": 13,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 864.28125,
+        "y": 42,
+        "width": 45.453125,
+        "height": 24
+      },
+      "reached_by": [
+        13
+      ]
+    },
+    {
+      "backend_node_id": 14,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 933.734375,
+        "y": 42,
+        "width": 74.265625,
+        "height": 24
+      },
+      "reached_by": [
+        14
+      ]
+    },
+    {
+      "backend_node_id": 18,
+      "tag": "INPUT",
+      "dom_id": "title",
+      "box": {
+        "x": 16,
+        "y": 131,
+        "width": 760,
+        "height": 44
+      },
+      "reached_by": [
+        18
+      ]
+    },
+    {
+      "backend_node_id": 21,
+      "tag": "BUTTON",
+      "dom_id": "btn-link",
+      "box": {
+        "x": 317.296875,
+        "y": 195,
+        "width": 88,
+        "height": 40
+      },
+      "reached_by": [
+        21
+      ]
+    },
+    {
+      "backend_node_id": 22,
+      "tag": "BUTTON",
+      "dom_id": "btn-underline",
+      "box": {
+        "x": 208,
+        "y": 195,
+        "width": 101.296875,
+        "height": 40
+      },
+      "reached_by": [
+        22
+      ]
+    },
+    {
+      "backend_node_id": 23,
+      "tag": "BUTTON",
+      "dom_id": "btn-italic",
+      "box": {
+        "x": 112,
+        "y": 195,
+        "width": 88,
+        "height": 40
+      },
+      "reached_by": [
+        23
+      ]
+    },
+    {
+      "backend_node_id": 24,
+      "tag": "BUTTON",
+      "dom_id": "btn-bold",
+      "box": {
+        "x": 16,
+        "y": 195,
+        "width": 88,
+        "height": 40
+      },
+      "reached_by": [
+        24
+      ]
+    },
+    {
+      "backend_node_id": 26,
+      "tag": "TEXTAREA",
+      "dom_id": "body",
+      "box": {
+        "x": 16,
+        "y": 287,
+        "width": 239,
+        "height": 218
+      },
+      "reached_by": [
+        26
+      ]
+    },
+    {
+      "backend_node_id": 30,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 16,
+        "y": 527,
+        "width": 60,
+        "height": 24
+      },
+      "reached_by": [
+        30
+      ]
+    },
+    {
+      "backend_node_id": 31,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 88,
+        "y": 527,
+        "width": 55.140625,
+        "height": 24
+      },
+      "reached_by": [
+        31
+      ]
+    }
+  ],
+  "blocked_requests": []
+}

@@ -1,0 +1,655 @@
+{
+  "url": "/order-pricing-rowwise.html",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "end_reason": "cycle",
+  "repeat_step": null,
+  "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab",
+    "Tab"
+  ],
+  "initial": {
+    "url": "/order-pricing-rowwise.html",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "focus": {
+      "backend_node_id": 4,
+      "tag": "BODY",
+      "dom_id": null,
+      "role": "none",
+      "name": null,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 508
+      },
+      "cover": null,
+      "document_has_focus": true
+    },
+    "screenshot": "initial.png",
+    "settled": true,
+    "appeared": []
+  },
+  "steps": [
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 14,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Product",
+        "box": {
+          "x": 842.71875,
+          "y": 42,
+          "width": 59.203125,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-000.png",
+      "settled": true,
+      "appeared": [],
+      "index": 0,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 3,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Customers",
+        "box": {
+          "x": 925.921875,
+          "y": 42,
+          "width": 82.078125,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-001.png",
+      "settled": true,
+      "appeared": [],
+      "index": 1,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 33,
+        "tag": "INPUT",
+        "dom_id": "seats-basic",
+        "role": "spinbutton",
+        "name": "Seats for Basic",
+        "box": {
+          "x": 37,
+          "y": 307,
+          "width": 100,
+          "height": 36
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-002.png",
+      "settled": true,
+      "appeared": [],
+      "index": 2,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 41,
+        "tag": "INPUT",
+        "dom_id": "seats-pro",
+        "role": "spinbutton",
+        "name": "Seats for Pro",
+        "box": {
+          "x": 345,
+          "y": 307,
+          "width": 100,
+          "height": 36
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-003.png",
+      "settled": true,
+      "appeared": [],
+      "index": 3,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 49,
+        "tag": "INPUT",
+        "dom_id": "seats-team",
+        "role": "spinbutton",
+        "name": "Seats for Team",
+        "box": {
+          "x": 653,
+          "y": 307,
+          "width": 100,
+          "height": 36
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-004.png",
+      "settled": true,
+      "appeared": [],
+      "index": 4,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 55,
+        "tag": "BUTTON",
+        "dom_id": "choose-basic",
+        "role": "button",
+        "name": "Choose Basic",
+        "box": {
+          "x": 37,
+          "y": 367,
+          "width": 135.53125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-005.png",
+      "settled": true,
+      "appeared": [],
+      "index": 5,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 55,
+        "tag": "BUTTON",
+        "dom_id": "choose-basic",
+        "role": "button",
+        "name": "Choose Basic",
+        "box": {
+          "x": 37,
+          "y": 367,
+          "width": 135.53125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-006.png",
+      "settled": true,
+      "appeared": [],
+      "index": 6,
+      "key": "Enter"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 55,
+        "tag": "BUTTON",
+        "dom_id": "choose-basic",
+        "role": "button",
+        "name": "Choose Basic",
+        "box": {
+          "x": 37,
+          "y": 367,
+          "width": 135.53125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-007.png",
+      "settled": true,
+      "appeared": [],
+      "index": 7,
+      "key": "Escape"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 57,
+        "tag": "BUTTON",
+        "dom_id": "choose-pro",
+        "role": "button",
+        "name": "Choose Pro",
+        "box": {
+          "x": 345,
+          "y": 367,
+          "width": 120.1875,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-008.png",
+      "settled": true,
+      "appeared": [],
+      "index": 8,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 57,
+        "tag": "BUTTON",
+        "dom_id": "choose-pro",
+        "role": "button",
+        "name": "Choose Pro",
+        "box": {
+          "x": 345,
+          "y": 367,
+          "width": 120.1875,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-009.png",
+      "settled": true,
+      "appeared": [],
+      "index": 9,
+      "key": "Enter"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 57,
+        "tag": "BUTTON",
+        "dom_id": "choose-pro",
+        "role": "button",
+        "name": "Choose Pro",
+        "box": {
+          "x": 345,
+          "y": 367,
+          "width": 120.1875,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-010.png",
+      "settled": true,
+      "appeared": [],
+      "index": 10,
+      "key": "Escape"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 59,
+        "tag": "BUTTON",
+        "dom_id": "choose-team",
+        "role": "button",
+        "name": "Choose Team",
+        "box": {
+          "x": 653,
+          "y": 367,
+          "width": 136.171875,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-011.png",
+      "settled": true,
+      "appeared": [],
+      "index": 11,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 59,
+        "tag": "BUTTON",
+        "dom_id": "choose-team",
+        "role": "button",
+        "name": "Choose Team",
+        "box": {
+          "x": 653,
+          "y": 367,
+          "width": 136.171875,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-012.png",
+      "settled": true,
+      "appeared": [],
+      "index": 12,
+      "key": "Enter"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 59,
+        "tag": "BUTTON",
+        "dom_id": "choose-team",
+        "role": "button",
+        "name": "Choose Team",
+        "box": {
+          "x": 653,
+          "y": 367,
+          "width": 136.171875,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-013.png",
+      "settled": true,
+      "appeared": [],
+      "index": 13,
+      "key": "Escape"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 62,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Compare all plans",
+        "box": {
+          "x": 16,
+          "y": 486,
+          "width": 135.609375,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-014.png",
+      "settled": true,
+      "appeared": [],
+      "index": 14,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 4,
+        "tag": "BODY",
+        "dom_id": null,
+        "role": "none",
+        "name": null,
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 548
+        },
+        "cover": null,
+        "document_has_focus": false
+      },
+      "screenshot": "step-015.png",
+      "settled": true,
+      "appeared": [],
+      "index": 15,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-pricing-rowwise.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 14,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Product",
+        "box": {
+          "x": 842.71875,
+          "y": 42,
+          "width": 59.203125,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-016.png",
+      "settled": true,
+      "appeared": [],
+      "index": 16,
+      "key": "Tab"
+    }
+  ],
+  "targets": [
+    {
+      "backend_node_id": 14,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 842.71875,
+        "y": 42,
+        "width": 59.203125,
+        "height": 24
+      },
+      "reached_by": [
+        14
+      ]
+    },
+    {
+      "backend_node_id": 3,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 925.921875,
+        "y": 42,
+        "width": 82.078125,
+        "height": 24
+      },
+      "reached_by": [
+        3
+      ]
+    },
+    {
+      "backend_node_id": 33,
+      "tag": "INPUT",
+      "dom_id": "seats-basic",
+      "box": {
+        "x": 37,
+        "y": 307,
+        "width": 100,
+        "height": 36
+      },
+      "reached_by": [
+        33
+      ]
+    },
+    {
+      "backend_node_id": 41,
+      "tag": "INPUT",
+      "dom_id": "seats-pro",
+      "box": {
+        "x": 345,
+        "y": 307,
+        "width": 100,
+        "height": 36
+      },
+      "reached_by": [
+        41
+      ]
+    },
+    {
+      "backend_node_id": 49,
+      "tag": "INPUT",
+      "dom_id": "seats-team",
+      "box": {
+        "x": 653,
+        "y": 307,
+        "width": 100,
+        "height": 36
+      },
+      "reached_by": [
+        49
+      ]
+    },
+    {
+      "backend_node_id": 55,
+      "tag": "BUTTON",
+      "dom_id": "choose-basic",
+      "box": {
+        "x": 37,
+        "y": 367,
+        "width": 135.53125,
+        "height": 40
+      },
+      "reached_by": [
+        55
+      ]
+    },
+    {
+      "backend_node_id": 57,
+      "tag": "BUTTON",
+      "dom_id": "choose-pro",
+      "box": {
+        "x": 345,
+        "y": 367,
+        "width": 120.1875,
+        "height": 40
+      },
+      "reached_by": [
+        57
+      ]
+    },
+    {
+      "backend_node_id": 59,
+      "tag": "BUTTON",
+      "dom_id": "choose-team",
+      "box": {
+        "x": 653,
+        "y": 367,
+        "width": 136.171875,
+        "height": 40
+      },
+      "reached_by": [
+        59
+      ]
+    },
+    {
+      "backend_node_id": 62,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 16,
+        "y": 446,
+        "width": 135.609375,
+        "height": 20
+      },
+      "reached_by": [
+        62
+      ]
+    }
+  ],
+  "blocked_requests": []
+}

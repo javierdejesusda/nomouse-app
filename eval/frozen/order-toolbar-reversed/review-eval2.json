@@ -1,0 +1,121 @@
+{
+  "page": "/order-toolbar-reversed.html",
+  "run": "eval2",
+  "verdicts_sha256": "c7bb2caa53d01c05f0c50a24a7c9756625fd4a4a4317bd4fa78d2ffb6c76c6c8",
+  "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "instances": [
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 3,
+        "enter": 4,
+        "escape": 5
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "No menu, dialog or panel appeared after Enter, so there is nothing to move into."
+        },
+        "opened": "no",
+        "returned": {
+          "answer": "pass",
+          "reason": "After Escape focus is still on the Link button that was activated."
+        }
+      },
+      "finding": false,
+      "status": null
+    },
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 6,
+        "enter": 7,
+        "escape": 8
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "No menu, dialog or panel appeared after Enter, so there is nothing to move into."
+        },
+        "opened": "no",
+        "returned": {
+          "answer": "pass",
+          "reason": "After Escape focus is still on the Underline button that was activated."
+        }
+      },
+      "finding": false,
+      "status": null
+    },
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 9,
+        "enter": 10,
+        "escape": 11
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "No menu, dialog or panel appeared after Enter, so there is nothing to move into."
+        },
+        "opened": "no",
+        "returned": {
+          "answer": "pass",
+          "reason": "After Escape focus is still on the Italic button that was activated."
+        }
+      },
+      "finding": false,
+      "status": null
+    },
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 12,
+        "enter": 13,
+        "escape": 14
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "No menu, dialog or panel appeared after Enter, so there is nothing to move into."
+        },
+        "opened": "no",
+        "returned": {
+          "answer": "pass",
+          "reason": "After Escape focus is still on the Bold button that was activated."
+        }
+      },
+      "finding": false,
+      "status": null
+    }
+  ],
+  "usage": {
+    "calls": 1,
+    "input_tokens": 12711,
+    "cached_tokens": 0,
+    "output_tokens": 619,
+    "reasoning_tokens": 323,
+    "total_tokens": 13330
+  },
+  "calls": [
+    {
+      "form": "i",
+      "images": 12,
+      "instances": 4,
+      "usage": {
+        "input_tokens": 12711,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 619,
+        "output_tokens_details": {
+          "reasoning_tokens": 323
+        },
+        "total_tokens": 13330
+      },
+      "latency_s": 3.8883050780000303
+    }
+  ]
+}

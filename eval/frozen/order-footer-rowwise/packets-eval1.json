@@ -1,0 +1,15 @@
+{
+  "page": "/order-footer-rowwise.html",
+  "verdicts_sha256": "62b1ee879a507199d636bc63d33fc8e789f75340b6473c0c7b78bff00249b127",
+  "review": {
+    "file": "review-eval1.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "template",
+    "error": null,
+    "usage": null
+  },
+  "packets": []
+}

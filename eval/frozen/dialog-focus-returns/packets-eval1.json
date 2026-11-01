@@ -1,0 +1,15 @@
+{
+  "page": "/dialog-focus-returns.html",
+  "verdicts_sha256": "41d5668c86ed8f39efdb99f27c3124758a424384ebee0c3734bc350e3e0d9935",
+  "review": {
+    "file": "review-eval1.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "template",
+    "error": null,
+    "usage": null
+  },
+  "packets": []
+}

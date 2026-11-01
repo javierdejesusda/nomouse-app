@@ -1,0 +1,2603 @@
+{
+  "url": "/after/home.html",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "end_reason": "cycle",
+  "repeat_step": null,
+  "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab"
+  ],
+  "initial": {
+    "url": "/after/home.html",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "focus": {
+      "backend_node_id": 18,
+      "tag": "BODY",
+      "dom_id": null,
+      "role": "none",
+      "name": null,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 1249.734375
+      },
+      "cover": null,
+      "document_has_focus": true
+    },
+    "screenshot": "initial.png",
+    "settled": true,
+    "appeared": []
+  },
+  "steps": [
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 35,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Skip to accessible demo page",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 201.203125,
+          "height": 27.265625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-000.png",
+      "settled": true,
+      "appeared": [],
+      "index": 0,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 37,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "W3C logo",
+        "box": {
+          "x": 743,
+          "y": 59.390625,
+          "width": 72,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-001.png",
+      "settled": true,
+      "appeared": [],
+      "index": 1,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 39,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Web Accessibility Initiative (WAI) logo",
+        "box": {
+          "x": 815,
+          "y": 59.390625,
+          "width": 194,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-002.png",
+      "settled": true,
+      "appeared": [],
+      "index": 2,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 48,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Overview",
+        "box": {
+          "x": 10,
+          "y": 116.515625,
+          "width": 86,
+          "height": 35.15625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-003.png",
+      "settled": true,
+      "appeared": [],
+      "index": 3,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 55,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Inaccessible Home Page",
+        "box": {
+          "x": 217.390625,
+          "y": 155.265625,
+          "width": 125.0,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-004.png",
+      "settled": true,
+      "appeared": [],
+      "index": 4,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 57,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Inaccessible Home Page Report",
+        "box": {
+          "x": 342.390625,
+          "y": 155.265625,
+          "width": 94.0,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-005.png",
+      "settled": true,
+      "appeared": [],
+      "index": 5,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 63,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Accessible Home Page Report",
+        "box": {
+          "x": 342.390625,
+          "y": 175.265625,
+          "width": 94.0,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-006.png",
+      "settled": true,
+      "appeared": [],
+      "index": 6,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 65,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Show Annotations",
+        "box": {
+          "x": 437.1875,
+          "y": 155.265625,
+          "width": 144.0,
+          "height": 41.59375
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-007.png",
+      "settled": true,
+      "appeared": [],
+      "index": 7,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 68,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "News",
+        "box": {
+          "x": 176,
+          "y": 116.515625,
+          "width": 82,
+          "height": 35.15625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-008.png",
+      "settled": true,
+      "appeared": [],
+      "index": 8,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 70,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Tickets",
+        "box": {
+          "x": 257,
+          "y": 116.515625,
+          "width": 82,
+          "height": 35.15625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-009.png",
+      "settled": true,
+      "appeared": [],
+      "index": 9,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 72,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Survey",
+        "box": {
+          "x": 338,
+          "y": 116.515625,
+          "width": 82,
+          "height": 35.15625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-010.png",
+      "settled": true,
+      "appeared": [],
+      "index": 10,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 74,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Template",
+        "box": {
+          "x": 419,
+          "y": 116.515625,
+          "width": 84.109375,
+          "height": 35.15625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-011.png",
+      "settled": true,
+      "appeared": [],
+      "index": 11,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 82,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Skip to content (within demo page)",
+        "box": {
+          "x": 138,
+          "y": 213.671875,
+          "width": 334,
+          "height": 32.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-012.png",
+      "settled": true,
+      "appeared": [],
+      "index": 12,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 84,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Skip to navigation (within demo page)",
+        "box": {
+          "x": 138,
+          "y": 213.671875,
+          "width": 334,
+          "height": 32.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-013.png",
+      "settled": true,
+      "appeared": [],
+      "index": 13,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 4,
+        "tag": "SELECT",
+        "dom_id": "qkmenu",
+        "role": "combobox",
+        "name": "Explore Site by Topic:",
+        "box": {
+          "x": 730.453125,
+          "y": 243.671875,
+          "width": 102.0,
+          "height": 18.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-014.png",
+      "settled": true,
+      "appeared": [],
+      "index": 14,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 6,
+        "tag": "INPUT",
+        "dom_id": null,
+        "role": "button",
+        "name": "Go",
+        "box": {
+          "x": 838.09375,
+          "y": 242.671875,
+          "width": 32.015625,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-015.png",
+      "settled": true,
+      "appeared": [],
+      "index": 15,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 6,
+        "tag": "INPUT",
+        "dom_id": null,
+        "role": "button",
+        "name": "Go",
+        "box": {
+          "x": 838.09375,
+          "y": 242.671875,
+          "width": 32.015625,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-016.png",
+      "settled": true,
+      "appeared": [],
+      "index": 16,
+      "key": "Enter"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 6,
+        "tag": "INPUT",
+        "dom_id": null,
+        "role": "button",
+        "name": "Go",
+        "box": {
+          "x": 838.09375,
+          "y": 242.671875,
+          "width": 32.015625,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-017.png",
+      "settled": true,
+      "appeared": [],
+      "index": 17,
+      "key": "Escape"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 159,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "NEWS",
+        "box": {
+          "x": 138,
+          "y": 387.671875,
+          "width": 135,
+          "height": 34.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-018.png",
+      "settled": true,
+      "appeared": [],
+      "index": 18,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 161,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "TICKETS",
+        "box": {
+          "x": 138,
+          "y": 422.671875,
+          "width": 135,
+          "height": 34.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-019.png",
+      "settled": true,
+      "appeared": [],
+      "index": 19,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 163,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "SURVEY",
+        "box": {
+          "x": 138,
+          "y": 457.671875,
+          "width": 135,
+          "height": 34.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-020.png",
+      "settled": true,
+      "appeared": [],
+      "index": 20,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 169,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Heat wave linked to temperatures",
+        "box": {
+          "x": 324,
+          "y": 436.265625,
+          "width": 103,
+          "height": 28.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-021.png",
+      "settled": true,
+      "appeared": [],
+      "index": 21,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 173,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Heat wave - full story",
+        "box": {
+          "x": 299,
+          "y": 698.421875,
+          "width": 128,
+          "height": 31.1875
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-022.png",
+      "settled": true,
+      "appeared": [],
+      "index": 22,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 177,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Man Gets Nine Months in Violin Case",
+        "box": {
+          "x": 472,
+          "y": 436.265625,
+          "width": 103,
+          "height": 42.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-023.png",
+      "settled": true,
+      "appeared": [],
+      "index": 23,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 181,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Violin case - full story",
+        "box": {
+          "x": 447,
+          "y": 712.421875,
+          "width": 128,
+          "height": 31.1875
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-024.png",
+      "settled": true,
+      "appeared": [],
+      "index": 24,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 185,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Lack of brains hinders research",
+        "box": {
+          "x": 620,
+          "y": 436.265625,
+          "width": 103,
+          "height": 28.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-025.png",
+      "settled": true,
+      "appeared": [],
+      "index": 25,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 189,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Brain donations - full story",
+        "box": {
+          "x": 595,
+          "y": 682.828125,
+          "width": 128,
+          "height": 31.1875
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-026.png",
+      "settled": true,
+      "appeared": [],
+      "index": 26,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 192,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Killer Bees",
+        "box": {
+          "x": 294,
+          "y": 374.203125,
+          "width": 87.359375,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-027.png",
+      "settled": true,
+      "appeared": [],
+      "index": 27,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 194,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Onions",
+        "box": {
+          "x": 294,
+          "y": 394.203125,
+          "width": 68.03125,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-028.png",
+      "settled": true,
+      "appeared": [],
+      "index": 28,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 203,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Buy Tickets",
+        "box": {
+          "x": 755,
+          "y": 83.640625,
+          "width": 126,
+          "height": 15.59375
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-029.png",
+      "settled": true,
+      "appeared": [],
+      "index": 29,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 206,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Take Survey",
+        "box": {
+          "x": 755,
+          "y": 406.390625,
+          "width": 126,
+          "height": 15.59375
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-030.png",
+      "settled": true,
+      "appeared": [],
+      "index": 30,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 209,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Copyright",
+        "box": {
+          "x": 689.515625,
+          "y": 471.0625,
+          "width": 41.9375,
+          "height": 11.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-031.png",
+      "settled": true,
+      "appeared": [],
+      "index": 31,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 210,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "W3C",
+        "box": {
+          "x": 768.640625,
+          "y": 471.0625,
+          "width": 21.78125,
+          "height": 11.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-032.png",
+      "settled": true,
+      "appeared": [],
+      "index": 32,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 213,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "MIT",
+        "box": {
+          "x": 802.421875,
+          "y": 471.0625,
+          "width": 15.78125,
+          "height": 11.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-033.png",
+      "settled": true,
+      "appeared": [],
+      "index": 33,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 215,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "ERCIM",
+        "box": {
+          "x": 823.65625,
+          "y": 471.0625,
+          "width": 31.578125,
+          "height": 11.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-034.png",
+      "settled": true,
+      "appeared": [],
+      "index": 34,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 217,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Keio",
+        "box": {
+          "x": 860.6875,
+          "y": 471.0625,
+          "width": 19.609375,
+          "height": 11.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-035.png",
+      "settled": true,
+      "appeared": [],
+      "index": 35,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 223,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "changelog",
+        "box": {
+          "x": 216.765625,
+          "y": 573.28125,
+          "width": 66.421875,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-036.png",
+      "settled": true,
+      "appeared": [],
+      "index": 36,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 225,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Shadi Abou-Zahra",
+        "box": {
+          "x": 67.1875,
+          "y": 593.4375,
+          "width": 116.015625,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-037.png",
+      "settled": true,
+      "appeared": [],
+      "index": 37,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 226,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Education and Outreach Working Group (EOWG)",
+        "box": {
+          "x": 239.21875,
+          "y": 593.4375,
+          "width": 314.875,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-038.png",
+      "settled": true,
+      "appeared": [],
+      "index": 38,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 228,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "WAI-TIES",
+        "box": {
+          "x": 201.5625,
+          "y": 613.59375,
+          "width": 63.4375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-039.png",
+      "settled": true,
+      "appeared": [],
+      "index": 39,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 230,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "WAI-AGE",
+        "box": {
+          "x": 297.015625,
+          "y": 613.59375,
+          "width": 61.828125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-040.png",
+      "settled": true,
+      "appeared": [],
+      "index": 40,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 233,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Acknowledgements",
+        "box": {
+          "x": 821.734375,
+          "y": 613.59375,
+          "width": 124.796875,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-041.png",
+      "settled": true,
+      "appeared": [],
+      "index": 41,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 235,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "WAI Site Map",
+        "box": {
+          "x": 18.390625,
+          "y": 648.140625,
+          "width": 87.4375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-042.png",
+      "settled": true,
+      "appeared": [],
+      "index": 42,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 236,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Help with WAI Website",
+        "box": {
+          "x": 117.828125,
+          "y": 648.140625,
+          "width": 145.5625,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-043.png",
+      "settled": true,
+      "appeared": [],
+      "index": 43,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 237,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Search",
+        "box": {
+          "x": 275.390625,
+          "y": 648.140625,
+          "width": 45.609375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-044.png",
+      "settled": true,
+      "appeared": [],
+      "index": 44,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 238,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Contacting WAI",
+        "box": {
+          "x": 333,
+          "y": 648.140625,
+          "width": 99.453125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-045.png",
+      "settled": true,
+      "appeared": [],
+      "index": 45,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 241,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "wai-eo-editors@w3.org",
+        "box": {
+          "x": 167.15625,
+          "y": 668.296875,
+          "width": 157.96875,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-046.png",
+      "settled": true,
+      "appeared": [],
+      "index": 46,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 242,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "wai@w3.org",
+        "box": {
+          "x": 499.484375,
+          "y": 668.296875,
+          "width": 79.40625,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-047.png",
+      "settled": true,
+      "appeared": [],
+      "index": 47,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 245,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Copyright",
+        "box": {
+          "x": 14.390625,
+          "y": 705.640625,
+          "width": 61.59375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-048.png",
+      "settled": true,
+      "appeared": [],
+      "index": 48,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 246,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "W3C",
+        "box": {
+          "x": 130.609375,
+          "y": 705.640625,
+          "width": 31.984375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-049.png",
+      "settled": true,
+      "appeared": [],
+      "index": 49,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 249,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "MIT",
+        "box": {
+          "x": 180.234375,
+          "y": 705.640625,
+          "width": 23.1875,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-050.png",
+      "settled": true,
+      "appeared": [],
+      "index": 50,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 251,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "ERCIM",
+        "box": {
+          "x": 211.421875,
+          "y": 705.640625,
+          "width": 46.375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-051.png",
+      "settled": true,
+      "appeared": [],
+      "index": 51,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 253,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Keio",
+        "box": {
+          "x": 265.796875,
+          "y": 705.640625,
+          "width": 28.8125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-052.png",
+      "settled": true,
+      "appeared": [],
+      "index": 52,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 254,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "liability",
+        "box": {
+          "x": 476.953125,
+          "y": 705.640625,
+          "width": 42.125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-053.png",
+      "settled": true,
+      "appeared": [],
+      "index": 53,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 255,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "trademark",
+        "box": {
+          "x": 527.078125,
+          "y": 705.640625,
+          "width": 64.78125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-054.png",
+      "settled": true,
+      "appeared": [],
+      "index": 54,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 256,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "document use",
+        "box": {
+          "x": 599.859375,
+          "y": 705.640625,
+          "width": 90.40625,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-055.png",
+      "settled": true,
+      "appeared": [],
+      "index": 55,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 257,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "software licensing",
+        "box": {
+          "x": 722.28125,
+          "y": 705.640625,
+          "width": 114.390625,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-056.png",
+      "settled": true,
+      "appeared": [],
+      "index": 56,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 258,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "public",
+        "box": {
+          "x": 347.140625,
+          "y": 725.796875,
+          "width": 37.609375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-057.png",
+      "settled": true,
+      "appeared": [],
+      "index": 57,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 259,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Member",
+        "box": {
+          "x": 416.765625,
+          "y": 725.796875,
+          "width": 52.78125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-058.png",
+      "settled": true,
+      "appeared": [],
+      "index": 58,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 477,
+      "focus": {
+        "backend_node_id": 18,
+        "tag": "BODY",
+        "dom_id": null,
+        "role": "none",
+        "name": null,
+        "box": {
+          "x": 0,
+          "y": -477,
+          "width": 1024,
+          "height": 1249.734375
+        },
+        "cover": null,
+        "document_has_focus": false
+      },
+      "screenshot": "step-059.png",
+      "settled": true,
+      "appeared": [],
+      "index": 59,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/home.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 35,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Skip to accessible demo page",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 201.203125,
+          "height": 27.265625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-060.png",
+      "settled": true,
+      "appeared": [],
+      "index": 60,
+      "key": "Tab"
+    }
+  ],
+  "targets": [
+    {
+      "backend_node_id": 35,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": -14400,
+        "y": -14400,
+        "width": 1,
+        "height": 1
+      },
+      "reached_by": [
+        35
+      ]
+    },
+    {
+      "backend_node_id": 37,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 743,
+        "y": 59.390625,
+        "width": 72,
+        "height": 16
+      },
+      "reached_by": [
+        37
+      ]
+    },
+    {
+      "backend_node_id": 39,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 815,
+        "y": 59.390625,
+        "width": 194,
+        "height": 16
+      },
+      "reached_by": [
+        39
+      ]
+    },
+    {
+      "backend_node_id": 48,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 10,
+        "y": 116.515625,
+        "width": 86,
+        "height": 35.15625
+      },
+      "reached_by": [
+        48
+      ]
+    },
+    {
+      "backend_node_id": 55,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 217.390625,
+        "y": 155.265625,
+        "width": 125,
+        "height": 20
+      },
+      "reached_by": [
+        55
+      ]
+    },
+    {
+      "backend_node_id": 57,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 342.390625,
+        "y": 155.265625,
+        "width": 94,
+        "height": 20
+      },
+      "reached_by": [
+        57
+      ]
+    },
+    {
+      "backend_node_id": 63,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 342.390625,
+        "y": 175.265625,
+        "width": 94,
+        "height": 20
+      },
+      "reached_by": [
+        63
+      ]
+    },
+    {
+      "backend_node_id": 65,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 437.1875,
+        "y": 155.265625,
+        "width": 144,
+        "height": 41.59375
+      },
+      "reached_by": [
+        65
+      ]
+    },
+    {
+      "backend_node_id": 68,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 176,
+        "y": 116.515625,
+        "width": 82,
+        "height": 35.15625
+      },
+      "reached_by": [
+        68
+      ]
+    },
+    {
+      "backend_node_id": 70,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 257,
+        "y": 116.515625,
+        "width": 82,
+        "height": 35.15625
+      },
+      "reached_by": [
+        70
+      ]
+    },
+    {
+      "backend_node_id": 72,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 338,
+        "y": 116.515625,
+        "width": 82,
+        "height": 35.15625
+      },
+      "reached_by": [
+        72
+      ]
+    },
+    {
+      "backend_node_id": 74,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 419,
+        "y": 116.515625,
+        "width": 84.109375,
+        "height": 35.15625
+      },
+      "reached_by": [
+        74
+      ]
+    },
+    {
+      "backend_node_id": 82,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": -15862,
+        "y": 213.671875,
+        "width": 334,
+        "height": 32
+      },
+      "reached_by": [
+        82
+      ]
+    },
+    {
+      "backend_node_id": 84,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": -15862,
+        "y": 213.671875,
+        "width": 334,
+        "height": 32
+      },
+      "reached_by": [
+        84
+      ]
+    },
+    {
+      "backend_node_id": 4,
+      "tag": "SELECT",
+      "dom_id": "qkmenu",
+      "box": {
+        "x": 730.453125,
+        "y": 243.671875,
+        "width": 102,
+        "height": 18
+      },
+      "reached_by": [
+        4
+      ]
+    },
+    {
+      "backend_node_id": 6,
+      "tag": "INPUT",
+      "dom_id": null,
+      "box": {
+        "x": 838.09375,
+        "y": 242.671875,
+        "width": 32.015625,
+        "height": 20
+      },
+      "reached_by": [
+        6
+      ]
+    },
+    {
+      "backend_node_id": 159,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 138,
+        "y": 387.671875,
+        "width": 135,
+        "height": 34
+      },
+      "reached_by": [
+        159
+      ]
+    },
+    {
+      "backend_node_id": 161,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 138,
+        "y": 422.671875,
+        "width": 135,
+        "height": 34
+      },
+      "reached_by": [
+        161
+      ]
+    },
+    {
+      "backend_node_id": 163,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 138,
+        "y": 457.671875,
+        "width": 135,
+        "height": 34
+      },
+      "reached_by": [
+        163
+      ]
+    },
+    {
+      "backend_node_id": 169,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 324,
+        "y": 436.265625,
+        "width": 103,
+        "height": 28
+      },
+      "reached_by": [
+        169
+      ]
+    },
+    {
+      "backend_node_id": 173,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 299,
+        "y": 698.421875,
+        "width": 128,
+        "height": 31.1875
+      },
+      "reached_by": [
+        173
+      ]
+    },
+    {
+      "backend_node_id": 177,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 472,
+        "y": 436.265625,
+        "width": 103,
+        "height": 42
+      },
+      "reached_by": [
+        177
+      ]
+    },
+    {
+      "backend_node_id": 181,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 447,
+        "y": 712.421875,
+        "width": 128,
+        "height": 31.1875
+      },
+      "reached_by": [
+        181
+      ]
+    },
+    {
+      "backend_node_id": 185,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 620,
+        "y": 436.265625,
+        "width": 103,
+        "height": 28
+      },
+      "reached_by": [
+        185
+      ]
+    },
+    {
+      "backend_node_id": 189,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 595,
+        "y": 682.828125,
+        "width": 128,
+        "height": 31.1875
+      },
+      "reached_by": [
+        189
+      ]
+    },
+    {
+      "backend_node_id": 192,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 294,
+        "y": 851.203125,
+        "width": 87.359375,
+        "height": 20
+      },
+      "reached_by": [
+        192
+      ]
+    },
+    {
+      "backend_node_id": 194,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 294,
+        "y": 871.203125,
+        "width": 68.03125,
+        "height": 20
+      },
+      "reached_by": [
+        194
+      ]
+    },
+    {
+      "backend_node_id": 203,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 755,
+        "y": 560.640625,
+        "width": 126,
+        "height": 15.59375
+      },
+      "reached_by": [
+        203
+      ]
+    },
+    {
+      "backend_node_id": 206,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 755,
+        "y": 883.390625,
+        "width": 126,
+        "height": 15.59375
+      },
+      "reached_by": [
+        206
+      ]
+    },
+    {
+      "backend_node_id": 209,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 689.515625,
+        "y": 948.0625,
+        "width": 41.9375,
+        "height": 11
+      },
+      "reached_by": [
+        209
+      ]
+    },
+    {
+      "backend_node_id": 210,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 768.640625,
+        "y": 948.0625,
+        "width": 21.78125,
+        "height": 11
+      },
+      "reached_by": [
+        210
+      ]
+    },
+    {
+      "backend_node_id": 213,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 802.421875,
+        "y": 948.0625,
+        "width": 15.78125,
+        "height": 11
+      },
+      "reached_by": [
+        213
+      ]
+    },
+    {
+      "backend_node_id": 215,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 823.65625,
+        "y": 948.0625,
+        "width": 31.578125,
+        "height": 11
+      },
+      "reached_by": [
+        215
+      ]
+    },
+    {
+      "backend_node_id": 217,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 860.6875,
+        "y": 948.0625,
+        "width": 19.609375,
+        "height": 11
+      },
+      "reached_by": [
+        217
+      ]
+    },
+    {
+      "backend_node_id": 223,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 216.765625,
+        "y": 1050.28125,
+        "width": 66.421875,
+        "height": 16
+      },
+      "reached_by": [
+        223
+      ]
+    },
+    {
+      "backend_node_id": 225,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 67.1875,
+        "y": 1070.4375,
+        "width": 116.015625,
+        "height": 16
+      },
+      "reached_by": [
+        225
+      ]
+    },
+    {
+      "backend_node_id": 226,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 239.21875,
+        "y": 1070.4375,
+        "width": 314.875,
+        "height": 16
+      },
+      "reached_by": [
+        226
+      ]
+    },
+    {
+      "backend_node_id": 228,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 201.5625,
+        "y": 1090.59375,
+        "width": 63.4375,
+        "height": 16
+      },
+      "reached_by": [
+        228
+      ]
+    },
+    {
+      "backend_node_id": 230,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 297.015625,
+        "y": 1090.59375,
+        "width": 61.828125,
+        "height": 16
+      },
+      "reached_by": [
+        230
+      ]
+    },
+    {
+      "backend_node_id": 233,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 821.734375,
+        "y": 1090.59375,
+        "width": 124.796875,
+        "height": 16
+      },
+      "reached_by": [
+        233
+      ]
+    },
+    {
+      "backend_node_id": 235,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 18.390625,
+        "y": 1125.140625,
+        "width": 87.4375,
+        "height": 16
+      },
+      "reached_by": [
+        235
+      ]
+    },
+    {
+      "backend_node_id": 236,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 117.828125,
+        "y": 1125.140625,
+        "width": 145.5625,
+        "height": 16
+      },
+      "reached_by": [
+        236
+      ]
+    },
+    {
+      "backend_node_id": 237,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 275.390625,
+        "y": 1125.140625,
+        "width": 45.609375,
+        "height": 16
+      },
+      "reached_by": [
+        237
+      ]
+    },
+    {
+      "backend_node_id": 238,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 333,
+        "y": 1125.140625,
+        "width": 99.453125,
+        "height": 16
+      },
+      "reached_by": [
+        238
+      ]
+    },
+    {
+      "backend_node_id": 241,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 167.15625,
+        "y": 1145.296875,
+        "width": 157.96875,
+        "height": 16
+      },
+      "reached_by": [
+        241
+      ]
+    },
+    {
+      "backend_node_id": 242,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 499.484375,
+        "y": 1145.296875,
+        "width": 79.40625,
+        "height": 16
+      },
+      "reached_by": [
+        242
+      ]
+    },
+    {
+      "backend_node_id": 245,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 14.390625,
+        "y": 1182.640625,
+        "width": 61.59375,
+        "height": 16
+      },
+      "reached_by": [
+        245
+      ]
+    },
+    {
+      "backend_node_id": 246,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 130.609375,
+        "y": 1182.640625,
+        "width": 31.984375,
+        "height": 16
+      },
+      "reached_by": [
+        246
+      ]
+    },
+    {
+      "backend_node_id": 249,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 180.234375,
+        "y": 1182.640625,
+        "width": 23.1875,
+        "height": 16
+      },
+      "reached_by": [
+        249
+      ]
+    },
+    {
+      "backend_node_id": 251,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 211.421875,
+        "y": 1182.640625,
+        "width": 46.375,
+        "height": 16
+      },
+      "reached_by": [
+        251
+      ]
+    },
+    {
+      "backend_node_id": 253,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 265.796875,
+        "y": 1182.640625,
+        "width": 28.8125,
+        "height": 16
+      },
+      "reached_by": [
+        253
+      ]
+    },
+    {
+      "backend_node_id": 254,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 476.953125,
+        "y": 1182.640625,
+        "width": 42.125,
+        "height": 16
+      },
+      "reached_by": [
+        254
+      ]
+    },
+    {
+      "backend_node_id": 255,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 527.078125,
+        "y": 1182.640625,
+        "width": 64.78125,
+        "height": 16
+      },
+      "reached_by": [
+        255
+      ]
+    },
+    {
+      "backend_node_id": 256,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 599.859375,
+        "y": 1182.640625,
+        "width": 90.40625,
+        "height": 16
+      },
+      "reached_by": [
+        256
+      ]
+    },
+    {
+      "backend_node_id": 257,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 722.28125,
+        "y": 1182.640625,
+        "width": 114.390625,
+        "height": 16
+      },
+      "reached_by": [
+        257
+      ]
+    },
+    {
+      "backend_node_id": 258,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 347.140625,
+        "y": 1202.796875,
+        "width": 37.609375,
+        "height": 16
+      },
+      "reached_by": [
+        258
+      ]
+    },
+    {
+      "backend_node_id": 259,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 416.765625,
+        "y": 1202.796875,
+        "width": 52.78125,
+        "height": 16
+      },
+      "reached_by": [
+        259
+      ]
+    }
+  ],
+  "blocked_requests": []
+}

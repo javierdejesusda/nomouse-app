@@ -1,0 +1,47 @@
+{
+  "page": "/dialog-fades-in.html",
+  "verdicts_sha256": "d097544af2caa4b2edbabb0fc2872ed7102fbf538e3efbdd0962f082d8ca7e6b",
+  "review": {
+    "file": "review-eval1.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "spark",
+    "model": "muse-spark-1.3",
+    "reasoning_effort": "minimal",
+    "error": null,
+    "usage": {
+      "input_tokens": 284,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 330,
+      "output_tokens_details": {
+        "reasoning_tokens": 268
+      },
+      "total_tokens": 614
+    }
+  },
+  "packets": [
+    {
+      "id": "P1",
+      "status": "NEEDS REVIEW",
+      "best_practice": false,
+      "source": "reviewer form (i)",
+      "rule": "focus-management",
+      "question": "inside",
+      "step": 2,
+      "element": {
+        "tag": "BUTTON",
+        "dom_id": "sign-in",
+        "role": "button",
+        "name": "Sign in"
+      },
+      "observed": "A sign-in dialog with Email and Password fields opened but focus stayed on the background Sign in button behind the overlay.",
+      "sentence": "A model saw that at step 2 a sign-in dialog with Email and Password fields opened but focus stayed on the background Sign in button behind the overlay, and a person should confirm.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    }
+  ]
+}

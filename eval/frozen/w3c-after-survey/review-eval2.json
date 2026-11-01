@@ -1,0 +1,79 @@
+{
+  "page": "/after/survey.html",
+  "run": "eval2",
+  "verdicts_sha256": "d486eae5f0bd3c51c72231746986fcf9a450e174a1efa79d7dcdbdc2fde372ee",
+  "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "instances": [
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 16,
+        "enter": 17,
+        "escape": 18
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "No menu or dialog appears after Enter, so remaining on the Go button is correct."
+        },
+        "opened": "no",
+        "returned": {
+          "answer": "pass",
+          "reason": "Focus is still on the Go button after Escape."
+        }
+      },
+      "finding": false,
+      "status": null
+    },
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 28,
+        "enter": 29,
+        "escape": 30
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "No new panel or dialog appears after Enter, so staying on submit is expected."
+        },
+        "opened": "no",
+        "returned": {
+          "answer": "pass",
+          "reason": "Focus remains on the submit button after Escape."
+        }
+      },
+      "finding": false,
+      "status": null
+    }
+  ],
+  "usage": {
+    "calls": 1,
+    "input_tokens": 6542,
+    "cached_tokens": 0,
+    "output_tokens": 272,
+    "reasoning_tokens": 128,
+    "total_tokens": 6814
+  },
+  "calls": [
+    {
+      "form": "i",
+      "images": 6,
+      "instances": 2,
+      "usage": {
+        "input_tokens": 6542,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 272,
+        "output_tokens_details": {
+          "reasoning_tokens": 128
+        },
+        "total_tokens": 6814
+      },
+      "latency_s": 2.387559447000058
+    }
+  ]
+}

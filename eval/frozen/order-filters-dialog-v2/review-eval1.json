@@ -1,0 +1,79 @@
+{
+  "page": "/order-filters-dialog.html",
+  "run": "eval1",
+  "verdicts_sha256": "b00cd2c23ac1c53695599c697274bb680475e97587f9081c66d76f7b32764d2d",
+  "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "instances": [
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 3,
+        "enter": 4,
+        "escape": 5
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "No new panel opened because the Filter backpacks drawer was already visible in both before and after screenshots."
+        },
+        "opened": "no",
+        "returned": {
+          "answer": "fail",
+          "reason": "After Escape focus is on Filters, not on the activated Reset button which is now gone with the closed drawer."
+        }
+      },
+      "finding": true,
+      "status": "NEEDS REVIEW"
+    },
+    {
+      "form": "i",
+      "steps": {
+        "trigger": 16,
+        "enter": 17,
+        "escape": 18
+      },
+      "answer": {
+        "inside": {
+          "answer": "pass",
+          "reason": "After Enter focus is on the Ridgeline checkbox inside the newly opened Filter backpacks drawer."
+        },
+        "opened": "yes",
+        "returned": {
+          "answer": "pass",
+          "reason": "After Escape the drawer closed and focus is back on the Filters button that was activated."
+        }
+      },
+      "finding": false,
+      "status": null
+    }
+  ],
+  "usage": {
+    "calls": 1,
+    "input_tokens": 6518,
+    "cached_tokens": 0,
+    "output_tokens": 570,
+    "reasoning_tokens": 400,
+    "total_tokens": 7088
+  },
+  "calls": [
+    {
+      "form": "i",
+      "images": 6,
+      "instances": 2,
+      "usage": {
+        "input_tokens": 6518,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 570,
+        "output_tokens_details": {
+          "reasoning_tokens": 400
+        },
+        "total_tokens": 7088
+      },
+      "latency_s": 3.4839823940001224
+    }
+  ]
+}

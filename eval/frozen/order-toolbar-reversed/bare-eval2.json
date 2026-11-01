@@ -1,0 +1,40 @@
+{
+  "page": "/order-toolbar-reversed.html",
+  "run": "eval2",
+  "verdicts_sha256": "c7bb2caa53d01c05f0c50a24a7c9756625fd4a4a4317bd4fa78d2ffb6c76c6c8",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 21,
+    "seconds_per_frame": 1,
+    "video_sha256": "232918bbc27f7222a8aad4f659d0c880f71b80e33580d5302460cdac116f0254"
+  },
+  "failures": [
+    {
+      "description": "Tab moves through the formatting toolbar right-to-left from Link to Bold instead of left-to-right in visual order.",
+      "element": "Bold Italic Underline Link toolbar",
+      "second": 4,
+      "type": "focus-order"
+    },
+    {
+      "description": "The Body textarea retains its focus outline after keyboard focus has moved to the Preview link.",
+      "element": "Body",
+      "second": 16,
+      "type": "focus-not-moved"
+    }
+  ],
+  "usage": {
+    "input_tokens": 2660,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 1359,
+    "output_tokens_details": {
+      "reasoning_tokens": 1254
+    },
+    "total_tokens": 4019
+  },
+  "latency_s": 8.856149086000187
+}

@@ -1,0 +1,52 @@
+{
+  "page": "/order-footer-rowwise.html",
+  "run": "eval1",
+  "verdicts_sha256": "62b1ee879a507199d636bc63d33fc8e789f75340b6473c0c7b78bff00249b127",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 16,
+    "seconds_per_frame": 1,
+    "video_sha256": "4240ee00b09ff033b4d2261ee71b3e60dee786412ebf8eaf2149bffb63c9c7dc"
+  },
+  "failures": [
+    {
+      "description": "At this point both About us and Help center show focus outlines at the same time so the actual keyboard focus location is ambiguous.",
+      "element": "About us and Help center",
+      "second": 6,
+      "type": "focus-not-visible"
+    },
+    {
+      "description": "At this point both Integrations and Careers show focus outlines at the same time so the actual keyboard focus location is ambiguous.",
+      "element": "Integrations and Careers",
+      "second": 8,
+      "type": "focus-not-visible"
+    },
+    {
+      "description": "At this point both Changelog and Contact show focus outlines at the same time so the actual keyboard focus location is ambiguous.",
+      "element": "Changelog and Contact",
+      "second": 10,
+      "type": "focus-not-visible"
+    },
+    {
+      "description": "At this point both Press and System status show focus outlines at the same time so the actual keyboard focus location is ambiguous.",
+      "element": "Press and System status",
+      "second": 12,
+      "type": "focus-not-visible"
+    }
+  ],
+  "usage": {
+    "input_tokens": 2140,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 1852,
+    "output_tokens_details": {
+      "reasoning_tokens": 1634
+    },
+    "total_tokens": 3992
+  },
+  "latency_s": 15.751066616000116
+}

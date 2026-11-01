@@ -1,0 +1,82 @@
+{
+  "page": "/disclosure-stays-on-toggle.html",
+  "verdicts_sha256": "f7f67da472e09efae793b7c9d164a496e33b918be528db4455fe333b89883b88",
+  "review": {
+    "file": "review-eval2.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "spark",
+    "model": "muse-spark-1.3",
+    "reasoning_effort": "minimal",
+    "error": null,
+    "usage": {
+      "input_tokens": 429,
+      "input_tokens_details": {
+        "cached_tokens": 163
+      },
+      "output_tokens": 454,
+      "output_tokens_details": {
+        "reasoning_tokens": 308
+      },
+      "total_tokens": 883
+    }
+  },
+  "packets": [
+    {
+      "id": "P1",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "focus-management",
+      "step": 3,
+      "element": {
+        "tag": "BUTTON",
+        "dom_id": "faq-1",
+        "role": "button",
+        "name": "+ When does my box arrive?"
+      },
+      "observed": "after Enter, focus is outside the 3 elements that appeared",
+      "sentence": "At step 3, after pressing Enter on the button named \"+ When does my box arrive?\", keyboard focus was outside the 3 elements that appeared.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P2",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "focus-management",
+      "step": 7,
+      "element": {
+        "tag": "BUTTON",
+        "dom_id": "faq-2",
+        "role": "button",
+        "name": "+ Can I skip a week?"
+      },
+      "observed": "after Enter, focus is outside the 3 elements that appeared",
+      "sentence": "At step 7, after pressing Enter on the button named \"+ Can I skip a week?\", keyboard focus was outside the 3 elements that appeared.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P3",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "focus-management",
+      "step": 11,
+      "element": {
+        "tag": "BUTTON",
+        "dom_id": "faq-3",
+        "role": "button",
+        "name": "+ What if I am not home?"
+      },
+      "observed": "after Enter, focus is outside the 3 elements that appeared",
+      "sentence": "At step 11, after pressing Enter on the button named \"+ What if I am not home?\", keyboard focus was outside the 3 elements that appeared.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    }
+  ]
+}

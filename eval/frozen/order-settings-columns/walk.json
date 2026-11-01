@@ -1,0 +1,582 @@
+{
+  "url": "/order-settings-columns.html",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "end_reason": "cycle",
+  "repeat_step": null,
+  "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab"
+  ],
+  "initial": {
+    "url": "/order-settings-columns.html",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "focus": {
+      "backend_node_id": 3,
+      "tag": "BODY",
+      "dom_id": null,
+      "role": "none",
+      "name": null,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 620
+      },
+      "cover": null,
+      "document_has_focus": true
+    },
+    "screenshot": "initial.png",
+    "settled": true,
+    "appeared": []
+  },
+  "steps": [
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 14,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Schedule",
+        "box": {
+          "x": 861.28125,
+          "y": 42,
+          "width": 70.65625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-000.png",
+      "settled": true,
+      "appeared": [],
+      "index": 0,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 15,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "People",
+        "box": {
+          "x": 955.9375,
+          "y": 42,
+          "width": 52.0625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-001.png",
+      "settled": true,
+      "appeared": [],
+      "index": 1,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 23,
+        "tag": "INPUT",
+        "dom_id": "display-name",
+        "role": "textbox",
+        "name": "Display name",
+        "box": {
+          "x": 33,
+          "y": 215,
+          "width": 390,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-002.png",
+      "settled": true,
+      "appeared": [],
+      "index": 2,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 27,
+        "tag": "INPUT",
+        "dom_id": "account-email",
+        "role": "textbox",
+        "name": "Email",
+        "box": {
+          "x": 33,
+          "y": 299,
+          "width": 390,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-003.png",
+      "settled": true,
+      "appeared": [],
+      "index": 3,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 31,
+        "tag": "SELECT",
+        "dom_id": "language",
+        "role": "combobox",
+        "name": "Language",
+        "box": {
+          "x": 33,
+          "y": 383,
+          "width": 390,
+          "height": 36
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-004.png",
+      "settled": true,
+      "appeared": [],
+      "index": 4,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 49,
+        "tag": "INPUT",
+        "dom_id": "timezone",
+        "role": "textbox",
+        "name": "Time zone",
+        "box": {
+          "x": 33,
+          "y": 463,
+          "width": 390,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-005.png",
+      "settled": true,
+      "appeared": [],
+      "index": 5,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 54,
+        "tag": "INPUT",
+        "dom_id": "notify-digest",
+        "role": "checkbox",
+        "name": "Weekly digest",
+        "box": {
+          "x": 493,
+          "y": 192.5,
+          "width": 13,
+          "height": 13.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-006.png",
+      "settled": true,
+      "appeared": [],
+      "index": 6,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 57,
+        "tag": "INPUT",
+        "dom_id": "notify-swaps",
+        "role": "checkbox",
+        "name": "Shift swap requests",
+        "box": {
+          "x": 493,
+          "y": 232.5,
+          "width": 13,
+          "height": 13.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-007.png",
+      "settled": true,
+      "appeared": [],
+      "index": 7,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 60,
+        "tag": "INPUT",
+        "dom_id": "notify-news",
+        "role": "checkbox",
+        "name": "Product news",
+        "box": {
+          "x": 493,
+          "y": 272.5,
+          "width": 13,
+          "height": 13.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-008.png",
+      "settled": true,
+      "appeared": [],
+      "index": 8,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 63,
+        "tag": "BUTTON",
+        "dom_id": "save",
+        "role": "button",
+        "name": "Save changes",
+        "box": {
+          "x": 16,
+          "y": 560,
+          "width": 142.15625,
+          "height": 44
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-009.png",
+      "settled": true,
+      "appeared": [],
+      "index": 9,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 63,
+        "tag": "BUTTON",
+        "dom_id": "save",
+        "role": "button",
+        "name": "Save changes",
+        "box": {
+          "x": 16,
+          "y": 560,
+          "width": 142.15625,
+          "height": 44
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-010.png",
+      "settled": true,
+      "appeared": [],
+      "index": 10,
+      "key": "Enter"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 63,
+        "tag": "BUTTON",
+        "dom_id": "save",
+        "role": "button",
+        "name": "Save changes",
+        "box": {
+          "x": 16,
+          "y": 560,
+          "width": 142.15625,
+          "height": 44
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-011.png",
+      "settled": true,
+      "appeared": [],
+      "index": 11,
+      "key": "Escape"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 3,
+        "tag": "BODY",
+        "dom_id": null,
+        "role": "none",
+        "name": null,
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 620
+        },
+        "cover": null,
+        "document_has_focus": false
+      },
+      "screenshot": "step-012.png",
+      "settled": true,
+      "appeared": [],
+      "index": 12,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-settings-columns.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 14,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Schedule",
+        "box": {
+          "x": 861.28125,
+          "y": 42,
+          "width": 70.65625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-013.png",
+      "settled": true,
+      "appeared": [],
+      "index": 13,
+      "key": "Tab"
+    }
+  ],
+  "targets": [
+    {
+      "backend_node_id": 14,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 861.28125,
+        "y": 42,
+        "width": 70.65625,
+        "height": 24
+      },
+      "reached_by": [
+        14
+      ]
+    },
+    {
+      "backend_node_id": 15,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 955.9375,
+        "y": 42,
+        "width": 52.0625,
+        "height": 24
+      },
+      "reached_by": [
+        15
+      ]
+    },
+    {
+      "backend_node_id": 23,
+      "tag": "INPUT",
+      "dom_id": "display-name",
+      "box": {
+        "x": 33,
+        "y": 215,
+        "width": 390,
+        "height": 40
+      },
+      "reached_by": [
+        23
+      ]
+    },
+    {
+      "backend_node_id": 27,
+      "tag": "INPUT",
+      "dom_id": "account-email",
+      "box": {
+        "x": 33,
+        "y": 299,
+        "width": 390,
+        "height": 40
+      },
+      "reached_by": [
+        27
+      ]
+    },
+    {
+      "backend_node_id": 31,
+      "tag": "SELECT",
+      "dom_id": "language",
+      "box": {
+        "x": 33,
+        "y": 383,
+        "width": 390,
+        "height": 36
+      },
+      "reached_by": [
+        31
+      ]
+    },
+    {
+      "backend_node_id": 49,
+      "tag": "INPUT",
+      "dom_id": "timezone",
+      "box": {
+        "x": 33,
+        "y": 463,
+        "width": 390,
+        "height": 40
+      },
+      "reached_by": [
+        49
+      ]
+    },
+    {
+      "backend_node_id": 54,
+      "tag": "INPUT",
+      "dom_id": "notify-digest",
+      "box": {
+        "x": 493,
+        "y": 192.5,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        54
+      ]
+    },
+    {
+      "backend_node_id": 57,
+      "tag": "INPUT",
+      "dom_id": "notify-swaps",
+      "box": {
+        "x": 493,
+        "y": 232.5,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        57
+      ]
+    },
+    {
+      "backend_node_id": 60,
+      "tag": "INPUT",
+      "dom_id": "notify-news",
+      "box": {
+        "x": 493,
+        "y": 272.5,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        60
+      ]
+    },
+    {
+      "backend_node_id": 63,
+      "tag": "BUTTON",
+      "dom_id": "save",
+      "box": {
+        "x": 16,
+        "y": 560,
+        "width": 142.15625,
+        "height": 44
+      },
+      "reached_by": [
+        63
+      ]
+    }
+  ],
+  "blocked_requests": []
+}

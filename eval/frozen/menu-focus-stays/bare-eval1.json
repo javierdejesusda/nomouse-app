@@ -1,0 +1,52 @@
+{
+  "page": "/menu-focus-stays.html",
+  "run": "eval1",
+  "verdicts_sha256": "c07a45265f22e6164cd7f324248df54182a93715eea8d55dc8b5c15e0561d6fb",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 20,
+    "seconds_per_frame": 1,
+    "video_sha256": "ccb1f999bb8bdc551ff87812cee18b51936472e4a3073319d1cbb09081c3a466"
+  },
+  "failures": [
+    {
+      "description": "Opening the Actions button shows a menu at second 4 but keyboard focus does not move into the menu items.",
+      "element": "Actions menu",
+      "second": 4,
+      "type": "focus-not-moved"
+    },
+    {
+      "description": "Top navigation Board only receives focus after the bottom Help link, showing an illogical tab order.",
+      "element": "Board",
+      "second": 18,
+      "type": "focus-order"
+    },
+    {
+      "description": "Tabbing from Help goes directly to Board, the Reports link never receives keyboard focus.",
+      "element": "Reports",
+      "second": 18,
+      "type": "not-focusable"
+    },
+    {
+      "description": "Tabbing through the header skips the Team link so it never receives keyboard focus.",
+      "element": "Team",
+      "second": 18,
+      "type": "not-focusable"
+    }
+  ],
+  "usage": {
+    "input_tokens": 2660,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 1465,
+    "output_tokens_details": {
+      "reasoning_tokens": 1278
+    },
+    "total_tokens": 4125
+  },
+  "latency_s": 17.839140047
+}

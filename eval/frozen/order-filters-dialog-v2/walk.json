@@ -1,0 +1,743 @@
+{
+  "url": "/order-filters-dialog.html",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "end_reason": "cycle",
+  "repeat_step": null,
+  "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab"
+  ],
+  "initial": {
+    "url": "/order-filters-dialog.html",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "focus": {
+      "backend_node_id": 3,
+      "tag": "INPUT",
+      "dom_id": "brand-ridge",
+      "role": "checkbox",
+      "name": "Ridgeline",
+      "box": {
+        "x": 732,
+        "y": 163.5,
+        "width": 13,
+        "height": 13.0
+      },
+      "cover": {
+        "sampled": 9,
+        "covered": 0
+      },
+      "document_has_focus": true
+    },
+    "screenshot": "initial.png",
+    "settled": true,
+    "appeared": []
+  },
+  "steps": [
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 51,
+        "tag": "INPUT",
+        "dom_id": "brand-north",
+        "role": "checkbox",
+        "name": "Northfold",
+        "box": {
+          "x": 732,
+          "y": 195.5,
+          "width": 13,
+          "height": 13.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-000.png",
+      "settled": true,
+      "appeared": [],
+      "index": 0,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 54,
+        "tag": "INPUT",
+        "dom_id": "brand-pine",
+        "role": "checkbox",
+        "name": "Pinecrest",
+        "box": {
+          "x": 732,
+          "y": 227.5,
+          "width": 13,
+          "height": 13.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-001.png",
+      "settled": true,
+      "appeared": [],
+      "index": 1,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 60,
+        "tag": "SELECT",
+        "dom_id": "capacity",
+        "role": "combobox",
+        "name": "Up to",
+        "box": {
+          "x": 776.875,
+          "y": 300.5,
+          "width": 48.0,
+          "height": 19.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-002.png",
+      "settled": true,
+      "appeared": [],
+      "index": 2,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 77,
+        "tag": "BUTTON",
+        "dom_id": "filters-reset",
+        "role": "button",
+        "name": "Reset",
+        "box": {
+          "x": 728,
+          "y": 346,
+          "width": 70.40625,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-003.png",
+      "settled": true,
+      "appeared": [],
+      "index": 3,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 77,
+        "tag": "BUTTON",
+        "dom_id": "filters-reset",
+        "role": "button",
+        "name": "Reset",
+        "box": {
+          "x": 728,
+          "y": 346,
+          "width": 70.40625,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-004.png",
+      "settled": true,
+      "appeared": [],
+      "index": 4,
+      "key": "Enter"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 27,
+        "tag": "BUTTON",
+        "dom_id": "filters-open",
+        "role": "button",
+        "name": "Filters",
+        "box": {
+          "x": 16,
+          "y": 185.875,
+          "width": 74.3125,
+          "height": 40.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-005.png",
+      "settled": true,
+      "appeared": [],
+      "index": 5,
+      "key": "Escape"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 30,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Ridge 30 L",
+        "box": {
+          "x": 29,
+          "y": 256.875,
+          "width": 81.140625,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-006.png",
+      "settled": true,
+      "appeared": [],
+      "index": 6,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 32,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Summit 45 L",
+        "box": {
+          "x": 239.65625,
+          "y": 256.875,
+          "width": 94.984375,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-007.png",
+      "settled": true,
+      "appeared": [],
+      "index": 7,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 34,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Daytrip 18 L",
+        "box": {
+          "x": 450.328125,
+          "y": 256.875,
+          "width": 89.15625,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-008.png",
+      "settled": true,
+      "appeared": [],
+      "index": 8,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 36,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Canyon 38 L",
+        "box": {
+          "x": 29,
+          "y": 374.875,
+          "width": 95.453125,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-009.png",
+      "settled": true,
+      "appeared": [],
+      "index": 9,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 38,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Alpine 55 L",
+        "box": {
+          "x": 239.65625,
+          "y": 374.875,
+          "width": 84.875,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-010.png",
+      "settled": true,
+      "appeared": [],
+      "index": 10,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 40,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Commuter 22 L",
+        "box": {
+          "x": 450.328125,
+          "y": 374.875,
+          "width": 116.765625,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-011.png",
+      "settled": true,
+      "appeared": [],
+      "index": 11,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 17,
+        "tag": "BODY",
+        "dom_id": null,
+        "role": "none",
+        "name": null,
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 497.875
+        },
+        "cover": null,
+        "document_has_focus": false
+      },
+      "screenshot": "step-012.png",
+      "settled": true,
+      "appeared": [],
+      "index": 12,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 22,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Tents",
+        "box": {
+          "x": 829.84375,
+          "y": 42,
+          "width": 41.390625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-013.png",
+      "settled": true,
+      "appeared": [],
+      "index": 13,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 23,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Packs",
+        "box": {
+          "x": 895.234375,
+          "y": 42,
+          "width": 45.578125,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-014.png",
+      "settled": true,
+      "appeared": [],
+      "index": 14,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Boots",
+        "box": {
+          "x": 964.8125,
+          "y": 42,
+          "width": 43.1875,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-015.png",
+      "settled": true,
+      "appeared": [],
+      "index": 15,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 27,
+        "tag": "BUTTON",
+        "dom_id": "filters-open",
+        "role": "button",
+        "name": "Filters",
+        "box": {
+          "x": 16,
+          "y": 185.875,
+          "width": 74.3125,
+          "height": 40.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-016.png",
+      "settled": true,
+      "appeared": [],
+      "index": 16,
+      "key": "Tab"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 3,
+        "tag": "INPUT",
+        "dom_id": "brand-ridge",
+        "role": "checkbox",
+        "name": "Ridgeline",
+        "box": {
+          "x": 732,
+          "y": 163.5,
+          "width": 13,
+          "height": 13.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-017.png",
+      "settled": true,
+      "appeared": [
+        3,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        76,
+        77,
+        78,
+        79
+      ],
+      "index": 17,
+      "key": "Enter"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 27,
+        "tag": "BUTTON",
+        "dom_id": "filters-open",
+        "role": "button",
+        "name": "Filters",
+        "box": {
+          "x": 16,
+          "y": 185.875,
+          "width": 74.3125,
+          "height": 40.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-018.png",
+      "settled": true,
+      "appeared": [],
+      "index": 18,
+      "key": "Escape"
+    },
+    {
+      "url": "/order-filters-dialog.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 30,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Ridge 30 L",
+        "box": {
+          "x": 29,
+          "y": 256.875,
+          "width": 81.140625,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-019.png",
+      "settled": true,
+      "appeared": [],
+      "index": 19,
+      "key": "Tab"
+    }
+  ],
+  "targets": [
+    {
+      "backend_node_id": 45,
+      "tag": "BUTTON",
+      "dom_id": "filters-close",
+      "box": {
+        "x": 889.78125,
+        "y": 40,
+        "width": 118.21875,
+        "height": 40
+      },
+      "reached_by": [
+        45
+      ]
+    },
+    {
+      "backend_node_id": 3,
+      "tag": "INPUT",
+      "dom_id": "brand-ridge",
+      "box": {
+        "x": 732,
+        "y": 163.5,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        3
+      ]
+    },
+    {
+      "backend_node_id": 51,
+      "tag": "INPUT",
+      "dom_id": "brand-north",
+      "box": {
+        "x": 732,
+        "y": 195.5,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        51
+      ]
+    },
+    {
+      "backend_node_id": 54,
+      "tag": "INPUT",
+      "dom_id": "brand-pine",
+      "box": {
+        "x": 732,
+        "y": 227.5,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        54
+      ]
+    },
+    {
+      "backend_node_id": 60,
+      "tag": "SELECT",
+      "dom_id": "capacity",
+      "box": {
+        "x": 776.875,
+        "y": 300.5,
+        "width": 48,
+        "height": 19
+      },
+      "reached_by": [
+        60
+      ]
+    },
+    {
+      "backend_node_id": 77,
+      "tag": "BUTTON",
+      "dom_id": "filters-reset",
+      "box": {
+        "x": 728,
+        "y": 346,
+        "width": 70.40625,
+        "height": 40
+      },
+      "reached_by": [
+        77
+      ]
+    },
+    {
+      "backend_node_id": 78,
+      "tag": "BUTTON",
+      "dom_id": "filters-apply",
+      "box": {
+        "x": 810.40625,
+        "y": 346,
+        "width": 71.578125,
+        "height": 40
+      },
+      "reached_by": [
+        78
+      ]
+    }
+  ],
+  "blocked_requests": []
+}

@@ -1,0 +1,2697 @@
+{
+  "url": "/after/survey.html",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "end_reason": "cycle",
+  "repeat_step": null,
+  "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab"
+  ],
+  "initial": {
+    "url": "/after/survey.html",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "focus": {
+      "backend_node_id": 4,
+      "tag": "BODY",
+      "dom_id": null,
+      "role": "none",
+      "name": null,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 1432.1875
+      },
+      "cover": null,
+      "document_has_focus": true
+    },
+    "screenshot": "initial.png",
+    "settled": true,
+    "appeared": []
+  },
+  "steps": [
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 20,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Skip to accessible demo page",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 201.203125,
+          "height": 27.265625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-000.png",
+      "settled": true,
+      "appeared": [],
+      "index": 0,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 22,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "W3C logo",
+        "box": {
+          "x": 743,
+          "y": 59.390625,
+          "width": 72,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-001.png",
+      "settled": true,
+      "appeared": [],
+      "index": 1,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Web Accessibility Initiative (WAI) logo",
+        "box": {
+          "x": 815,
+          "y": 59.390625,
+          "width": 194,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-002.png",
+      "settled": true,
+      "appeared": [],
+      "index": 2,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 33,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Overview",
+        "box": {
+          "x": 10,
+          "y": 116.515625,
+          "width": 86,
+          "height": 35.15625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-003.png",
+      "settled": true,
+      "appeared": [],
+      "index": 3,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 35,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Home",
+        "box": {
+          "x": 105,
+          "y": 116.515625,
+          "width": 82,
+          "height": 35.15625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-004.png",
+      "settled": true,
+      "appeared": [],
+      "index": 4,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 37,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "News",
+        "box": {
+          "x": 186,
+          "y": 116.515625,
+          "width": 82,
+          "height": 35.15625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-005.png",
+      "settled": true,
+      "appeared": [],
+      "index": 5,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 39,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Tickets",
+        "box": {
+          "x": 267,
+          "y": 116.515625,
+          "width": 82,
+          "height": 35.15625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-006.png",
+      "settled": true,
+      "appeared": [],
+      "index": 6,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 46,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Inaccessible Survey Page",
+        "box": {
+          "x": 460.390625,
+          "y": 155.265625,
+          "width": 125.0,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-007.png",
+      "settled": true,
+      "appeared": [],
+      "index": 7,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 48,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Inaccessible Survey Page Report",
+        "box": {
+          "x": 585.390625,
+          "y": 155.265625,
+          "width": 94.0,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-008.png",
+      "settled": true,
+      "appeared": [],
+      "index": 8,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 54,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Accessible Survey Page Report",
+        "box": {
+          "x": 585.390625,
+          "y": 175.265625,
+          "width": 94.0,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-009.png",
+      "settled": true,
+      "appeared": [],
+      "index": 9,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 56,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Show Annotations",
+        "box": {
+          "x": 680.1875,
+          "y": 155.265625,
+          "width": 144.0,
+          "height": 41.59375
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-010.png",
+      "settled": true,
+      "appeared": [],
+      "index": 10,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 59,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Template",
+        "box": {
+          "x": 419,
+          "y": 116.515625,
+          "width": 84.109375,
+          "height": 35.15625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-011.png",
+      "settled": true,
+      "appeared": [],
+      "index": 11,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 67,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Skip to content (within demo page)",
+        "box": {
+          "x": 138,
+          "y": 213.671875,
+          "width": 334,
+          "height": 32.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-012.png",
+      "settled": true,
+      "appeared": [],
+      "index": 12,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 69,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Skip to navigation (within demo page)",
+        "box": {
+          "x": 138,
+          "y": 213.671875,
+          "width": 334,
+          "height": 32.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-013.png",
+      "settled": true,
+      "appeared": [],
+      "index": 13,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 71,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Citylights: your access to the city.",
+        "box": {
+          "x": 138,
+          "y": 242.90625,
+          "width": 443,
+          "height": 17.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-014.png",
+      "settled": true,
+      "appeared": [],
+      "index": 14,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 77,
+        "tag": "SELECT",
+        "dom_id": "qkmenu",
+        "role": "combobox",
+        "name": "Explore Site by Topic:",
+        "box": {
+          "x": 730.453125,
+          "y": 243.671875,
+          "width": 102.0,
+          "height": 18.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-015.png",
+      "settled": true,
+      "appeared": [],
+      "index": 15,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 132,
+        "tag": "INPUT",
+        "dom_id": null,
+        "role": "button",
+        "name": "Go",
+        "box": {
+          "x": 838.09375,
+          "y": 242.671875,
+          "width": 32.015625,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-016.png",
+      "settled": true,
+      "appeared": [],
+      "index": 16,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 132,
+        "tag": "INPUT",
+        "dom_id": null,
+        "role": "button",
+        "name": "Go",
+        "box": {
+          "x": 838.09375,
+          "y": 242.671875,
+          "width": 32.015625,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-017.png",
+      "settled": true,
+      "appeared": [],
+      "index": 17,
+      "key": "Enter"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 132,
+        "tag": "INPUT",
+        "dom_id": null,
+        "role": "button",
+        "name": "Go",
+        "box": {
+          "x": 838.09375,
+          "y": 242.671875,
+          "width": 32.015625,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-018.png",
+      "settled": true,
+      "appeared": [],
+      "index": 18,
+      "key": "Escape"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 144,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "HOME",
+        "box": {
+          "x": 138,
+          "y": 352.671875,
+          "width": 135,
+          "height": 34.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-019.png",
+      "settled": true,
+      "appeared": [],
+      "index": 19,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 146,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "NEWS",
+        "box": {
+          "x": 138,
+          "y": 387.671875,
+          "width": 135,
+          "height": 34.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-020.png",
+      "settled": true,
+      "appeared": [],
+      "index": 20,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 148,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "TICKETS",
+        "box": {
+          "x": 138,
+          "y": 422.671875,
+          "width": 135,
+          "height": 34.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-021.png",
+      "settled": true,
+      "appeared": [],
+      "index": 21,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 162,
+        "tag": "INPUT",
+        "dom_id": "nn",
+        "role": "radio",
+        "name": "None",
+        "box": {
+          "x": 311,
+          "y": 521.859375,
+          "width": 13,
+          "height": 13.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-022.png",
+      "settled": true,
+      "appeared": [],
+      "index": 22,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 184,
+        "tag": "SELECT",
+        "dom_id": "cc",
+        "role": "combobox",
+        "name": "cities of the world",
+        "box": {
+          "x": 306,
+          "y": 674.859375,
+          "width": 306,
+          "height": 19.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-023.png",
+      "settled": true,
+      "appeared": [],
+      "index": 23,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 863,
+        "tag": "INPUT",
+        "dom_id": "mr",
+        "role": "radio",
+        "name": "Mr.",
+        "box": {
+          "x": 331,
+          "y": 377.265625,
+          "width": 13,
+          "height": 13.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-024.png",
+      "settled": true,
+      "appeared": [],
+      "index": 24,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 867,
+        "tag": "INPUT",
+        "dom_id": "n",
+        "role": "textbox",
+        "name": "Name:",
+        "box": {
+          "x": 446.703125,
+          "y": 375.265625,
+          "width": 265.0,
+          "height": 21.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-025.png",
+      "settled": true,
+      "appeared": [],
+      "index": 25,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 872,
+        "tag": "INPUT",
+        "dom_id": "em",
+        "role": "textbox",
+        "name": "eMail Address:",
+        "box": {
+          "x": 306,
+          "y": 425.265625,
+          "width": 185,
+          "height": 21.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-026.png",
+      "settled": true,
+      "appeared": [],
+      "index": 26,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 877,
+        "tag": "INPUT",
+        "dom_id": "ev",
+        "role": "textbox",
+        "name": "Retype eMail:",
+        "box": {
+          "x": 518,
+          "y": 425.265625,
+          "width": 185,
+          "height": 21.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-027.png",
+      "settled": true,
+      "appeared": [],
+      "index": 27,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 880,
+        "tag": "INPUT",
+        "dom_id": "submit",
+        "role": "button",
+        "name": "submit",
+        "box": {
+          "x": 294,
+          "y": 479.671875,
+          "width": 55.265625,
+          "height": 21.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-028.png",
+      "settled": true,
+      "appeared": [],
+      "index": 28,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 880,
+        "tag": "INPUT",
+        "dom_id": "submit",
+        "role": "button",
+        "name": "submit",
+        "box": {
+          "x": 294,
+          "y": 479.671875,
+          "width": 55.265625,
+          "height": 21.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-029.png",
+      "settled": true,
+      "appeared": [],
+      "index": 29,
+      "key": "Enter"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 880,
+        "tag": "INPUT",
+        "dom_id": "submit",
+        "role": "button",
+        "name": "submit",
+        "box": {
+          "x": 294,
+          "y": 479.671875,
+          "width": 55.265625,
+          "height": 21.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-030.png",
+      "settled": true,
+      "appeared": [],
+      "index": 30,
+      "key": "Escape"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 913,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Copyright",
+        "box": {
+          "x": 689.515625,
+          "y": 731.515625,
+          "width": 41.9375,
+          "height": 11.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-031.png",
+      "settled": true,
+      "appeared": [],
+      "index": 31,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 914,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "W3C",
+        "box": {
+          "x": 768.640625,
+          "y": 731.515625,
+          "width": 21.78125,
+          "height": 11.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-032.png",
+      "settled": true,
+      "appeared": [],
+      "index": 32,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 917,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "MIT",
+        "box": {
+          "x": 802.421875,
+          "y": 731.515625,
+          "width": 15.78125,
+          "height": 11.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-033.png",
+      "settled": true,
+      "appeared": [],
+      "index": 33,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 919,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "ERCIM",
+        "box": {
+          "x": 823.65625,
+          "y": 731.515625,
+          "width": 31.578125,
+          "height": 11.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-034.png",
+      "settled": true,
+      "appeared": [],
+      "index": 34,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 399,
+      "focus": {
+        "backend_node_id": 921,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Keio",
+        "box": {
+          "x": 860.6875,
+          "y": 731.515625,
+          "width": 19.609375,
+          "height": 11.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-035.png",
+      "settled": true,
+      "appeared": [],
+      "index": 35,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 927,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "changelog",
+        "box": {
+          "x": 216.765625,
+          "y": 568.734375,
+          "width": 66.421875,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-036.png",
+      "settled": true,
+      "appeared": [],
+      "index": 36,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 929,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Shadi Abou-Zahra",
+        "box": {
+          "x": 67.1875,
+          "y": 588.890625,
+          "width": 116.015625,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-037.png",
+      "settled": true,
+      "appeared": [],
+      "index": 37,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 930,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Education and Outreach Working Group (EOWG)",
+        "box": {
+          "x": 239.21875,
+          "y": 588.890625,
+          "width": 314.875,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-038.png",
+      "settled": true,
+      "appeared": [],
+      "index": 38,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 932,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "WAI-TIES",
+        "box": {
+          "x": 201.5625,
+          "y": 609.046875,
+          "width": 63.4375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-039.png",
+      "settled": true,
+      "appeared": [],
+      "index": 39,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 934,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "WAI-AGE",
+        "box": {
+          "x": 297.015625,
+          "y": 609.046875,
+          "width": 61.828125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-040.png",
+      "settled": true,
+      "appeared": [],
+      "index": 40,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 937,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Acknowledgements",
+        "box": {
+          "x": 821.734375,
+          "y": 609.046875,
+          "width": 124.796875,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-041.png",
+      "settled": true,
+      "appeared": [],
+      "index": 41,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 939,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "WAI Site Map",
+        "box": {
+          "x": 18.390625,
+          "y": 643.59375,
+          "width": 87.4375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-042.png",
+      "settled": true,
+      "appeared": [],
+      "index": 42,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 940,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Help with WAI Website",
+        "box": {
+          "x": 117.828125,
+          "y": 643.59375,
+          "width": 145.5625,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-043.png",
+      "settled": true,
+      "appeared": [],
+      "index": 43,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 941,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Search",
+        "box": {
+          "x": 275.390625,
+          "y": 643.59375,
+          "width": 45.609375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-044.png",
+      "settled": true,
+      "appeared": [],
+      "index": 44,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 942,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Contacting WAI",
+        "box": {
+          "x": 333,
+          "y": 643.59375,
+          "width": 99.453125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-045.png",
+      "settled": true,
+      "appeared": [],
+      "index": 45,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 945,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "wai-eo-editors@w3.org",
+        "box": {
+          "x": 167.15625,
+          "y": 663.75,
+          "width": 157.96875,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-046.png",
+      "settled": true,
+      "appeared": [],
+      "index": 46,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 946,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "wai@w3.org",
+        "box": {
+          "x": 499.484375,
+          "y": 663.75,
+          "width": 79.40625,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-047.png",
+      "settled": true,
+      "appeared": [],
+      "index": 47,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 949,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Copyright",
+        "box": {
+          "x": 14.390625,
+          "y": 701.09375,
+          "width": 61.59375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-048.png",
+      "settled": true,
+      "appeared": [],
+      "index": 48,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 950,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "W3C",
+        "box": {
+          "x": 130.609375,
+          "y": 701.09375,
+          "width": 31.984375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-049.png",
+      "settled": true,
+      "appeared": [],
+      "index": 49,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 953,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "MIT",
+        "box": {
+          "x": 180.234375,
+          "y": 701.09375,
+          "width": 23.1875,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-050.png",
+      "settled": true,
+      "appeared": [],
+      "index": 50,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 955,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "ERCIM",
+        "box": {
+          "x": 211.421875,
+          "y": 701.09375,
+          "width": 46.375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-051.png",
+      "settled": true,
+      "appeared": [],
+      "index": 51,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 957,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Keio",
+        "box": {
+          "x": 265.796875,
+          "y": 701.09375,
+          "width": 28.8125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-052.png",
+      "settled": true,
+      "appeared": [],
+      "index": 52,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 958,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "liability",
+        "box": {
+          "x": 476.953125,
+          "y": 701.09375,
+          "width": 42.125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-053.png",
+      "settled": true,
+      "appeared": [],
+      "index": 53,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 959,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "trademark",
+        "box": {
+          "x": 527.078125,
+          "y": 701.09375,
+          "width": 64.78125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-054.png",
+      "settled": true,
+      "appeared": [],
+      "index": 54,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 960,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "document use",
+        "box": {
+          "x": 599.859375,
+          "y": 701.09375,
+          "width": 90.40625,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-055.png",
+      "settled": true,
+      "appeared": [],
+      "index": 55,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 961,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "software licensing",
+        "box": {
+          "x": 722.28125,
+          "y": 701.09375,
+          "width": 114.390625,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-056.png",
+      "settled": true,
+      "appeared": [],
+      "index": 56,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 962,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "public",
+        "box": {
+          "x": 347.140625,
+          "y": 721.25,
+          "width": 37.609375,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-057.png",
+      "settled": true,
+      "appeared": [],
+      "index": 57,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 963,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Member",
+        "box": {
+          "x": 416.765625,
+          "y": 721.25,
+          "width": 52.78125,
+          "height": 16.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-058.png",
+      "settled": true,
+      "appeared": [],
+      "index": 58,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 664,
+      "focus": {
+        "backend_node_id": 4,
+        "tag": "BODY",
+        "dom_id": null,
+        "role": "none",
+        "name": null,
+        "box": {
+          "x": 0,
+          "y": -664,
+          "width": 1024,
+          "height": 1432.1875
+        },
+        "cover": null,
+        "document_has_focus": false
+      },
+      "screenshot": "step-059.png",
+      "settled": true,
+      "appeared": [],
+      "index": 59,
+      "key": "Tab"
+    },
+    {
+      "url": "/after/survey.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 20,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Skip to accessible demo page",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 201.203125,
+          "height": 27.265625
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-060.png",
+      "settled": true,
+      "appeared": [],
+      "index": 60,
+      "key": "Tab"
+    }
+  ],
+  "targets": [
+    {
+      "backend_node_id": 20,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": -14400,
+        "y": -14400,
+        "width": 1,
+        "height": 1
+      },
+      "reached_by": [
+        20
+      ]
+    },
+    {
+      "backend_node_id": 22,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 743,
+        "y": 59.390625,
+        "width": 72,
+        "height": 16
+      },
+      "reached_by": [
+        22
+      ]
+    },
+    {
+      "backend_node_id": 24,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 815,
+        "y": 59.390625,
+        "width": 194,
+        "height": 16
+      },
+      "reached_by": [
+        24
+      ]
+    },
+    {
+      "backend_node_id": 33,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 10,
+        "y": 116.515625,
+        "width": 86,
+        "height": 35.15625
+      },
+      "reached_by": [
+        33
+      ]
+    },
+    {
+      "backend_node_id": 35,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 105,
+        "y": 116.515625,
+        "width": 82,
+        "height": 35.15625
+      },
+      "reached_by": [
+        35
+      ]
+    },
+    {
+      "backend_node_id": 37,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 186,
+        "y": 116.515625,
+        "width": 82,
+        "height": 35.15625
+      },
+      "reached_by": [
+        37
+      ]
+    },
+    {
+      "backend_node_id": 39,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 267,
+        "y": 116.515625,
+        "width": 82,
+        "height": 35.15625
+      },
+      "reached_by": [
+        39
+      ]
+    },
+    {
+      "backend_node_id": 46,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 460.390625,
+        "y": 155.265625,
+        "width": 125,
+        "height": 20
+      },
+      "reached_by": [
+        46
+      ]
+    },
+    {
+      "backend_node_id": 48,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 585.390625,
+        "y": 155.265625,
+        "width": 94,
+        "height": 20
+      },
+      "reached_by": [
+        48
+      ]
+    },
+    {
+      "backend_node_id": 54,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 585.390625,
+        "y": 175.265625,
+        "width": 94,
+        "height": 20
+      },
+      "reached_by": [
+        54
+      ]
+    },
+    {
+      "backend_node_id": 56,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 680.1875,
+        "y": 155.265625,
+        "width": 144,
+        "height": 41.59375
+      },
+      "reached_by": [
+        56
+      ]
+    },
+    {
+      "backend_node_id": 59,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 419,
+        "y": 116.515625,
+        "width": 84.109375,
+        "height": 35.15625
+      },
+      "reached_by": [
+        59
+      ]
+    },
+    {
+      "backend_node_id": 67,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": -15862,
+        "y": 213.671875,
+        "width": 334,
+        "height": 32
+      },
+      "reached_by": [
+        67
+      ]
+    },
+    {
+      "backend_node_id": 69,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": -15862,
+        "y": 213.671875,
+        "width": 334,
+        "height": 32
+      },
+      "reached_by": [
+        69
+      ]
+    },
+    {
+      "backend_node_id": 71,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 138,
+        "y": 242.90625,
+        "width": 443,
+        "height": 17
+      },
+      "reached_by": [
+        71
+      ]
+    },
+    {
+      "backend_node_id": 77,
+      "tag": "SELECT",
+      "dom_id": "qkmenu",
+      "box": {
+        "x": 730.453125,
+        "y": 243.671875,
+        "width": 102,
+        "height": 18
+      },
+      "reached_by": [
+        77
+      ]
+    },
+    {
+      "backend_node_id": 132,
+      "tag": "INPUT",
+      "dom_id": null,
+      "box": {
+        "x": 838.09375,
+        "y": 242.671875,
+        "width": 32.015625,
+        "height": 20
+      },
+      "reached_by": [
+        132
+      ]
+    },
+    {
+      "backend_node_id": 144,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 138,
+        "y": 352.671875,
+        "width": 135,
+        "height": 34
+      },
+      "reached_by": [
+        144
+      ]
+    },
+    {
+      "backend_node_id": 146,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 138,
+        "y": 387.671875,
+        "width": 135,
+        "height": 34
+      },
+      "reached_by": [
+        146
+      ]
+    },
+    {
+      "backend_node_id": 148,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 138,
+        "y": 422.671875,
+        "width": 135,
+        "height": 34
+      },
+      "reached_by": [
+        148
+      ]
+    },
+    {
+      "backend_node_id": 162,
+      "tag": "INPUT",
+      "dom_id": "nn",
+      "box": {
+        "x": 311,
+        "y": 521.859375,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        162,
+        165,
+        168,
+        172,
+        175,
+        178
+      ]
+    },
+    {
+      "backend_node_id": 165,
+      "tag": "INPUT",
+      "dom_id": "cp",
+      "box": {
+        "x": 311,
+        "y": 549.859375,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        165,
+        162,
+        168,
+        172,
+        175,
+        178
+      ]
+    },
+    {
+      "backend_node_id": 168,
+      "tag": "INPUT",
+      "dom_id": "gp",
+      "box": {
+        "x": 311,
+        "y": 577.859375,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        168,
+        162,
+        165,
+        172,
+        175,
+        178
+      ]
+    },
+    {
+      "backend_node_id": 172,
+      "tag": "INPUT",
+      "dom_id": "jp",
+      "box": {
+        "x": 533.390625,
+        "y": 521.859375,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        172,
+        162,
+        165,
+        168,
+        175,
+        178
+      ]
+    },
+    {
+      "backend_node_id": 175,
+      "tag": "INPUT",
+      "dom_id": "sp",
+      "box": {
+        "x": 533.390625,
+        "y": 549.859375,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        175,
+        162,
+        165,
+        168,
+        172,
+        178
+      ]
+    },
+    {
+      "backend_node_id": 178,
+      "tag": "INPUT",
+      "dom_id": "ot",
+      "box": {
+        "x": 533.390625,
+        "y": 577.859375,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        178,
+        162,
+        165,
+        168,
+        172,
+        175
+      ]
+    },
+    {
+      "backend_node_id": 184,
+      "tag": "SELECT",
+      "dom_id": "cc",
+      "box": {
+        "x": 306,
+        "y": 674.859375,
+        "width": 306,
+        "height": 19
+      },
+      "reached_by": [
+        184
+      ]
+    },
+    {
+      "backend_node_id": 863,
+      "tag": "INPUT",
+      "dom_id": "mr",
+      "box": {
+        "x": 331,
+        "y": 776.265625,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        863,
+        865
+      ]
+    },
+    {
+      "backend_node_id": 865,
+      "tag": "INPUT",
+      "dom_id": "mrs",
+      "box": {
+        "x": 382.015625,
+        "y": 776.265625,
+        "width": 13,
+        "height": 13
+      },
+      "reached_by": [
+        865,
+        863
+      ]
+    },
+    {
+      "backend_node_id": 867,
+      "tag": "INPUT",
+      "dom_id": "n",
+      "box": {
+        "x": 446.703125,
+        "y": 774.265625,
+        "width": 265,
+        "height": 21
+      },
+      "reached_by": [
+        867
+      ]
+    },
+    {
+      "backend_node_id": 872,
+      "tag": "INPUT",
+      "dom_id": "em",
+      "box": {
+        "x": 306,
+        "y": 824.265625,
+        "width": 185,
+        "height": 21
+      },
+      "reached_by": [
+        872
+      ]
+    },
+    {
+      "backend_node_id": 877,
+      "tag": "INPUT",
+      "dom_id": "ev",
+      "box": {
+        "x": 518,
+        "y": 824.265625,
+        "width": 185,
+        "height": 21
+      },
+      "reached_by": [
+        877
+      ]
+    },
+    {
+      "backend_node_id": 880,
+      "tag": "INPUT",
+      "dom_id": "submit",
+      "box": {
+        "x": 294,
+        "y": 878.671875,
+        "width": 55.265625,
+        "height": 21
+      },
+      "reached_by": [
+        880
+      ]
+    },
+    {
+      "backend_node_id": 913,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 689.515625,
+        "y": 1130.515625,
+        "width": 41.9375,
+        "height": 11
+      },
+      "reached_by": [
+        913
+      ]
+    },
+    {
+      "backend_node_id": 914,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 768.640625,
+        "y": 1130.515625,
+        "width": 21.78125,
+        "height": 11
+      },
+      "reached_by": [
+        914
+      ]
+    },
+    {
+      "backend_node_id": 917,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 802.421875,
+        "y": 1130.515625,
+        "width": 15.78125,
+        "height": 11
+      },
+      "reached_by": [
+        917
+      ]
+    },
+    {
+      "backend_node_id": 919,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 823.65625,
+        "y": 1130.515625,
+        "width": 31.578125,
+        "height": 11
+      },
+      "reached_by": [
+        919
+      ]
+    },
+    {
+      "backend_node_id": 921,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 860.6875,
+        "y": 1130.515625,
+        "width": 19.609375,
+        "height": 11
+      },
+      "reached_by": [
+        921
+      ]
+    },
+    {
+      "backend_node_id": 927,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 216.765625,
+        "y": 1232.734375,
+        "width": 66.421875,
+        "height": 16
+      },
+      "reached_by": [
+        927
+      ]
+    },
+    {
+      "backend_node_id": 929,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 67.1875,
+        "y": 1252.890625,
+        "width": 116.015625,
+        "height": 16
+      },
+      "reached_by": [
+        929
+      ]
+    },
+    {
+      "backend_node_id": 930,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 239.21875,
+        "y": 1252.890625,
+        "width": 314.875,
+        "height": 16
+      },
+      "reached_by": [
+        930
+      ]
+    },
+    {
+      "backend_node_id": 932,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 201.5625,
+        "y": 1273.046875,
+        "width": 63.4375,
+        "height": 16
+      },
+      "reached_by": [
+        932
+      ]
+    },
+    {
+      "backend_node_id": 934,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 297.015625,
+        "y": 1273.046875,
+        "width": 61.828125,
+        "height": 16
+      },
+      "reached_by": [
+        934
+      ]
+    },
+    {
+      "backend_node_id": 937,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 821.734375,
+        "y": 1273.046875,
+        "width": 124.796875,
+        "height": 16
+      },
+      "reached_by": [
+        937
+      ]
+    },
+    {
+      "backend_node_id": 939,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 18.390625,
+        "y": 1307.59375,
+        "width": 87.4375,
+        "height": 16
+      },
+      "reached_by": [
+        939
+      ]
+    },
+    {
+      "backend_node_id": 940,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 117.828125,
+        "y": 1307.59375,
+        "width": 145.5625,
+        "height": 16
+      },
+      "reached_by": [
+        940
+      ]
+    },
+    {
+      "backend_node_id": 941,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 275.390625,
+        "y": 1307.59375,
+        "width": 45.609375,
+        "height": 16
+      },
+      "reached_by": [
+        941
+      ]
+    },
+    {
+      "backend_node_id": 942,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 333,
+        "y": 1307.59375,
+        "width": 99.453125,
+        "height": 16
+      },
+      "reached_by": [
+        942
+      ]
+    },
+    {
+      "backend_node_id": 945,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 167.15625,
+        "y": 1327.75,
+        "width": 157.96875,
+        "height": 16
+      },
+      "reached_by": [
+        945
+      ]
+    },
+    {
+      "backend_node_id": 946,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 499.484375,
+        "y": 1327.75,
+        "width": 79.40625,
+        "height": 16
+      },
+      "reached_by": [
+        946
+      ]
+    },
+    {
+      "backend_node_id": 949,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 14.390625,
+        "y": 1365.09375,
+        "width": 61.59375,
+        "height": 16
+      },
+      "reached_by": [
+        949
+      ]
+    },
+    {
+      "backend_node_id": 950,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 130.609375,
+        "y": 1365.09375,
+        "width": 31.984375,
+        "height": 16
+      },
+      "reached_by": [
+        950
+      ]
+    },
+    {
+      "backend_node_id": 953,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 180.234375,
+        "y": 1365.09375,
+        "width": 23.1875,
+        "height": 16
+      },
+      "reached_by": [
+        953
+      ]
+    },
+    {
+      "backend_node_id": 955,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 211.421875,
+        "y": 1365.09375,
+        "width": 46.375,
+        "height": 16
+      },
+      "reached_by": [
+        955
+      ]
+    },
+    {
+      "backend_node_id": 957,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 265.796875,
+        "y": 1365.09375,
+        "width": 28.8125,
+        "height": 16
+      },
+      "reached_by": [
+        957
+      ]
+    },
+    {
+      "backend_node_id": 958,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 476.953125,
+        "y": 1365.09375,
+        "width": 42.125,
+        "height": 16
+      },
+      "reached_by": [
+        958
+      ]
+    },
+    {
+      "backend_node_id": 959,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 527.078125,
+        "y": 1365.09375,
+        "width": 64.78125,
+        "height": 16
+      },
+      "reached_by": [
+        959
+      ]
+    },
+    {
+      "backend_node_id": 960,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 599.859375,
+        "y": 1365.09375,
+        "width": 90.40625,
+        "height": 16
+      },
+      "reached_by": [
+        960
+      ]
+    },
+    {
+      "backend_node_id": 961,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 722.28125,
+        "y": 1365.09375,
+        "width": 114.390625,
+        "height": 16
+      },
+      "reached_by": [
+        961
+      ]
+    },
+    {
+      "backend_node_id": 962,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 347.140625,
+        "y": 1385.25,
+        "width": 37.609375,
+        "height": 16
+      },
+      "reached_by": [
+        962
+      ]
+    },
+    {
+      "backend_node_id": 963,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 416.765625,
+        "y": 1385.25,
+        "width": 52.78125,
+        "height": 16
+      },
+      "reached_by": [
+        963
+      ]
+    }
+  ],
+  "blocked_requests": [
+    {
+      "method": "POST",
+      "url": "/after/survey.php",
+      "reason": "non-GET"
+    }
+  ]
+}

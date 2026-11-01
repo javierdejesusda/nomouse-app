@@ -1,0 +1,64 @@
+{
+  "page": "/order-glossary-columns.html",
+  "verdicts_sha256": "f5b2072b136c43d47d04319b5fdafcb9b9763334df7155c7718aa45f6b87e4ca",
+  "review": {
+    "file": "review-eval1.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "spark",
+    "model": "muse-spark-1.3",
+    "reasoning_effort": "minimal",
+    "error": null,
+    "usage": {
+      "input_tokens": 337,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 450,
+      "output_tokens_details": {
+        "reasoning_tokens": 306
+      },
+      "total_tokens": 787
+    }
+  },
+  "packets": [
+    {
+      "id": "P1",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 8,
+      "element": {
+        "tag": "A",
+        "dom_id": "term-col2",
+        "role": "link",
+        "name": "Downhaul"
+      },
+      "observed": "jumps up 180 px from A",
+      "sentence": "At step 8, keyboard focus moved to link \"Downhaul\" which jumps up 180 px from A, and as a best practice finding the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P2",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 14,
+      "element": {
+        "tag": "A",
+        "dom_id": "term-col3",
+        "role": "link",
+        "name": "Mainsheet"
+      },
+      "observed": "jumps up 180 px from A",
+      "sentence": "At step 14, keyboard focus moved to link \"Mainsheet\" which jumps up 180 px from A, and as a best practice finding the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "page": "/trap-editor-escape.html",
+  "run": "eval1",
+  "verdicts_sha256": "87371982c32d3958b49b9767bef74e833190fdbfe87c8bfe9acf3fe43f10a4af",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 8,
+    "seconds_per_frame": 1,
+    "video_sha256": "dd43bba16ce1ee1191a7f5c9bbdaae3180edd4f4807c9a08aea8ff41290986f9"
+  },
+  "failures": [
+    {
+      "description": "Keyboard focus inside the Code editor has no visible indicator at this second.",
+      "element": "Code editor",
+      "second": 4,
+      "type": "focus-not-visible"
+    },
+    {
+      "description": "The page provides no skip link or other bypass mechanism for repeated content.",
+      "element": "New snippet page",
+      "second": 0,
+      "type": "no-bypass"
+    }
+  ],
+  "usage": {
+    "input_tokens": 1100,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 467,
+    "output_tokens_details": {
+      "reasoning_tokens": 374
+    },
+    "total_tokens": 1567
+  },
+  "latency_s": 5.0810294980001345
+}

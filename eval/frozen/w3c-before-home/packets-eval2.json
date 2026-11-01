@@ -1,0 +1,407 @@
+{
+  "page": "/before/home.html",
+  "verdicts_sha256": "ae8edb0b3d6d9cc7a803047da07c24cab709c05e017591d1947b6345d622e5ca",
+  "review": {
+    "file": "review-eval2.json",
+    "prompt_sha256": "59707175ebfe57396494168a43618ae0889a1adc6715949db5189c6b2626e686"
+  },
+  "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice.",
+  "writer": {
+    "mode": "spark",
+    "model": "muse-spark-1.3",
+    "reasoning_effort": "minimal",
+    "error": null,
+    "usage": {
+      "input_tokens": 1604,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 1056,
+      "output_tokens_details": {
+        "reasoning_tokens": 219
+      },
+      "total_tokens": 2660
+    }
+  },
+  "packets": [
+    {
+      "id": "P1",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P2",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P3",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P4",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P5",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P6",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P7",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P8",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P9",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P10",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P11",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P12",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P13",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P14",
+      "status": "VERIFIED",
+      "best_practice": false,
+      "source": "W1",
+      "rule": "unreachable",
+      "step": null,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": null,
+        "name": null
+      },
+      "observed": "never focused in a full Tab cycle",
+      "sentence": "The A element never received keyboard focus during a full Tab cycle.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P15",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 5,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Accessible Home Page"
+      },
+      "observed": "jumps left 125 px on the same row from A",
+      "sentence": "Order (best practice) at step 5 on the link \"Accessible Home Page\": jumps left 125 px on the same row from A; the Tab order differs from the visual layout, and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "template",
+      "rejected": "At Tab step 5 keyboard focus moved to link Accessible Home Page which jumps left 125 px on the same row from A, and as a best practice finding the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P16",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 8,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "News"
+      },
+      "observed": "jumps up 39 px from A",
+      "sentence": "At Tab step 8 keyboard focus moved to link News which jumps up 39 px from A, and as a best practice finding the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P17",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 13,
+      "element": {
+        "tag": "SELECT",
+        "dom_id": null,
+        "role": "combobox",
+        "name": ""
+      },
+      "observed": "jumps up 38 px from A",
+      "sentence": "At Tab step 13 keyboard focus moved to combobox which jumps up 38 px from A, and as a best practice finding the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P18",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 34,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Shadi Abou-Zahra"
+      },
+      "observed": "jumps left 150 px on the same row from A",
+      "sentence": "At Tab step 34 keyboard focus moved to link Shadi Abou-Zahra which jumps left 150 px on the same row from A, and as a best practice finding the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P19",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 36,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "WAI-TIES"
+      },
+      "observed": "jumps left 38 px on the same row from A",
+      "sentence": "At Tab step 36 keyboard focus moved to link WAI-TIES which jumps left 38 px on the same row from A, and as a best practice finding the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P20",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 43,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "wai-eo-editors@w3.org"
+      },
+      "observed": "jumps left 166 px on the same row from A",
+      "sentence": "At Tab step 43 keyboard focus moved to link wai-eo-editors@w3.org which jumps left 166 px on the same row from A, and as a best practice finding the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    },
+    {
+      "id": "P21",
+      "status": "VERIFIED",
+      "best_practice": true,
+      "source": "W1",
+      "rule": "order",
+      "step": 54,
+      "element": {
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "public"
+      },
+      "observed": "jumps left 375 px on the same row from A",
+      "sentence": "At Tab step 54 keyboard focus moved to link public which jumps left 375 px on the same row from A, and as a best practice finding the Tab order differs from the visual layout and W3C allows other meaningful orders, so a person should review it.",
+      "sentence_source": "spark",
+      "disclaimer": "Observed keyboard-only test evidence. Not a conformance claim and not legal advice."
+    }
+  ]
+}

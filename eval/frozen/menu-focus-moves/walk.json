@@ -1,0 +1,504 @@
+{
+  "url": "/menu-focus-moves.html",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "end_reason": "cycle",
+  "repeat_step": null,
+  "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab"
+  ],
+  "initial": {
+    "url": "/menu-focus-moves.html",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "focus": {
+      "backend_node_id": 3,
+      "tag": "BODY",
+      "dom_id": null,
+      "role": "none",
+      "name": null,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 289
+      },
+      "cover": null,
+      "document_has_focus": true
+    },
+    "screenshot": "initial.png",
+    "settled": true,
+    "appeared": []
+  },
+  "steps": [
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 17,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Albums",
+        "box": {
+          "x": 873.765625,
+          "y": 42,
+          "width": 56.640625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-000.png",
+      "settled": true,
+      "appeared": [],
+      "index": 0,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 18,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Shared",
+        "box": {
+          "x": 954.40625,
+          "y": 42,
+          "width": 53.59375,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-001.png",
+      "settled": true,
+      "appeared": [],
+      "index": 1,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 21,
+        "tag": "BUTTON",
+        "dom_id": "sort",
+        "role": "button",
+        "name": "Sort",
+        "box": {
+          "x": 16,
+          "y": 95,
+          "width": 59.375,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-002.png",
+      "settled": true,
+      "appeared": [],
+      "index": 2,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "BUTTON",
+        "dom_id": "sort-newest",
+        "role": "menuitem",
+        "name": "Newest first",
+        "box": {
+          "x": 17,
+          "y": 140,
+          "width": 180,
+          "height": 36
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-003.png",
+      "settled": true,
+      "appeared": [
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "index": 3,
+      "key": "Enter"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 21,
+        "tag": "BUTTON",
+        "dom_id": "sort",
+        "role": "button",
+        "name": "Sort",
+        "box": {
+          "x": 16,
+          "y": 95,
+          "width": 59.375,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-004.png",
+      "settled": true,
+      "appeared": [],
+      "index": 4,
+      "key": "Escape"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 29,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Upload photos",
+        "box": {
+          "x": 87.375,
+          "y": 103,
+          "width": 110.578125,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-005.png",
+      "settled": true,
+      "appeared": [],
+      "index": 5,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 32,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Harbour at dawn",
+        "box": {
+          "x": 24,
+          "y": 161,
+          "width": 126.578125,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-006.png",
+      "settled": true,
+      "appeared": [],
+      "index": 6,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 34,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Market stalls",
+        "box": {
+          "x": 252,
+          "y": 161,
+          "width": 96.140625,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-007.png",
+      "settled": true,
+      "appeared": [],
+      "index": 7,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 36,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Snow on the hill",
+        "box": {
+          "x": 480,
+          "y": 161,
+          "width": 119.78125,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-008.png",
+      "settled": true,
+      "appeared": [],
+      "index": 8,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 38,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Birthday cake",
+        "box": {
+          "x": 708,
+          "y": 161,
+          "width": 103.390625,
+          "height": 20
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-009.png",
+      "settled": true,
+      "appeared": [],
+      "index": 9,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 3,
+        "tag": "BODY",
+        "dom_id": null,
+        "role": "none",
+        "name": null,
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 289
+        },
+        "cover": null,
+        "document_has_focus": false
+      },
+      "screenshot": "step-010.png",
+      "settled": true,
+      "appeared": [],
+      "index": 10,
+      "key": "Tab"
+    },
+    {
+      "url": "/menu-focus-moves.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 17,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Albums",
+        "box": {
+          "x": 873.765625,
+          "y": 42,
+          "width": 56.640625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-011.png",
+      "settled": true,
+      "appeared": [],
+      "index": 11,
+      "key": "Tab"
+    }
+  ],
+  "targets": [
+    {
+      "backend_node_id": 17,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 873.765625,
+        "y": 42,
+        "width": 56.640625,
+        "height": 24
+      },
+      "reached_by": [
+        17
+      ]
+    },
+    {
+      "backend_node_id": 18,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 954.40625,
+        "y": 42,
+        "width": 53.59375,
+        "height": 24
+      },
+      "reached_by": [
+        18
+      ]
+    },
+    {
+      "backend_node_id": 21,
+      "tag": "BUTTON",
+      "dom_id": "sort",
+      "box": {
+        "x": 16,
+        "y": 95,
+        "width": 59.375,
+        "height": 40
+      },
+      "reached_by": [
+        21
+      ]
+    },
+    {
+      "backend_node_id": 29,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 87.375,
+        "y": 103,
+        "width": 110.578125,
+        "height": 24
+      },
+      "reached_by": [
+        29
+      ]
+    },
+    {
+      "backend_node_id": 32,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 24,
+        "y": 161,
+        "width": 126.578125,
+        "height": 20
+      },
+      "reached_by": [
+        32
+      ]
+    },
+    {
+      "backend_node_id": 34,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 252,
+        "y": 161,
+        "width": 96.140625,
+        "height": 20
+      },
+      "reached_by": [
+        34
+      ]
+    },
+    {
+      "backend_node_id": 36,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 480,
+        "y": 161,
+        "width": 119.78125,
+        "height": 20
+      },
+      "reached_by": [
+        36
+      ]
+    },
+    {
+      "backend_node_id": 38,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 708,
+        "y": 161,
+        "width": 103.390625,
+        "height": 20
+      },
+      "reached_by": [
+        38
+      ]
+    }
+  ],
+  "blocked_requests": []
+}

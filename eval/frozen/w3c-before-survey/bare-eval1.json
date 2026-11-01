@@ -1,0 +1,46 @@
+{
+  "page": "/before/survey.html",
+  "run": "eval1",
+  "verdicts_sha256": "60fab3b9ad53c533f3153c5f7564515231379df52fef5f3254780eed4263fee4",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 58,
+    "seconds_per_frame": 1,
+    "video_sha256": "c1438c5cc06c41af9c22f683b6b272465e6c44587cdb92d9cf881c7ce958f2bb"
+  },
+  "failures": [
+    {
+      "description": "The page provides no skip link or other bypass to skip the repeated header and navigation blocks.",
+      "element": "Top navigation Overview Home News Tickets",
+      "second": 2,
+      "type": "no-bypass"
+    },
+    {
+      "description": "Keyboard focus moves to the top navigation links but no visible focus indicator is shown.",
+      "element": "Overview",
+      "second": 4,
+      "type": "focus-not-visible"
+    },
+    {
+      "description": "The custom QUICKMENU dropdown only opens on mouse hover and cannot be opened or operated by keyboard alone.",
+      "element": "QUICKMENU -->",
+      "second": 14,
+      "type": "keyboard-operation"
+    }
+  ],
+  "usage": {
+    "input_tokens": 7600,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 1215,
+    "output_tokens_details": {
+      "reasoning_tokens": 1067
+    },
+    "total_tokens": 8815
+  },
+  "latency_s": 9.733092487999784
+}

@@ -1,0 +1,456 @@
+{
+  "url": "/trap-card-fields.html",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "end_reason": "repeat",
+  "repeat_step": 8,
+  "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Escape",
+    "Tab"
+  ],
+  "initial": {
+    "url": "/trap-card-fields.html",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "focus": {
+      "backend_node_id": 4,
+      "tag": "BODY",
+      "dom_id": null,
+      "role": "none",
+      "name": null,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 628.875
+      },
+      "cover": null,
+      "document_has_focus": true
+    },
+    "screenshot": "initial.png",
+    "settled": true,
+    "appeared": []
+  },
+  "steps": [
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 14,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "My trips",
+        "box": {
+          "x": 946.34375,
+          "y": 42,
+          "width": 61.65625,
+          "height": 24
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-000.png",
+      "settled": true,
+      "appeared": [],
+      "index": 0,
+      "key": "Tab"
+    },
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 19,
+        "tag": "INPUT",
+        "dom_id": "card-name",
+        "role": "textbox",
+        "name": "Name on card",
+        "box": {
+          "x": 16,
+          "y": 221.875,
+          "width": 520,
+          "height": 44.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-001.png",
+      "settled": true,
+      "appeared": [],
+      "index": 1,
+      "key": "Tab"
+    },
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "INPUT",
+        "dom_id": "card-number",
+        "role": "textbox",
+        "name": "Card number",
+        "box": {
+          "x": 33,
+          "y": 326.875,
+          "width": 486,
+          "height": 44.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-002.png",
+      "settled": true,
+      "appeared": [],
+      "index": 2,
+      "key": "Tab"
+    },
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 29,
+        "tag": "INPUT",
+        "dom_id": "card-expiry",
+        "role": "textbox",
+        "name": "Expiry (MM/YY)",
+        "box": {
+          "x": 33,
+          "y": 414.875,
+          "width": 268,
+          "height": 44.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-003.png",
+      "settled": true,
+      "appeared": [],
+      "index": 3,
+      "key": "Tab"
+    },
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 33,
+        "tag": "INPUT",
+        "dom_id": "card-cvc",
+        "role": "textbox",
+        "name": "Security code",
+        "box": {
+          "x": 313,
+          "y": 414.875,
+          "width": 268,
+          "height": 44.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-004.png",
+      "settled": true,
+      "appeared": [],
+      "index": 4,
+      "key": "Tab"
+    },
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "INPUT",
+        "dom_id": "card-number",
+        "role": "textbox",
+        "name": "Card number",
+        "box": {
+          "x": 33,
+          "y": 326.875,
+          "width": 486,
+          "height": 44.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-005.png",
+      "settled": true,
+      "appeared": [],
+      "index": 5,
+      "key": "Tab"
+    },
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 29,
+        "tag": "INPUT",
+        "dom_id": "card-expiry",
+        "role": "textbox",
+        "name": "Expiry (MM/YY)",
+        "box": {
+          "x": 33,
+          "y": 414.875,
+          "width": 268,
+          "height": 44.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-006.png",
+      "settled": true,
+      "appeared": [],
+      "index": 6,
+      "key": "Tab"
+    },
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 33,
+        "tag": "INPUT",
+        "dom_id": "card-cvc",
+        "role": "textbox",
+        "name": "Security code",
+        "box": {
+          "x": 313,
+          "y": 414.875,
+          "width": 268,
+          "height": 44.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-007.png",
+      "settled": true,
+      "appeared": [],
+      "index": 7,
+      "key": "Tab"
+    },
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "INPUT",
+        "dom_id": "card-number",
+        "role": "textbox",
+        "name": "Card number",
+        "box": {
+          "x": 33,
+          "y": 326.875,
+          "width": 486,
+          "height": 44.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-008.png",
+      "settled": true,
+      "appeared": [],
+      "index": 8,
+      "key": "Tab"
+    },
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "INPUT",
+        "dom_id": "card-number",
+        "role": "textbox",
+        "name": "Card number",
+        "box": {
+          "x": 33,
+          "y": 326.875,
+          "width": 486,
+          "height": 44.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-009.png",
+      "settled": true,
+      "appeared": [],
+      "index": 9,
+      "key": "Escape"
+    },
+    {
+      "url": "/trap-card-fields.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 29,
+        "tag": "INPUT",
+        "dom_id": "card-expiry",
+        "role": "textbox",
+        "name": "Expiry (MM/YY)",
+        "box": {
+          "x": 33,
+          "y": 414.875,
+          "width": 268,
+          "height": 44.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-010.png",
+      "settled": true,
+      "appeared": [],
+      "index": 10,
+      "key": "Tab"
+    }
+  ],
+  "targets": [
+    {
+      "backend_node_id": 14,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 946.34375,
+        "y": 42,
+        "width": 61.65625,
+        "height": 24
+      },
+      "reached_by": [
+        14
+      ]
+    },
+    {
+      "backend_node_id": 19,
+      "tag": "INPUT",
+      "dom_id": "card-name",
+      "box": {
+        "x": 16,
+        "y": 221.875,
+        "width": 520,
+        "height": 44
+      },
+      "reached_by": [
+        19
+      ]
+    },
+    {
+      "backend_node_id": 24,
+      "tag": "INPUT",
+      "dom_id": "card-number",
+      "box": {
+        "x": 33,
+        "y": 326.875,
+        "width": 486,
+        "height": 44
+      },
+      "reached_by": [
+        24
+      ]
+    },
+    {
+      "backend_node_id": 29,
+      "tag": "INPUT",
+      "dom_id": "card-expiry",
+      "box": {
+        "x": 33,
+        "y": 414.875,
+        "width": 268,
+        "height": 44
+      },
+      "reached_by": [
+        29
+      ]
+    },
+    {
+      "backend_node_id": 33,
+      "tag": "INPUT",
+      "dom_id": "card-cvc",
+      "box": {
+        "x": 313,
+        "y": 414.875,
+        "width": 268,
+        "height": 44
+      },
+      "reached_by": [
+        33
+      ]
+    },
+    {
+      "backend_node_id": 35,
+      "tag": "BUTTON",
+      "dom_id": "pay",
+      "box": {
+        "x": 16,
+        "y": 507.875,
+        "width": 156.875,
+        "height": 44
+      },
+      "reached_by": [
+        35
+      ]
+    },
+    {
+      "backend_node_id": 3,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 16,
+        "y": 593.875,
+        "width": 117.6875,
+        "height": 17
+      },
+      "reached_by": [
+        3
+      ]
+    }
+  ],
+  "blocked_requests": []
+}

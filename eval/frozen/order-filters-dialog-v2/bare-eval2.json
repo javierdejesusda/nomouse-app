@@ -1,0 +1,46 @@
+{
+  "page": "/order-filters-dialog.html",
+  "run": "eval2",
+  "verdicts_sha256": "b00cd2c23ac1c53695599c697274bb680475e97587f9081c66d76f7b32764d2d",
+  "prompt_sha256": "80f2ad8399c4fc28b6d71005b8a4098d55866c15fb9485d648ec57e6244aaad3",
+  "model": "muse-spark-1.3",
+  "reasoning_effort": "minimal",
+  "input": {
+    "kind": "video",
+    "frames": 21,
+    "seconds_per_frame": 1,
+    "video_sha256": "8ac000d66e86a57a373e62c79d04f8719d29b5cbc496eb7acdd816df069381f1"
+  },
+  "failures": [
+    {
+      "description": "Opening the Filters panel leaves focus on the Ridge 30 L link in the background instead of moving it inside the dialog.",
+      "element": "Filter backpacks dialog",
+      "second": 18,
+      "type": "focus-not-moved"
+    },
+    {
+      "description": "Closing the filter panel moves focus to Ridge 30 L instead of returning it to the Filters button that opened it.",
+      "element": "Filters",
+      "second": 6,
+      "type": "focus-not-returned"
+    },
+    {
+      "description": "Tabbing from the product grid jumps backward to the top Tents, Packs, Boots links before reaching the Filters button.",
+      "element": "Tents",
+      "second": 14,
+      "type": "focus-order"
+    }
+  ],
+  "usage": {
+    "input_tokens": 2660,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 907,
+    "output_tokens_details": {
+      "reasoning_tokens": 744
+    },
+    "total_tokens": 3567
+  },
+  "latency_s": 9.862980882000102
+}

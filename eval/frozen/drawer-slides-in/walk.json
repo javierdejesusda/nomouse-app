@@ -1,0 +1,324 @@
+{
+  "url": "/drawer-slides-in.html",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "end_reason": "cycle",
+  "repeat_step": null,
+  "keys": [
+    "Tab",
+    "Enter",
+    "Escape",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab"
+  ],
+  "initial": {
+    "url": "/drawer-slides-in.html",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "focus": {
+      "backend_node_id": 3,
+      "tag": "BODY",
+      "dom_id": null,
+      "role": "none",
+      "name": null,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 361.875
+      },
+      "cover": null,
+      "document_has_focus": true
+    },
+    "screenshot": "initial.png",
+    "settled": true,
+    "appeared": []
+  },
+  "steps": [
+    {
+      "url": "/drawer-slides-in.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 15,
+        "tag": "BUTTON",
+        "dom_id": "menu-toggle",
+        "role": "button",
+        "name": "Menu",
+        "box": {
+          "x": 16,
+          "y": 42,
+          "width": 70.703125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-000.png",
+      "settled": true,
+      "appeared": [],
+      "index": 0,
+      "key": "Tab"
+    },
+    {
+      "url": "/drawer-slides-in.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 15,
+        "tag": "BUTTON",
+        "dom_id": "menu-toggle",
+        "role": "button",
+        "name": "Menu",
+        "box": {
+          "x": 16,
+          "y": 42,
+          "width": 70.703125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 9
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-001.png",
+      "settled": true,
+      "appeared": [],
+      "index": 1,
+      "key": "Enter"
+    },
+    {
+      "url": "/drawer-slides-in.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 15,
+        "tag": "BUTTON",
+        "dom_id": "menu-toggle",
+        "role": "button",
+        "name": "Menu",
+        "box": {
+          "x": 16,
+          "y": 42,
+          "width": 70.703125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-002.png",
+      "settled": true,
+      "appeared": [],
+      "index": 2,
+      "key": "Escape"
+    },
+    {
+      "url": "/drawer-slides-in.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 22,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Listen to the song",
+        "box": {
+          "x": 56,
+          "y": 243.875,
+          "width": 134.734375,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-003.png",
+      "settled": true,
+      "appeared": [],
+      "index": 3,
+      "key": "Tab"
+    },
+    {
+      "url": "/drawer-slides-in.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 24,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "Nest boxes for robins",
+        "box": {
+          "x": 56,
+          "y": 275.875,
+          "width": 161.734375,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-004.png",
+      "settled": true,
+      "appeared": [],
+      "index": 4,
+      "key": "Tab"
+    },
+    {
+      "url": "/drawer-slides-in.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 26,
+        "tag": "A",
+        "dom_id": null,
+        "role": "link",
+        "name": "What to put on the feeder",
+        "box": {
+          "x": 56,
+          "y": 307.875,
+          "width": 193.4375,
+          "height": 20.0
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-005.png",
+      "settled": true,
+      "appeared": [],
+      "index": 5,
+      "key": "Tab"
+    },
+    {
+      "url": "/drawer-slides-in.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 3,
+        "tag": "BODY",
+        "dom_id": null,
+        "role": "none",
+        "name": null,
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 361.875
+        },
+        "cover": null,
+        "document_has_focus": false
+      },
+      "screenshot": "step-006.png",
+      "settled": true,
+      "appeared": [],
+      "index": 6,
+      "key": "Tab"
+    },
+    {
+      "url": "/drawer-slides-in.html",
+      "scroll_x": 0,
+      "scroll_y": 0,
+      "focus": {
+        "backend_node_id": 15,
+        "tag": "BUTTON",
+        "dom_id": "menu-toggle",
+        "role": "button",
+        "name": "Menu",
+        "box": {
+          "x": 16,
+          "y": 42,
+          "width": 70.703125,
+          "height": 40
+        },
+        "cover": {
+          "sampled": 9,
+          "covered": 0
+        },
+        "document_has_focus": true
+      },
+      "screenshot": "step-007.png",
+      "settled": true,
+      "appeared": [],
+      "index": 7,
+      "key": "Tab"
+    }
+  ],
+  "targets": [
+    {
+      "backend_node_id": 15,
+      "tag": "BUTTON",
+      "dom_id": "menu-toggle",
+      "box": {
+        "x": 16,
+        "y": 42,
+        "width": 70.703125,
+        "height": 40
+      },
+      "reached_by": [
+        15
+      ]
+    },
+    {
+      "backend_node_id": 22,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 56,
+        "y": 243.875,
+        "width": 134.734375,
+        "height": 20
+      },
+      "reached_by": [
+        22
+      ]
+    },
+    {
+      "backend_node_id": 24,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 56,
+        "y": 275.875,
+        "width": 161.734375,
+        "height": 20
+      },
+      "reached_by": [
+        24
+      ]
+    },
+    {
+      "backend_node_id": 26,
+      "tag": "A",
+      "dom_id": null,
+      "box": {
+        "x": 56,
+        "y": 307.875,
+        "width": 193.4375,
+        "height": 20
+      },
+      "reached_by": [
+        26
+      ]
+    }
+  ],
+  "blocked_requests": []
+}
