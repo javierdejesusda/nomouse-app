@@ -13,7 +13,7 @@ import math
 from collections.abc import Iterator
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 from PIL import Image, ImageChops
 
@@ -519,3 +519,37 @@ def _focus_management(record: WalkRecord) -> Iterator[Finding | None]:
 
 def _label(focus: Focus) -> str:
     return f"{focus.tag}#{focus.dom_id}" if focus.dom_id else str(focus.tag)
+
+
+FAIL_ON_CHOICES = ("none", "barriers", "findings")
+"""Values of `nomouse walk --fail-on`."""
+
+
+def failing_findings(verdicts: dict[str, Any], fail_on: str) -> list[dict[str, Any]]:
+    """Returns the W1 findings that should fail a CI walk.
+
+    Args:
+        verdicts: The frozen `verdicts.json` payload.
+        fail_on: "none" (nothing fails), "barriers" (every W1 rule except the
+            order rule, whose findings are best practice only) or "findings"
+            (every W1 finding).
+
+    Returns:
+        The failing W1 findings in walk order; empty when the walk passes.
+
+    Raises:
+        ValueError: If `fail_on` is not one of `FAIL_ON_CHOICES`.
+    """
+    if fail_on not in FAIL_ON_CHOICES:
+        raise ValueError(f"unknown --fail-on value: {fail_on}")
+    if fail_on == "none":
+        return []
+    findings = [
+        finding
+        for verdict in verdicts["verdicts"]
+        if verdict["walker"] == "W1"
+        for finding in verdict["findings"]
+    ]
+    if fail_on == "barriers":
+        findings = [f for f in findings if f["rule"] != "order"]
+    return findings

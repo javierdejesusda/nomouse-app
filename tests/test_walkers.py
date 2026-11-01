@@ -4,13 +4,21 @@ import json
 import shutil
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import pytest
 from playwright.sync_api import Browser, BrowserContext
 
 from nomouse.driver import KeySession, new_walk_context, walk
 from nomouse.server import serve_directory
-from nomouse.walkers import Element, Finding, freeze, run_w0, run_w1
+from nomouse.walkers import (
+    Element,
+    Finding,
+    failing_findings,
+    freeze,
+    run_w0,
+    run_w1,
+)
 
 PAGES_DIR = Path(__file__).parent / "pages"
 
@@ -386,3 +394,37 @@ def test_freeze_judges_a_navigator_run_that_starts_with_escape(
     verdicts = json.loads((tmp_path / "verdicts.json").read_text(encoding="utf-8"))
     assert verdicts["keys"] == ["Escape"]
     assert all(v["checked"]["unreachable"] == 0 for v in verdicts["verdicts"])
+
+
+def _verdicts(*findings: tuple[str, str]) -> dict[str, Any]:
+    return {
+        "verdicts": [
+            {"walker": "W0", "findings": [{"rule": "trap"}]},
+            {
+                "walker": "W1",
+                "findings": [{"rule": r, "step": int(n)} for r, n in findings],
+            },
+        ]
+    }
+
+
+def test_failing_findings_counts_w1_only_and_skips_order_for_barriers() -> None:
+    verdicts = _verdicts(("order", "2"), ("focus-management", "4"))
+
+    assert failing_findings(verdicts, "none") == []
+    assert [f["rule"] for f in failing_findings(verdicts, "barriers")] == [
+        "focus-management"
+    ]
+    assert [f["rule"] for f in failing_findings(verdicts, "findings")] == [
+        "order",
+        "focus-management",
+    ]
+
+
+def test_failing_findings_passes_order_only_walks_as_barriers() -> None:
+    assert failing_findings(_verdicts(("order", "2")), "barriers") == []
+
+
+def test_failing_findings_refuses_an_unknown_mode() -> None:
+    with pytest.raises(ValueError, match="unknown --fail-on value"):
+        failing_findings(_verdicts(), "all")

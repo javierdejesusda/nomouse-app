@@ -37,7 +37,12 @@ from nomouse.driver import (
 )
 from nomouse.mirror import WALK_PAGES, fetch_mirror, mirror_root
 from nomouse.server import make_server, serve_directory
-from nomouse.walkers import VERDICTS_NAME, freeze
+from nomouse.walkers import (
+    FAIL_ON_CHOICES,
+    VERDICTS_NAME,
+    failing_findings,
+    freeze,
+)
 
 _DEFAULT_CACHE = Path(".cache")
 _DEFAULT_RUNS = Path("runs")
@@ -103,6 +108,14 @@ def _parser() -> argparse.ArgumentParser:
         "--out", type=Path, help="run directory (default: runs/<UTC time>)"
     )
     walk_command.add_argument("--max-keys", type=int, default=DEFAULT_MAX_KEYS)
+    walk_command.add_argument(
+        "--fail-on",
+        choices=FAIL_ON_CHOICES,
+        default="none",
+        help="exit 1 when W1 has findings, for CI: 'barriers' counts every rule"
+        " but the best-practice order rule, 'findings' counts every rule"
+        " (default: none, always exit 0)",
+    )
     navigate_command = commands.add_parser(
         "navigate",
         help="keyboard navigator: Muse Spark presses keys for a typed task, then"
@@ -517,6 +530,19 @@ def _walk(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
         record = walk(new_walk_context(browser), url, out, max_keys=args.max_keys)
     print(f"{len(record.keys)} keys, ended by {record.end_reason}: {out / RECORD_NAME}")
     print(f"verdicts frozen: sha256 {freeze(record, out)}")
+    failing = failing_findings(
+        json.loads((out / VERDICTS_NAME).read_text(encoding="utf-8")), args.fail_on
+    )
+    for finding in failing:
+        element = finding["element"]
+        print(
+            f"W1 {finding['rule']} at step {finding['step']}:"
+            f' {element["role"]} "{element["name"]}": {finding["detail"]}',
+            file=sys.stderr,
+        )
+    if failing:
+        print(f"nomouse walk: {len(failing)} W1 finding(s), failing", file=sys.stderr)
+        return 1
     return 0
 
 

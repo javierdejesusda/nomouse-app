@@ -162,6 +162,37 @@ def test_walk_serves_and_walks_a_builder_page(tmp_path: Path) -> None:
     ]
 
 
+def test_walk_fails_on_a_w1_barrier_for_ci(tmp_path: Path) -> None:
+    out = tmp_path / "run"
+
+    result = run_cli(
+        "walk",
+        "builder/menu-focus-stays.html",
+        "--out",
+        str(out),
+        "--fail-on",
+        "barriers",
+    )
+
+    assert result.returncode == 1
+    assert 'W1 focus-management at step 4: button "Actions"' in result.stderr
+    assert "1 W1 finding(s), failing" in result.stderr
+    assert (out / "verdicts.json").exists()
+
+
+def test_walk_passes_a_correct_page_with_fail_on(tmp_path: Path) -> None:
+    result = run_cli(
+        "walk",
+        "builder/dialog-focus-returns.html",
+        "--out",
+        str(tmp_path / "run"),
+        "--fail-on",
+        "barriers",
+    )
+
+    assert result.returncode == 0, result.stderr
+
+
 @pytest.mark.parametrize(
     "target", ["builder/missing.html", "builder/../pyproject.toml", "builder/"]
 )

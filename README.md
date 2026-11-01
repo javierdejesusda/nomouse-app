@@ -106,7 +106,11 @@ uv run nomouse export site --runs eval1 eval2 live --audit eval/audit-correction
 uv run nomouse serve-replay site --port 8000                                 # add --live for live runs
 ```
 
-`nomouse walk` alone needs no key and spends nothing: it walks, runs W0 and W1, and writes `verdicts.json` with its SHA-256. That is the mode for CI. No CI integration is packaged yet.
+`nomouse walk` alone needs no key and spends nothing: it walks, runs W0 and W1, and writes `verdicts.json` with its SHA-256. That is the mode for CI: add `--fail-on barriers` and the walk exits 1 when W1 records a trap, an unreachable target, a focus not visible, a cover or a focus-management failure (order findings are best practice and do not fail it; `--fail-on findings` counts them too). `.github/workflows/ci.yml` runs it in this repository: correct pages pass, and `builder/menu-focus-stays.html`, where focus stays on the menu button, must fail.
+
+```yaml
+- run: uv run nomouse walk http://127.0.0.1:3000/settings --fail-on barriers   # your app, served on loopback
+```
 
 Checks: `uv run pytest -q`, `uv run ruff check .`, `uv run ruff format --check .`, `uv run mypy src`.
 

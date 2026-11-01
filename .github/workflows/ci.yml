@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - run: uv run playwright install --with-deps chromium
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy src
+      - run: uv run pytest -q
+
+  keyboard-walk:
+    # The CI mode: walk pages with the keyboard only, no model call and no
+    # key, and fail the job on a W1 barrier (order findings are best
+    # practice and do not fail with --fail-on barriers).
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - run: uv run playwright install --with-deps chromium
+      - name: Correct dialog and disclosure pages pass
+        run: |
+          uv run nomouse walk builder/dialog-focus-returns.html --out runs/ci/dialog --fail-on barriers
+          uv run nomouse walk builder/menu-focus-moves.html --out runs/ci/menu --fail-on barriers
+      - name: The menu that keeps focus on its button fails the walk
+        run: |
+          if uv run nomouse walk builder/menu-focus-stays.html --out runs/ci/broken --fail-on barriers; then
+            echo "expected the walk to fail on the focus-management barrier" >&2
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: keyboard-walks
+          path: runs/ci
