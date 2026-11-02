@@ -8,7 +8,7 @@
 
 *Above: Enter opens a drawer, focus stays on the Menu button behind it. The DOM walker (W1) passes it; the model flags it for a person.*
 
-- **Live replay and live runs:** _URL added at deploy_ · **Video (3 min):** _link added at upload_
+- **Live replay and live runs:** https://nomouse.site · **Video (2:40):** https://youtu.be/qJekhWflkxk
 - **3 catches the walker misses**, in both model runs (builder pages, labelled before any model call).
 - **No false flag added** over the walker on 20 clean controls; a plain Spark video prompt flags 16 and 15 of 20 (two runs).
 - **On W3C's own reference widgets** (APG dialog, menu buttons, disclosures; [outside pass](eval/outside/results.md)): the walker flags 7 of 10 correct triggers, the model 0 of 10 in both runs.
