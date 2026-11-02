@@ -6,6 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'; base-uri 'none'">
 <title>NoMouse replay</title>
 <link rel="stylesheet" href="app.css">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body>
 <a class="skip" href="#main">Skip to main content</a>
@@ -21,15 +22,25 @@
   </nav>
 </header>
 <main id="main" tabindex="-1">
-  <h1>Replay of frozen keyboard walks</h1>
+  <section id="intro" aria-labelledby="intro-heading">
+    <h1 id="intro-heading">A menu opens, but keyboard focus stays behind it.</h1>
+    <p class="lede">NoMouse walks a page with the keyboard only. Deterministic walkers judge what the DOM can settle, then Muse Spark 1.3 looks at the screenshots: did focus land inside what visibly opened, and did it come back on close?</p>
+    <ul class="counts">
+      <li><strong>3 catches the walker misses</strong>, in both model runs, on builder pages labelled before any model call.</li>
+      <li><strong>No false flag added</strong> over the walker on 20 clean controls. A plain Spark video prompt flags 16 and 15 of 20.</li>
+      <li><strong>0 of 10</strong> correct triggers flagged on W3C's own reference widgets, in both runs. The walker flags 7.</li>
+    </ul>
+    <p class="start"><a href="page.html?id=drawer-slides-in">Watch focus stay behind a drawer</a> or <a href="live.html">Run a live walk</a> on an allowlisted page.</p>
+  </section>
+  <h2>Replay of frozen keyboard walks</h2>
   <p>A driver pressed Tab, Enter and Escape on each page and recorded where the browser put focus after every key. The walker verdicts were frozen and hashed before any model call. This replay makes no model call and needs no API key.</p>
   <section aria-labelledby="w3c-heading">
-    <h2 id="w3c-heading">W3C Before and After Demonstration</h2>
+    <h3 id="w3c-heading">W3C Before and After Demonstration</h3>
     <p>Third-party pages, shown unmodified with their original address and notice.</p>
     <ul id="w3c-pages" class="pages"></ul>
   </section>
   <section aria-labelledby="builder-heading">
-    <h2 id="builder-heading">Builder-made pages</h2>
+    <h3 id="builder-heading">Builder-made pages</h3>
     <p>Written and labelled by the builder, MIT licensed.</p>
     <ul id="builder-pages" class="pages"></ul>
   </section>

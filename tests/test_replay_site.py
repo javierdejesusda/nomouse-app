@@ -247,3 +247,52 @@ def test_a_navigator_run_shows_its_task_as_text_and_why_each_key(
         assert page.title() != "1"
     page.close()
     assert errors == []
+
+
+def test_every_page_links_a_favicon_that_the_site_serves(
+    replay: tuple[Page, str],
+) -> None:
+    page, base_url = replay
+    icon = '<link rel="icon" href="favicon.svg" type="image/svg+xml">'
+    for name in ("index.html", "eval.html", "live.html", "page.html", "privacy.html"):
+        assert icon in page.request.get(base_url + name).text(), name
+    response = page.request.get(base_url + "favicon.svg")
+    assert response.status == 200
+    assert response.headers["content-type"].startswith("image/svg+xml")
+    assert "<svg" in response.text()
+
+
+def test_the_index_opens_with_the_problem_the_counts_and_where_to_start(
+    replay: tuple[Page, str],
+) -> None:
+    page, base_url = replay
+    page.goto(base_url + "index.html")
+
+    intro = page.locator("#intro")
+    expect(intro.get_by_role("heading", level=1)).to_have_text(
+        "A menu opens, but keyboard focus stays behind it."
+    )
+    counts = intro.get_by_role("list").get_by_role("listitem")
+    expect(counts).to_have_count(3)
+    expect(counts.nth(0)).to_contain_text("3 catches the walker misses")
+    expect(counts.nth(1)).to_contain_text("No false flag added")
+    expect(counts.nth(2)).to_contain_text("0 of 10")
+    start = intro.get_by_role("link", name="Watch focus stay behind a drawer")
+    expect(start).to_have_attribute("href", "page.html?id=drawer-slides-in")
+    live = intro.get_by_role("link", name="Run a live walk")
+    expect(live).to_have_attribute("href", "live.html")
+    expect(
+        page.get_by_role("heading", name="Replay of frozen keyboard walks")
+    ).to_be_visible()
+
+
+def test_the_w3c_notice_on_the_index_is_quiet_text_not_bold(
+    replay: tuple[Page, str],
+) -> None:
+    page, base_url = replay
+    page.goto(base_url + "index.html")
+
+    notice = page.locator("#w3c-pages .notice").first
+    expect(notice).to_have_text(W3C_NOTICE)
+    weight = int(notice.evaluate("n => getComputedStyle(n).fontWeight"))
+    assert weight < 600
